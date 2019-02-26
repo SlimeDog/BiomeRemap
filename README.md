@@ -1,2 +1,2 @@
 # Thermostats
-Regulate the core temperatures of biomes, per world
+Regulate the core temperatures of biomes
