@@ -1,2 +1,2 @@
-# Thermostats
-Regulate the core temperatures of biomes
+# BiomeRemapper
+Remap biomes to create strange new worlds.
