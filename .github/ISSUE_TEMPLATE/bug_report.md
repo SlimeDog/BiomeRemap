@@ -22,7 +22,7 @@ If applicable, add screenshots to help explain your problem
 **Server Environment**
  - OS [Linux, MacOS, Windows] and version:
  - Spigot version [/version]:
- - Thermostats version:
+ - BiomeRemapper version:
 
 **Additional context**
 Link to your configuration:
