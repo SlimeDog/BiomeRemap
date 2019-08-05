@@ -4,14 +4,13 @@ about: Create a report to help us improve
 title: ''
 labels: ''
 assignees: ''
-
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is
+**Description**
+A clear and concise description of the issue
 
-**To Reproduce**
-Steps to reproduce the behavior:
+**Reproduction steps**
+How to reproduce the behavior
 
 **Expected behavior**
 A clear and concise description of what you expected to happen
@@ -20,10 +19,10 @@ A clear and concise description of what you expected to happen
 If applicable, add screenshots to help explain your problem
 
 **Server Environment**
- - OS [Linux, MacOS, Windows] and version:
+ - OS [Linux, MacOS, Windows] version:
  - Spigot version [/version]:
- - BiomeRemapper version:
+ - BiomeRemapper version [/version BiomeRemapper]:
 
 **Additional context**
-Link to your configuration:
-Link to error log:
+ Link to your configuration:
+ Link to error log:
