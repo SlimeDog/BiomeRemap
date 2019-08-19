@@ -8,18 +8,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 import me.ford.biomeremap.commands.BiomeRemapCommand;
 import me.ford.biomeremap.populator.MappingPopulator;
 //import me.ford.biomeremap.listeners.ChunkListener;
-import me.ford.biomeremap.settings.CustomConfigHandler;
+import me.ford.biomeremap.settings.Messages;
 import me.ford.biomeremap.settings.Settings;
 
 public class BiomeRemap extends JavaPlugin {
-	private CustomConfigHandler messageConfig;
+	private Messages messages;
 	private Settings settings;
 	
 	@Override
 	public void onEnable() {
 //		getServer().getPluginManager().registerEvents(new ChunkListener(this), this);
 		settings = new Settings(this);
-		messageConfig = new CustomConfigHandler(this, "messages.yml");
+		messages = new Messages(this);
 		MappingPopulator populator = new MappingPopulator();
 		for (World world : getServer().getWorlds()) {
 			world.getPopulators().add(populator);
@@ -31,11 +31,15 @@ public class BiomeRemap extends JavaPlugin {
 	public void reload() {
 		reloadConfig();
 		settings.reload();
-		messageConfig.reloadCustomConfig();
+		messages.reloadCustomConfig();
 	}
 	
 	public Settings getSettings() {
 		return settings;
+	}
+	
+	public Messages getMessages() {
+		return messages;
 	}
 	
 	public static Logger logger() {

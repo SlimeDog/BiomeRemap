@@ -1,0 +1,35 @@
+# All messages produced by BiomeRemap may be localized here.
+# This file must contain valid YAML code. A YAML checker may be found at http://www.yamllint.com
+#
+# Message placeholders are indicated by {PLACEHOLDER}.
+# PlaceholderAPI variables are not supported.
+#
+
+# Messages produced by /biomeremap info
+#
+BIOMEREMAP_INFO: "Description: {BIOMEREMAP_DESC} \nWorlds: {BIOMEREMAP_WORLDS}"
+
+# Messages produced by /biomeremap list
+#
+BIOMEREMAP_LIST_HEADER: "List of biomemaps:"
+BIOMEREMAP_LIST_ITEM: " - {BIOME_ID}"
+
+# Messages produced by /biomeremap reload
+#
+BIOMEREMAP_RELOAD: "BiomeRemap was reloaded successfully."
+
+# Messages produced by /biomeremap remap
+#
+BIOMEREMAP_REMAP_COMPLETE: "Remap complete."
+
+# Error messages
+#
+ERROR_BIOME_NOT_FOUND: "Biome id {BIOME_ID} was not found."
+ERROR_NO_PERMISSION: "You do not have permission to execute that command."
+ERROR_WORLD_NOT_FOUND: "World name {WORLD_NAME} was not found."
+
+# Information messages
+# 
+WORLD_BIOMEREMAP_MAP_INFO: "World {WORLD_NAME} was successfully mapped to biomemap {BIOME_ID}"
+# WORLD_BIOMEREMAP_MAP_INFO should be changed to:
+# INFO_WORLD_BIOME_MAPPED: "World {WORLD_NAME} was successfully mapped to biomemap {BIOME_ID}"

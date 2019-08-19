@@ -50,6 +50,10 @@ public class BiomeRemapCommand extends ArgSplittingCommand {
 		} else {
 			SubCommand cmd = subCommands.get(args[0]);
 			if (cmd == null || !cmd.hasPermission(sender)) {
+				if (cmd != null) {
+					sender.sendMessage(br.getMessages().errorNoPermissions());
+					return true;
+				}
 				sender.sendMessage(getUsage(sender));
 				return true;
 			}

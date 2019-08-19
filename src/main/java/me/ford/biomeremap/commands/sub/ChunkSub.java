@@ -55,7 +55,7 @@ public class ChunkSub extends SubCommand {
 			String worldName = args[0];
 			World world = br.getServer().getWorld(worldName);
 			if (world == null) {
-				sender.sendMessage("World not found:" + worldName); // TODO - messaging
+				sender.sendMessage(br.getMessages().errorWorldNotFound());
 				return true;
 			}
 
@@ -80,7 +80,7 @@ public class ChunkSub extends SubCommand {
 		}
 		sender.sendMessage("Remapping..."); // TODO - messaging
 		long spent = BiomeRemapper.getInstance().remapChunk(chunk, debug);
-		sender.sendMessage("Done..."); // TODO - messaging
+		sender.sendMessage(br.getMessages().getBiomeRemapComplete());
 		if (debug) sender.sendMessage("Took:" + spent + " ms"); // TODO - messaging
 		return true;
 	}

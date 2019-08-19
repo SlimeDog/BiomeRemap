@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>me.ford</groupId>
   <artifactId>biomeremap</artifactId>
-  <version>0.0.2-SNAPSHOT</version>
+  <version>0.0.3-SNAPSHOT</version>
   <name>BiomeRemap</name>
   <description>Remap biomes to create strange new worlds.</description>
   <properties>
@@ -31,7 +31,6 @@
   </dependencies>
   
   <build>
-  	<finalName>BiomeRemap</finalName>
   	<sourceDirectory>src/main/java</sourceDirectory>
   	<resources>
   	  <resource>
