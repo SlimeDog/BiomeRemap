@@ -27,16 +27,21 @@ public class BiomeRemapper {
 		return instance;
 	}
 	
-	public void remapChunk(Chunk chunk) {
+	public long remapChunk(Chunk chunk) {
+		return remapChunk(chunk, true);
+	}
+	
+	public long remapChunk(Chunk chunk, boolean debug) {
 //		if (Bukkit.isPrimaryThread()) {
 //			br.getLogger().warning("Chunk remap attempted in sync! Falling back async.");
 //			br.getServer().getScheduler().runTaskAsynchronously(br, () -> remapChunk(chunk));
 //		}
-		BiomeRemap.debug("Looking for biomes to remap (SYNC) in chunk:" + chunk.getX() + "," + chunk.getZ() + "...");
+		long start = System.currentTimeMillis();
+		if (debug) BiomeRemap.debug("Looking for biomes to remap (SYNC) in chunk:" + chunk.getX() + "," + chunk.getZ() + "...");
 		World world = chunk.getWorld();
 		BiomeMap map = br.getSettings().getApplicableBiomeMap(world.getName());
-		if (map == null) return;
-		BiomeRemap.debug(world.getName() + "->Mapping " + map.getName() + ":" + map.getMapping());
+		if (map == null) return 0;
+		if (debug) BiomeRemap.debug(world.getName() + "->Mapping " + map.getName() + ":" + map.getMapping());
 		int chunkX = chunk.getX() * 16;
 		int chunkZ = chunk.getZ() * 16;
 		Map<Integer, Biome> toChange = new HashMap<>();
@@ -54,14 +59,15 @@ public class BiomeRemapper {
 			}
 		}
 		if (!toChange.isEmpty()) {
-			BiomeRemap.debug("Found:" + changes);
+			if (debug) BiomeRemap.debug("Found:" + changes);
 			// TODO - might want to spread it out? But then again, if they are gonna load chunks, they'll do many at a time...
-			doMapping(chunk, toChange);
+			doMapping(chunk, toChange, debug);
 		}
+		return System.currentTimeMillis() - start;
 	}
 	
-	private void doMapping(Chunk chunk, Map<Integer, Biome> toChange) {
-		BiomeRemap.debug("Remapping biomes");
+	private void doMapping(Chunk chunk, Map<Integer, Biome> toChange, boolean debug) {
+		if (debug) BiomeRemap.debug("Remapping biomes");
 		World world = chunk.getWorld();
 		int startX = chunk.getX() * 16;
 		int startZ = chunk.getZ() * 16;

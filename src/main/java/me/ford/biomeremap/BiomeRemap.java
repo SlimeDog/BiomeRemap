@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import me.ford.biomeremap.commands.BiomeRemapCommand;
 import me.ford.biomeremap.populator.MappingPopulator;
 //import me.ford.biomeremap.listeners.ChunkListener;
 import me.ford.biomeremap.settings.CustomConfigHandler;
@@ -23,6 +24,8 @@ public class BiomeRemap extends JavaPlugin {
 		for (World world : getServer().getWorlds()) {
 			world.getPopulators().add(populator);
 		}
+		// commands
+		getCommand("biomeremap").setExecutor(new BiomeRemapCommand(this));
 	}
 	
 	public void reload() {
