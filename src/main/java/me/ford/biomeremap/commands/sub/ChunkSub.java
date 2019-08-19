@@ -41,7 +41,6 @@ public class ChunkSub extends SubCommand {
 	public boolean onCommand(CommandSender sender, String[] args, String[] opts) {
 		List<String> options = Arrays.asList(opts);
 		boolean debug = options.contains("--debug");
-		boolean generate = options.contains("--generate");
 		boolean ingame = sender instanceof Player;
 		if (!ingame && args.length < 3) {
 			return false;
@@ -71,10 +70,6 @@ public class ChunkSub extends SubCommand {
 				z = Integer.parseInt(args[2]);
 			} catch (NumberFormatException e) {
 				return false; // USAGE - maybe somethinge else?
-			}
-			if (!world.isChunkGenerated(x, z) && !generate) {
-				sender.sendMessage("Chunk not generated! Use --generate to force generation");
-				return true;
 			}
 			chunk = world.getChunkAt(x, z);
 		}
