@@ -1,0 +1,282 @@
+# BiomeRemap
+# $Id: config.yml,v 1.1 2019/08/16 09:08:20 ram Exp ram $
+# This file must contain valid YAML code. A YAML checker may be found at http://www.yamllint.com
+#
+# Regulate the core-temperatures of biomes
+#
+# Design: SlimeDog
+# Implementation: Tabuu
+# Testing: SlimeDog
+#
+# Spigot version support: 1.14.4
+#
+# ========== WARNINGS AND DISCLAIMERS ==============================================================
+# BiomeRemap is provided for your enjoyment and entertainment. We cannot guarantee that the results
+# will meet your needs or desires.
+#
+# BiomeRemap augments terrain generation by remapping biomes in the configured worlds as chunks are
+# generated. Remapping previously generated chunks carries negative performance impacts and other
+# potential risks. (For example, the underlying chunk populator may change, which could result in
+# mismatched chunk or biome borders.) Consequently, BiomeRemap will not remap existing chunks
+# automatically, even if the configuration is changed. They can be remapped manually, if desired.
+# Commands to do so are described in the wiki.
+#
+# Due to the way Spigot world creation and chunk generation work, BiomeRemap cannot automatically
+# remap the chunks initially-generated on world creation. These chunks must be remapped manually.
+# Commands to do so are described in the wiki.
+#
+# Note that all 1.14 biomes are included in the configured biomemaps. Biomes that do not exist in
+# your Spigot version will generate warnings in the console/log on server start-up; these may be
+# safely ignored.
+#
+# Changes of this magnitude should always be performed first on a test server, in order to verify
+# that the configuration and results meet expectations. We strongly recommend making a server backup
+# before installing and using any new plugin.
+
+# ========== CONFIGURATION FILE VERSION ============================================================
+# Do not edit the version string unless you know what you are dolng.
+file: config.yml
+version: 1
+
+# If you do not want available updates announced in the console log, you may disable it here.
+check-for-updates: true
+
+# ========== CONFIGURATION =========================================================================
+# The main configuration is a list of biomemaps, enabled in specific world(s).
+# Each biomemap contains a list of assigned worlds, and a list of biomes with replacement-biomes.
+#
+# biomemaps:
+#   NAME:
+#     description: TEXT
+#     enabled-worlds: LIST
+#     biomes:
+#        BIOME_ENUM:
+#         replacement-biome: BIOME_ENUM
+#
+# biomeremap.NAME
+#   * required, unique
+#   * identifies a biomemap
+#   * multiple biomemaps may be defined, and subsets of worlds assigned to them
+#   * snowbound and boilerroom sample biomemaps are included in the default configuration
+# biomeremap.NAME.description
+#   * optional, for reference only
+# biomeremap.NAME.enabled-worlds
+#   * required, a list of assigned worlds
+#   * a world may be assigned to more than one biomemap, if you understand the consequences
+#   * may be the empty set [] if no worlds are assigned
+#   * overlapping combinations of worlds and biomes will generate non-fatal warnings in the console/log
+
+# biomes.BIOME_ENUM
+#   * required, unique per biomemap
+#   * identifies the vanilla biome that will be replaced
+#   * an invalid biome ENUM will generate a non-fatal warning in the console/log
+#   * valid biome ENUMs may be found at https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/block/Biome.html
+#   * biome descriptions may be found at https://minecraft.gamepedia.com/Biome
+#   * additional information may be found at https://github.com/SlimeDog/BiomeRemap/wiki/
+# biomes.BIOME_ENUM.replacement-biome
+#   * optional
+#   * if present, defines the replacement biome
+#   * if replacement is not defined for any biome, the biome will not be replaced
+#   * an invalid biome ENUM will generate a non-fatal warning in the console/log, and revert to the named biome
+#
+# Other configuration nodes may be added, as usage warrants.
+
+# ========== BSTATS METRICS ========================================================================
+# By default, the plugins collects and transmits anonymous statistics to bstats.org.
+# Data collection may be disabled here, or generally in the bStats/config.yml.
+#
+enable-metrics: true
+
+biomemaps:
+  # ======== BiomeRemap example: snowbound ===========================================================
+  # The climate has turned very cold. The entire world is covered with ice and snow.
+  # Map every biome to a colder biome.
+  #
+  # enabled-worlds must be changed to reflect your target worlds.
+  #
+  snowbound:
+    description: "The world is cold and icy. Snow everywhere."
+    enabled-worlds:
+      - world_name_goes_here
+    biomes:
+      BADLANDS:
+        replacement-biome: SNOWY_TUNDRA
+      BADLANDS_PLATEAU:
+        replacement-biome: SNOWY_TUNDRA
+      BAMBOO_JUNGLE:
+        replacement-biome: SNOWY_TAIGA
+      BAMBOO_JUNGLE_HILLS:
+        replacement-biome: SNOWY_TAIGA_HILLS
+      BEACH:
+        replacement-biome: SNOWY_BEACH
+      BIRCH_FOREST:
+        replacement-biome: SNOWY_TUNDRA
+      BIRCH_FOREST_HILLS:
+        replacement-biome: SNOWY_TAIGA_HILLS
+      COLD_OCEAN:
+        replacement-biome: FROZEN_OCEAN
+      DARK_FOREST:
+        replacement-biome: SNOWY_TUNDRA
+      DARK_FOREST_HILLS:
+        replacement-biome: SNOWY_TAIGA_HILLS
+      DEEP_COLD_OCEAN:
+        replacement-biome: FROZEN_OCEAN
+      DEEP_FROZEN_OCEAN:
+        replacement-biome: FROZEN_OCEAN
+      DEEP_LUKEWARM_OCEAN:
+        replacement-biome: FROZEN_OCEAN
+      DEEP_OCEAN:
+        replacement-biome: FROZEN_OCEAN
+      DEEP_WARM_OCEAN:
+        replacement-biome: FROZEN_OCEAN
+      DESERT:
+        replacement-biome: SNOWY_TUNDRA
+      DESERT_HILLS:
+        replacement-biome: SNOWY_TAIGA_HILLS
+      DESERT_LAKES:
+        replacement-biome: SNOWY_TUNDRA
+      ERODED_BADLANDS:
+        replacement-biome: SNOWY_TUNDRA
+      FLOWER_FOREST:
+        replacement-biome: SNOWY_TUNDRA
+      FOREST:
+        replacement-biome: SNOWY_TUNDRA
+      GIANT_SPRUCE_TAIGA:
+        replacement-biome: SNOWY_TAIGA
+      GIANT_SPRUCE_TAIGA_HILLS:
+        replacement-biome: SNOWY_TAIGA_HILLS
+      GIANT_TREE_TAIGA:
+        replacement-biome: SNOWY_TAIGA
+      GIANT_TREE_TAIGA_HILLS:
+        replacement-biome: SNOWY_TAIGA_HILLS
+      GRAVELLY_MOUNTAINS:
+        replacement-biome: SNOWY_TAIGA_MOUNTAINS
+      JUNGLE:
+        replacement-biome: SNOWY_TUNDRA
+      JUNGLE_HILLS:
+        replacement-biome: SNOWY_TAIGA_HILLS
+      LUKEWARM_OCEAN:
+        replacement-biome: FROZEN_OCEAN
+      MODIFIED_BADLANDS_PLATEAU:
+        replacement-biome: SNOWY_TUNDRA
+      MODIFIED_GRAVELLY_MOUNTAINS:
+        replacement-biome: SNOWY_TAIGA_MOUNTAINS
+      MODIFIED_JUNGLE:
+        replacement-biome: SNOWY_TUNDRA
+      MODIFIED_JUNGLE_EDGE:
+        replacement-biome: SNOWY_TUNDRA
+      MODIFIED_WOODED_BADLANDS_PLATEAU:
+        replacement-biome: SNOWY_TUNDRA
+      MOUNTAIN_EDGE:
+        replacement-biome: SNOWY_TUNDRA
+      MOUNTAINS:
+        replacement-biome: SNOWY_TAIGA_MOUNTAINS
+      MUSHROOM_FIELD_SHORE:
+        replacement-biome: SNOWY_BEACH
+      MUSHROOM_FIELDS:
+        replacement-biome: SNOWY_TUNDRA
+      OCEAN:
+        replacement-biome: FROZEN_OCEAN
+      PLAINS:
+        replacement-biome: SNOWY_TUNDRA
+      RIVER:
+        replacement-biome: FROZEN_RIVER
+      SAVANNA:
+        replacement-biome: SNOWY_TUNDRA
+      SAVANNA_PLATEAU:
+        replacement-biome: SNOWY_TUNDRA
+      SHATTERED_SAVANNA:
+        replacement-biome: SNOWY_TUNDRA
+      SHATTERED_SAVANNA_PLATEAU:
+        replacement-biome: SNOWY_TUNDRA
+      SNOWY_MOUNTAINS:
+        replacement-biome: SNOWY_TAIGA_MOUNTAINS
+      STONE_SHORE:
+        replacement-biome: SNOWY_BEACH
+      SUNFLOWER_PLAINS:
+        replacement-biome: SNOWY_TUNDRA
+      SWAMP:
+        replacement-biome: SNOWY_TUNDRA
+      SWAMP_HILLS:
+        replacement-biome: SNOWY_TAIGA_HILLS
+      TAIGA:
+        replacement-biome: SNOWY_TUNDRA
+      TAIGA_HILLS:
+        replacement-biome: SNOWY_TAIGA_HILLS
+      TAIGA_MOUNTAINS:
+        replacement-biome: SNOWY_TAIGA_MOUNTAINS
+      TALL_BIRCH_FOREST:
+        replacement-biome: SNOWY_TUNDRA
+      TALL_BIRCH_HILLS:
+        replacement-biome: SNOWY_TAIGA_HILLS
+      WARM_OCEAN:
+        replacement-biome: FROZEN_OCEAN
+      WOODED_BADLANDS_PLATEAU:
+        replacement-biome: SNOWY_TUNDRA
+      WOODED_HILLS:
+        replacement-biome: SNOWY_TAIGA_HILLS
+      WOODED_MOUNTAINS:
+        replacement-biome: SNOWY_TAIGA_MOUNTAINS
+
+  # ======== BiomeRemap example: boilerroom ==========================================================
+  # Climate change is real. The entire world is warm, warmer, hot, hotter.
+  # Map every biome to a warmer biome.
+  #
+  # enabled-worlds must be changed to reflect your target worlds.
+  #
+  boilerroom:
+    description: "Climate change is real. The entire world is warm, warmer, hot, hotter."
+    enabled-worlds: []
+    biomes:
+      BEACH:
+        replacement-biome: DESERT
+      COLD_OCEAN:
+        replacement-biome: WARM_OCEAN
+      DEEP_COLD_OCEAN:
+        replacement-biome: WARM_OCEAN
+      DEEP_FROZEN_OCEAN:
+        replacement-biome: WARM_OCEAN
+      DEEP_LUKEWARM_OCEAN:
+        replacement-biome: WARM_OCEAN
+      DEEP_OCEAN:
+        replacement-biome: WARM_OCEAN
+      DEEP_WARM_OCEAN:
+        replacement-biome: WARM_OCEAN
+      DESERT:
+        replacement-biome: DESERT
+      DESERT_HILLS:
+        replacement-biome: DESERT_HILLS
+      DESERT_LAKES:
+        replacement-biome: DESERT_LAKES
+      ERODED_BADLANDS:
+        replacement-biome: ERODED_BADLANDS
+      FROZEN_OCEAN:
+        replacement-biome: WARM_OCEAN
+      FROZEN_RIVER:
+        replacement-biome: RIVER
+      LUKEWARM_OCEAN:
+        replacement-biome: WARM_OCEAN
+      MODIFIED_BADLANDS_PLATEAU:
+        replacement-biome: MODIFIED_BADLANDS_PLATEAU
+      MODIFIED_WOODED_BADLANDS_PLATEAU:
+        replacement-biome: MODIFIED_WOODED_BADLANDS_PLATEAU
+      MUSHROOM_FIELDS:
+        replacement-biome: DESERT
+      MUSHROOM_FIELD_SHORE:
+        replacement-biome: DESERT
+      OCEAN:
+        replacement-biome: WARM_OCEAN
+      SAVANNA_PLATEAU:
+        replacement-biome: SAVANNA_PLATEAU
+      SHATTERED_SAVANNA:
+        replacement-biome: SHATTERED_SAVANNA
+      SHATTERED_SAVANNA_PLATEAU:
+        replacement-biome: SHATTERED_SAVANNA_PLATEAU
+      SNOWY_BEACH:
+        replacement-biome: DESERT
+      STONE_SHORE:
+        replacement-biome: DESERT
+      WARM_OCEAN:
+        replacement-biome: WARM_OCEAN
+      WOODED_BADLANDS_PLATEAU:
+        replacement-biome: WOODED_BADLANDS_PLATEAU

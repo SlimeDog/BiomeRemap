@@ -1,0 +1,56 @@
+name: ${project.name}
+version: ${project.version}
+api-version: 1.14
+main: ${project.groupId}.${project.artifactId}.${project.name}
+description: ${project.description}
+authors: [SlimeDog, drives_a_ford, Tabuu]
+load: POSTWORLD
+softdepend: [Multiverse-Core, MultiWorld]
+
+commands:
+  biomeremap:
+    description: Regulate the core temperatures of biomes.
+    usage: |
+      /biomeremap
+  biomeremap help:
+    description: Displays the command list.
+    permission: biomeremap.use
+    usage: |
+      /biomeremap help
+  biomeremap info <biomemap-id>:
+    description: Displays complete information about a biomemap.
+    usage: |
+      /biomeremap info <biomemap-id>
+  biomeremap list <world>:
+    description: Displays a list of biomemaps, optionally in a specific world.
+    usage: |
+      /biomeremap list <world>
+  biomeremap reload:
+    description: Reloads configuration files and caches any new data.
+    usage: |
+      /biomeremap reload
+  biomeremap remap chunk:
+    description: Remaps the chunk a player is standing in OR of specified location
+    usage: |
+      /biomeremap remap [--debug] chunk [<world> <x> <z>]
+  biomeremap remap region:
+    description: Remaps the region a player is standing in OR of specified location
+    usage: |
+      /biomeremap remap [--debug] region [<world> <x> <z>]
+
+permissions:
+  biomeremap.*:
+    description: Allows use of all commands.
+    default: op
+    children:
+      biomeremap.reload: true
+      biomeremap.use: true
+  biomeremap.reload:
+    description: Allows use of /biomeremap reload command.
+    default: op
+  biomeremap.remap:
+    description: Allows use of /biomeremap remap command.
+    default: op
+  biomeremap.use:
+    description: Allows use of /biomeremap command.
+    default: op
