@@ -8,6 +8,7 @@ import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import me.ford.biomeremap.BiomeRemap;
@@ -19,7 +20,7 @@ public class ChunkSub extends SubCommand {
 	private static final String USAGE = "/biomeremap chunk [<world> <x> <z>]";
 	private final BiomeRemap br;
 	private final List<String> worldNames = new ArrayList<>();
-	
+
 	public ChunkSub(BiomeRemap plugin) {
 		br = plugin;
 		for (World world : br.getServer().getWorlds()) {
@@ -41,35 +42,42 @@ public class ChunkSub extends SubCommand {
 		List<String> options = Arrays.asList(opts);
 		boolean debug = options.contains("--debug");
 		boolean generate = options.contains("--generate");
-		if (args.length < 3) {
+		boolean ingame = sender instanceof Player;
+		if (!ingame && args.length < 3) {
 			return false;
 		}
-		// check world
-		String worldName = args[0];
-		World world = br.getServer().getWorld(worldName);
-		if (world == null) {
-			sender.sendMessage("World not found:" + worldName); // TODO - messaging
-			return true;
+		boolean myLocation = args.length < 3;
+		Chunk chunk;
+		if (myLocation) {
+			chunk = ((Player) sender).getLocation().getChunk();
+		} else {
+			// check world
+			String worldName = args[0];
+			World world = br.getServer().getWorld(worldName);
+			if (world == null) {
+				sender.sendMessage("World not found:" + worldName); // TODO - messaging
+				return true;
+			}
+
+			// check x and z
+			int x;
+			try {
+				x = Integer.parseInt(args[1]);
+			} catch (NumberFormatException e) {
+				return false; // USAGE - maybe somethinge else?
+			}
+			int z;
+			try {
+				z = Integer.parseInt(args[2]);
+			} catch (NumberFormatException e) {
+				return false; // USAGE - maybe somethinge else?
+			}
+			if (!world.isChunkGenerated(x, z) && !generate) {
+				sender.sendMessage("Chunk not generated! Use --generate to force generation");
+				return true;
+			}
+			chunk = world.getChunkAt(x, z);
 		}
-		
-		// check x and z
-		int x;
-		try {
-			x = Integer.parseInt(args[1]);
-		} catch (NumberFormatException e) {
-			return false; // USAGE - maybe somethinge else?
-		}
-		int z;
-		try {
-			z = Integer.parseInt(args[2]);
-		} catch (NumberFormatException e) {
-			return false; // USAGE - maybe somethinge else?
-		}
-		if (!world.isChunkGenerated(x, z) && !generate) {
-			sender.sendMessage("Chunk not generated! Use --generate to force generation");
-			return true;
-		}
-		Chunk chunk = world.getChunkAt(x, z);
 		sender.sendMessage("Remapping..."); // TODO - messaging
 		long spent = BiomeRemapper.getInstance().remapChunk(chunk, debug);
 		sender.sendMessage("Done..."); // TODO - messaging
