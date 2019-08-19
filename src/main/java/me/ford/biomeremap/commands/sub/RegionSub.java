@@ -81,6 +81,10 @@ public class RegionSub extends SubCommand {
 				return false; // USAGE - maybe somethinge else?
 			}
 		}
+		if (br.getSettings().getApplicableBiomeMap(world.getName()) == null) {
+			sender.sendMessage("world not configured - which message?"); // TODO - messaging
+			return true;
+		}
 		sender.sendMessage("Remapping..."); // TODO - messaging
 		int chunkXStart = regionX * 32;
 		int chunkZStart = regionZ * 32;

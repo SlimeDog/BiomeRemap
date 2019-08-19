@@ -27,6 +27,7 @@ public class BiomeRemap extends JavaPlugin {
 		saveDefaultConfig();
 		settings = new Settings(this);
 		messages = new Messages(this);
+		messages.saveDefaultConfig();
 //		MappingPopulator populator = new MappingPopulator();
 //		for (World world : getServer().getWorlds()) {
 //			world.getPopulators().add(populator);

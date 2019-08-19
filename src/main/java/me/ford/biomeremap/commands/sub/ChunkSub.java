@@ -73,6 +73,10 @@ public class ChunkSub extends SubCommand {
 			}
 			chunk = world.getChunkAt(x, z);
 		}
+		if (br.getSettings().getApplicableBiomeMap(chunk.getWorld().getName()) == null) {
+			sender.sendMessage("world not configured - which message?"); // TODO - messaging
+			return true;
+		}
 		sender.sendMessage("Remapping..."); // TODO - messaging
 		long spent = BiomeRemapper.getInstance().remapChunk(chunk, debug);
 		sender.sendMessage(br.getMessages().getBiomeRemapComplete());
