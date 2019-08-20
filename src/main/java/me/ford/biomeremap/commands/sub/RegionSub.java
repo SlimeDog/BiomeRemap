@@ -90,9 +90,15 @@ public class RegionSub extends SubCommand {
 		int chunkZStart = regionZ * 32;
 		remapping = true;
 		new LargeMappingTask(br, world, chunkXStart, chunkXStart + 32, chunkZStart, chunkZStart + 32, debug,
-				(progress) -> sender.sendMessage(br.getMessages().getBiomeRemapProgress(progress)),
+				(progress) -> reportProgress(sender, progress),
 				(report) -> remappingEnded(sender, report, debug));
 		return true;
+	}
+	
+	private void reportProgress(CommandSender sender, String progress) {
+		String msg = br.getMessages().getBiomeRemapProgress(progress);
+		sender.sendMessage(msg);
+		br.getLogger().info(msg);
 	}
 	
 	private void remappingEnded(CommandSender sender, TaskReport report, boolean debug) {
