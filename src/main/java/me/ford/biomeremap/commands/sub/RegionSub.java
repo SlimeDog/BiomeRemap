@@ -87,7 +87,7 @@ public class RegionSub extends SubCommand {
 		}
 		String startedMsg = br.getMessages().getBiomeRemapStarted();
 		sender.sendMessage(startedMsg);
-		br.getLogger().info(startedMsg);
+		br.getLogger().info(startedMsg + String.format(" world: %s, x: %d, z: %d", world.getName(), regionX, regionZ));
 		int chunkXStart = regionX * 32;
 		int chunkZStart = regionZ * 32;
 		remapping = true;
