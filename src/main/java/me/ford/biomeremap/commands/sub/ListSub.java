@@ -37,6 +37,7 @@ public class ListSub extends SubCommand {
 	@Override
 	public boolean onCommand(CommandSender sender, String[] args, String[] opts) {
 		List<BiomeMap> list = new ArrayList<>();
+		String worldName = null;
 		if (args.length == 0) {
 			for (String name : br.getSettings().getBiomeMapNames()) {
 				BiomeMap map = br.getSettings().getBiomeMap(name);
@@ -47,7 +48,7 @@ public class ListSub extends SubCommand {
 				list.add(map);
 			}
 		} else {
-			String worldName = args[0];
+			worldName = args[0];
 			if (!worldNames.contains(worldName)) {
 				sender.sendMessage(br.getMessages().errorWorldNotFound());
 				return true;
@@ -55,13 +56,13 @@ public class ListSub extends SubCommand {
 			BiomeMap map = br.getSettings().getApplicableBiomeMap(worldName);
 			if (map != null) list.add(map);
 		}
-		sender.sendMessage(br.getMessages().getBiomeRemapListHeaders());
-		for (BiomeMap map : list) {
-			sender.sendMessage(br.getMessages().getBiomeRemapListItem(map.getName()));
-		}
-		if (list.isEmpty()) {
-			sender.sendMessage("No mapping found " + (args.length > 0 ? "for world " + args[0] : "")); // TODO - messaging
-			sender.sendMessage("Some message into messages.yml for this?");
+		if (list.isEmpty() && worldName != null) {
+			sender.sendMessage(br.getMessages().getBiomeRemapNoMap(worldName));
+		} else {
+			sender.sendMessage(br.getMessages().getBiomeRemapListHeaders());
+			for (BiomeMap map : list) {
+				sender.sendMessage(br.getMessages().getBiomeRemapListItem(map.getName()));
+			}
 		}
 		return true;
 	}

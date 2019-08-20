@@ -85,12 +85,12 @@ public class RegionSub extends SubCommand {
 			sender.sendMessage("world not configured - which message?"); // TODO - messaging
 			return true;
 		}
-		sender.sendMessage("Remapping..."); // TODO - messaging
+		sender.sendMessage(br.getMessages().getBiomeRemapStarted());
 		int chunkXStart = regionX * 32;
 		int chunkZStart = regionZ * 32;
 		remapping = true;
 		new LargeMappingTask(br, world, chunkXStart, chunkXStart + 32, chunkZStart, chunkZStart + 32, debug,
-				(progress) -> sender.sendMessage(progress),
+				(progress) -> sender.sendMessage(br.getMessages().getBiomeRemapProgress(progress)),
 				(report) -> remappingEnded(sender, report, debug));
 		return true;
 	}

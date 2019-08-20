@@ -77,7 +77,7 @@ public class ChunkSub extends SubCommand {
 			sender.sendMessage("world not configured - which message?"); // TODO - messaging
 			return true;
 		}
-		sender.sendMessage("Remapping..."); // TODO - messaging
+		sender.sendMessage(br.getMessages().getBiomeRemapStarted());
 		long spent = BiomeRemapper.getInstance().remapChunk(chunk, debug);
 		sender.sendMessage(br.getMessages().getBiomeRemapComplete());
 		if (debug) sender.sendMessage("Took:" + spent + " ms"); // TODO - messaging

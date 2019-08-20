@@ -13,23 +13,24 @@ BIOMEREMAP_INFO: "Description: {BIOMEREMAP_DESC} \nWorlds: {BIOMEREMAP_WORLDS}"
 #
 BIOMEREMAP_LIST_HEADER: "List of biomemaps:"
 BIOMEREMAP_LIST_ITEM: " - {BIOME_ID}"
+BIOMEREMAP_LIST_NO_MAP: "No biomemap found for world {WORLD_NAME}"
 
 # Messages produced by /biomeremap reload
 #
-BIOMEREMAP_RELOAD: "BiomeRemap was reloaded successfully."
+BIOMEREMAP_RELOAD: "BiomeRemap was reloaded successfully"
 
 # Messages produced by /biomeremap remap
 #
-BIOMEREMAP_REMAP_COMPLETE: "Remap complete."
+BIOMEREMAP_REMAP_START: "Remapping..."
+BIOMEREMAP_REMAP_PROGRESS: "{PERCENTAGE}"
+BIOMEREMAP_REMAP_COMPLETE: "Remap complete"
 
 # Error messages
 #
-ERROR_BIOME_NOT_FOUND: "Biome id {BIOME_ID} was not found."
-ERROR_NO_PERMISSION: "You do not have permission to execute that command."
-ERROR_WORLD_NOT_FOUND: "World name {WORLD_NAME} was not found."
+ERROR_BIOME_NOT_FOUND: "Biome id {BIOME_ID} was not found"
+ERROR_NO_PERMISSION: "You do not have permission to execute that command"
+ERROR_WORLD_NOT_FOUND: "World name {WORLD_NAME} was not found"
 
 # Information messages
 # 
-WORLD_BIOMEREMAP_MAP_INFO: "World {WORLD_NAME} was successfully mapped to biomemap {BIOME_ID}"
-# WORLD_BIOMEREMAP_MAP_INFO should be changed to:
-# INFO_WORLD_BIOME_MAPPED: "World {WORLD_NAME} was successfully mapped to biomemap {BIOME_ID}"
+INFO_WORLD_BIOME_MAPPED: "World {WORLD_NAME} was successfully mapped to biomemap {BIOME_ID}"

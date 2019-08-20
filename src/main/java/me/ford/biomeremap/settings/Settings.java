@@ -34,6 +34,7 @@ public class Settings {
 		for (BiomeMap map : maps.values()) {
 			for (String worldName : map.getApplicableWorldNames()) {
 				worldMap.put(worldName, map); // TODO - what happens with multiple mappings?
+				br.getLogger().info(br.getMessages().getInfoWorldMapped(worldName, map.getName()));
 			}
 		}
 	}
