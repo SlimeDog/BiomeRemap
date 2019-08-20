@@ -18,6 +18,7 @@ public class LargeMappingTask {
 	private final boolean debug;
 	private final Consumer<String> progress;
 	private final Consumer<TaskReport> ender;
+	private final int progressStep;
 	
 	private int x;
 	private int z;
@@ -25,7 +26,7 @@ public class LargeMappingTask {
 	private int ticks = 0;
 	private long time = 0;
 	private boolean done = false;
-	private int nextProgress = 5;
+	private int nextProgress;
 	
 	public LargeMappingTask(BiomeRemap plugin, World world, int minX, int maxX, int minZ, int maxZ, boolean debug, Consumer<String> progress, Consumer<TaskReport> ender) {
 		this.br = plugin;
@@ -40,6 +41,10 @@ public class LargeMappingTask {
 		this.ender = ender;
 		x = this.minX;
 		z = this.minZ;
+		int step = br.getSettings().getRegionRemapProgressStep();
+		if (step == 0) step = 100; // disable if set to 0
+		progressStep = step;
+		nextProgress = progressStep;
 		remapChunks();
 	}
 	
@@ -61,7 +66,7 @@ public class LargeMappingTask {
 		double progress = ((double) chunks)/((double) totalChunks);
 		if (progress * 100 > nextProgress) {
 			this.progress.accept(String.format("%d%%", nextProgress));
-			nextProgress += 5;
+			nextProgress += progressStep;
 		}
 	}
 	

@@ -280,3 +280,7 @@ biomemaps:
         replacement-biome: WARM_OCEAN
       WOODED_BADLANDS_PLATEAU:
         replacement-biome: WOODED_BADLANDS_PLATEAU
+
+# ========== REPORT REMAP PROGRESS =================================================================
+# How often should region command report progress, as a percentage of completion?
+report-region-remap-progress: 5

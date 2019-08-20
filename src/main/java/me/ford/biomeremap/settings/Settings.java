@@ -58,6 +58,10 @@ public class Settings {
 		return br.getConfig().getBoolean("debug-autoremap", false);
 	}
 	
+	public int getRegionRemapProgressStep() {
+		return br.getConfig().getInt("report-region-remap-progress", 5);
+	}
+	
 	public BiomeMap getBiomeMap(String name) {
 		return maps.get(name);
 	}
