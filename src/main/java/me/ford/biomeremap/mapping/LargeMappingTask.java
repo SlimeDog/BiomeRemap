@@ -1,6 +1,7 @@
 package me.ford.biomeremap.mapping;
 
 import java.util.function.Consumer;
+import java.util.logging.Level;
 
 import org.bukkit.World;
 
@@ -13,7 +14,9 @@ public class LargeMappingTask {
 	private final int maxX;
 	private final int minZ;
 	private final int maxZ;
+	private final int totalChunks;
 	private final boolean debug;
+	private final Consumer<String> progress;
 	private final Consumer<TaskReport> ender;
 	
 	private int x;
@@ -22,15 +25,18 @@ public class LargeMappingTask {
 	private int ticks = 0;
 	private long time = 0;
 	private boolean done = false;
+	private int nextProgress = 5;
 	
-	public LargeMappingTask(BiomeRemap plugin, World world, int minX, int maxX, int minZ, int maxZ, boolean debug, Consumer<TaskReport> ender) {
+	public LargeMappingTask(BiomeRemap plugin, World world, int minX, int maxX, int minZ, int maxZ, boolean debug, Consumer<String> progress, Consumer<TaskReport> ender) {
 		this.br = plugin;
 		this.world = world;
 		this.minX = minX;
 		this.maxX = maxX;
 		this.minZ = minZ;
 		this.maxZ = maxZ;
+		this.totalChunks = (this.maxX - this.minX) * (this.maxZ - this.minZ);
 		this.debug = debug;
+		this.progress = progress;
 		this.ender = ender;
 		x = this.minX;
 		z = this.minZ;
@@ -39,7 +45,11 @@ public class LargeMappingTask {
 	
 	private void remapChunks() {
 		long start = System.currentTimeMillis();
-		while (System.currentTimeMillis() - start < 20 && !done) doChunk(); // 20 ms max
+		try {
+			while (System.currentTimeMillis() - start < 20 && !done) doChunk(); // 20 ms max
+		} catch (Throwable e) {
+			br.getLogger().log(Level.SEVERE, "Issue while remapping chunk:", e);
+		}
 		long curTime = System.currentTimeMillis() - start;
 		time += curTime;
 		ticks++;
@@ -47,6 +57,11 @@ public class LargeMappingTask {
 			br.getServer().getScheduler().runTaskLater(br, () -> remapChunks(), curTime>40?2:1);
 		} else {
 			ender.accept(new TaskReport(chunks, ticks, time));
+		}
+		double progress = ((double) chunks)/((double) totalChunks);
+		if (progress * 100 > nextProgress) {
+			this.progress.accept(String.format("%d%%", nextProgress));
+			nextProgress += 5;
 		}
 	}
 	
