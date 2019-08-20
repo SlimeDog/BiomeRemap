@@ -8,11 +8,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Logger;
 
-//import org.bukkit.World;
+import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.ford.biomeremap.commands.BiomeRemapCommand;
-//import me.ford.biomeremap.populator.MappingPopulator;
+import me.ford.biomeremap.populator.MappingPopulator;
 //import me.ford.biomeremap.listeners.ChunkListener;
 import me.ford.biomeremap.settings.Messages;
 import me.ford.biomeremap.settings.Settings;
@@ -28,10 +28,10 @@ public class BiomeRemap extends JavaPlugin {
 		settings = new Settings(this);
 		messages = new Messages(this);
 		messages.saveDefaultConfig();
-//		MappingPopulator populator = new MappingPopulator();
-//		for (World world : getServer().getWorlds()) {
-//			world.getPopulators().add(populator);
-//		}
+		MappingPopulator populator = new MappingPopulator();
+		for (World world : getServer().getWorlds()) {
+			world.getPopulators().add(populator);
+		}
 		// commands
 		getCommand("biomeremap").setExecutor(new BiomeRemapCommand(this));
 	}
