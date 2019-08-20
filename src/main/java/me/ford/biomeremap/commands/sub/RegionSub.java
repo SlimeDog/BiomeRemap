@@ -85,7 +85,9 @@ public class RegionSub extends SubCommand {
 			sender.sendMessage("world not configured - which message?"); // TODO - messaging
 			return true;
 		}
-		sender.sendMessage(br.getMessages().getBiomeRemapStarted());
+		String startedMsg = br.getMessages().getBiomeRemapStarted();
+		sender.sendMessage(startedMsg);
+		br.getLogger().info(startedMsg);
 		int chunkXStart = regionX * 32;
 		int chunkZStart = regionZ * 32;
 		remapping = true;
