@@ -15,6 +15,7 @@ import me.ford.biomeremap.commands.sub.HelpSub;
 import me.ford.biomeremap.commands.sub.InfoSub;
 import me.ford.biomeremap.commands.sub.ListSub;
 import me.ford.biomeremap.commands.sub.RegionSub;
+import me.ford.biomeremap.commands.sub.ReloadSub;
 
 public class BiomeRemapCommand extends ArgSplittingCommand {
 	private final Map<String, SubCommand> subCommands = new HashMap<>();
@@ -27,6 +28,7 @@ public class BiomeRemapCommand extends ArgSplittingCommand {
 		subCommands.put("help", new HelpSub());
 		subCommands.put("info", new InfoSub(br));
 		subCommands.put("list", new ListSub(br));
+		subCommands.put("reload", new ReloadSub(br));
 	}
 
 	@Override
