@@ -100,7 +100,7 @@ public class RegionSub extends SubCommand {
 	private void reportProgress(CommandSender sender, String progress) {
 		String msg = br.getMessages().getBiomeRemapProgress(progress);
 		sender.sendMessage(msg);
-		br.getLogger().info(msg);
+		if (!(sender instanceof ConsoleCommandSender)) br.getLogger().info(msg);
 	}
 	
 	private void remappingEnded(CommandSender sender, TaskReport report, boolean debug) {
