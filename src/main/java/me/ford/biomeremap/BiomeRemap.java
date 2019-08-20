@@ -9,7 +9,9 @@ import java.util.Date;
 import java.util.logging.Logger;
 
 import org.bukkit.World;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.JavaPluginLoader;
 
 import me.ford.biomeremap.commands.BiomeRemapCommand;
 import me.ford.biomeremap.populator.MappingPopulator;
@@ -20,6 +22,15 @@ import me.ford.biomeremap.settings.Settings;
 public class BiomeRemap extends JavaPlugin {
 	private Messages messages;
 	private Settings settings;
+	
+	public BiomeRemap() {
+		super();
+	}
+	
+	protected BiomeRemap(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
+        super(loader, description, dataFolder, file);
+    }
+
 	
 	@Override
 	public void onEnable() {
