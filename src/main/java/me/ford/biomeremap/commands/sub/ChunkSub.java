@@ -78,6 +78,7 @@ public class ChunkSub extends SubCommand {
 			return true;
 		}
 		sender.sendMessage(br.getMessages().getBiomeRemapStarted());
+		if (!ingame) br.getLogger().info(String.format("Remapping world=%s, x=%d, z=%d", chunk.getWorld().getName(), chunk.getX(), chunk.getZ()));
 		long spent = BiomeRemapper.getInstance().remapChunk(chunk, debug);
 		sender.sendMessage(br.getMessages().getBiomeRemapComplete());
 		if (debug) sender.sendMessage("Took:" + spent + " ms"); // TODO - messaging
