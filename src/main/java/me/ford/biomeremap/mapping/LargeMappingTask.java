@@ -24,4 +24,8 @@ public class LargeMappingTask extends LargeTask {
 		}
 	}
 
+	@Override
+	protected void whenDone() {
+	}
+
 }

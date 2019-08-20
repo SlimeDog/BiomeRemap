@@ -45,7 +45,7 @@ public abstract class LargeTask {
 		if (step == 0) step = 100; // disable if set to 0
 		progressStep = step;
 		nextProgress = progressStep;
-		remapChunks();
+		br.getServer().getScheduler().runTask(br, () -> remapChunks());
 	}
 	
 	private void remapChunks() {
@@ -62,10 +62,13 @@ public abstract class LargeTask {
 			br.getServer().getScheduler().runTaskLater(br, () -> remapChunks(), curTime>40?2:1);
 		} else {
 			ender.accept(new TaskReport(chunks, ticks, time));
+			whenDone();
 		}
-		double progress = ((double) chunks)/((double) totalChunks);
-		if (progress * 100 > nextProgress) {
-			this.progress.accept(String.format("%d%%", nextProgress));
+		double progress = ((double) chunks)/((double) totalChunks) * 100;
+		if (progress > nextProgress) {
+			while (this.nextProgress < progress) nextProgress += progressStep;
+			nextProgress -= progressStep; // back one step
+			if (this.progress != null) this.progress.accept(String.format("%d%%", nextProgress));
 			nextProgress += progressStep;
 		}
 	}
@@ -81,7 +84,13 @@ public abstract class LargeTask {
 		chunks++;
 	}
 	
+	protected BiomeRemap getPlugin() {
+		return br;
+	}
+	
 	protected abstract void doTaskForChunk(World world, int x, int z, boolean debug);
+	
+	protected abstract void whenDone();
 	
 	public class TaskReport {
 		private final int chunksDone;
