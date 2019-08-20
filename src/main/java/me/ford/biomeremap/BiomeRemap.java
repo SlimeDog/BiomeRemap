@@ -25,8 +25,8 @@ public class BiomeRemap extends JavaPlugin {
 	public void onEnable() {
 //		getServer().getPluginManager().registerEvents(new ChunkListener(this), this);
 		saveDefaultConfig();
-		settings = new Settings(this);
 		messages = new Messages(this);
+		settings = new Settings(this);
 		messages.saveDefaultConfig();
 		MappingPopulator populator = new MappingPopulator();
 		for (World world : getServer().getWorlds()) {
