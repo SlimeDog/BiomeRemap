@@ -32,16 +32,12 @@ public class BiomeRemapper {
 	}
 	
 	public long remapChunk(Chunk chunk, boolean debug) {
-//		if (Bukkit.isPrimaryThread()) {
-//			br.getLogger().warning("Chunk remap attempted in sync! Falling back async.");
-//			br.getServer().getScheduler().runTaskAsynchronously(br, () -> remapChunk(chunk));
-//		}
 		long start = System.currentTimeMillis();
 		if (debug) BiomeRemap.debug("Looking for biomes to remap (SYNC) in chunk:" + chunk.getX() + "," + chunk.getZ() + "...");
 		World world = chunk.getWorld();
 		BiomeMap map = br.getSettings().getApplicableBiomeMap(world.getName());
 		if (map == null) return 0;
-		if (debug) BiomeRemap.debug(world.getName() + "->Mapping " + map.getName() + ":" + map.getMapping());
+		if (debug) BiomeRemap.debug(world.getName() + "->Mapping " + map.getName());
 		int chunkX = chunk.getX() * 16;
 		int chunkZ = chunk.getZ() * 16;
 		Map<Integer, Biome> toChange = new HashMap<>();
