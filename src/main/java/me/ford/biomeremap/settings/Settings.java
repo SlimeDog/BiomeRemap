@@ -54,6 +54,10 @@ public class Settings {
 		return maps.keySet();
 	}
 	
+	public boolean debugAutoremap() {
+		return br.getConfig().getBoolean("debug-autoremap", false);
+	}
+	
 	public BiomeMap getBiomeMap(String name) {
 		return maps.get(name);
 	}
