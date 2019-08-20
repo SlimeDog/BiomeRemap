@@ -12,6 +12,7 @@ import org.bukkit.util.StringUtil;
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.commands.sub.ChunkSub;
 import me.ford.biomeremap.commands.sub.HelpSub;
+import me.ford.biomeremap.commands.sub.InfoSub;
 import me.ford.biomeremap.commands.sub.RegionSub;
 
 public class BiomeRemapCommand extends ArgSplittingCommand {
@@ -23,6 +24,7 @@ public class BiomeRemapCommand extends ArgSplittingCommand {
 		subCommands.put("chunk", new ChunkSub(br));
 		subCommands.put("region", new RegionSub(br));
 		subCommands.put("help", new HelpSub());
+		subCommands.put("info", new InfoSub(br));
 	}
 
 	@Override
