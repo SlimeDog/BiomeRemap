@@ -18,8 +18,8 @@ public class HelpSub extends SubCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, String[] args, String[] opts) {
-		sender.sendMessage("What else should I put here other than the usage information?"); // TODO - additions?
-		return false;
+		sender.sendMessage("/biomeremap <info|list|chunk|region|reload>");
+		return true;
 	}
 
 	@Override

@@ -13,9 +13,10 @@ public class Messages extends CustomConfigHandler {
 	}
 	
 	public String getBiomeRemapInfo(String description, List<String> worldNames) {
+		String wn = worldNames.isEmpty() ? "none" : String.join(", ", worldNames);
 		return getMessage("BIOMEREMAP_INFO", "Description: {BIOMEREMAP_DESC} \nWorlds: {BIOMEREMAP_WORLDS}")
 						.replace("{BIOMEREMAP_DESC}", description)
-						.replace("{BIOMEREMAP_WORLDS}", String.join(", ", worldNames));
+						.replace("{BIOMEREMAP_WORLDS}", wn);
 	}
 	
 	public String getBiomeRemapListHeaders() {
