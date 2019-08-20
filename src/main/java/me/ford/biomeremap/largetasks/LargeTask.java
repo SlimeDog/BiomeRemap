@@ -63,6 +63,7 @@ public abstract class LargeTask {
 		} else {
 			ender.accept(new TaskReport(chunks, ticks, time));
 			whenDone();
+			return;
 		}
 		double progress = ((double) chunks)/((double) totalChunks) * 100;
 		if (progress > nextProgress) {
