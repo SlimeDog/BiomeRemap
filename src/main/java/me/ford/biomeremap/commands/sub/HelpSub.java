@@ -2,14 +2,21 @@ package me.ford.biomeremap.commands.sub;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.bukkit.command.CommandSender;
 
+import me.ford.biomeremap.commands.BiomeRemapCommand;
 import me.ford.biomeremap.commands.SubCommand;
 
 public class HelpSub extends SubCommand {
 	private static final String PERMS = "biomeremap.use";
 	private static final String USAGE = "/biomeremap help";
+	private final BiomeRemapCommand base;
+	
+	public HelpSub(BiomeRemapCommand base) {
+		this.base = base;
+	}
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, String[] args, String[] opts) {
@@ -18,8 +25,18 @@ public class HelpSub extends SubCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, String[] args, String[] opts) {
-		sender.sendMessage("/biomeremap <info|list|chunk|region|reload>");
+		sender.sendMessage(String.format("/biomeremap <%s>", String.join("|", getAllowedSubCommands(sender))));
 		return true;
+	}
+	
+	private List<String> getAllowedSubCommands(CommandSender sender) {
+		List<String> cmds = new ArrayList<>();
+		for (Entry<String, SubCommand> cmd : base.getSubCommands().entrySet()) {
+			if (cmd.getValue() != this && cmd.getValue().hasPermission(sender)) {
+				cmds.add(cmd.getKey());
+			}
+		}
+		return cmds;
 	}
 
 	@Override

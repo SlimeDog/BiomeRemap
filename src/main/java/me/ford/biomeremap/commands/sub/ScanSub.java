@@ -21,7 +21,7 @@ import me.ford.biomeremap.largetasks.LargeScanTask.BiomeReport;
 import me.ford.biomeremap.largetasks.LargeTask.TaskReport;
 
 public class ScanSub extends SubCommand {
-	private static final String PERMS = "TBD"; // TODO - perms
+	private static final String PERMS = "biomeremap.scan";
 	private static final String USAGE = "/biomeremap scan <chunk | region> [<world> <x> <z>]";
 	private final BiomeRemap br;
 	private final List<String> worldNames = new ArrayList<>();

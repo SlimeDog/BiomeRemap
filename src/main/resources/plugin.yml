@@ -6,6 +6,7 @@ description: ${project.description}
 authors: [SlimeDog, drives_a_ford, Tabuu]
 load: POSTWORLD
 softdepend: [Multiverse-Core, MultiWorld]
+aliases: [bmap]
 
 commands:
   biomeremap:
@@ -29,28 +30,41 @@ commands:
     description: Reloads configuration files and caches any new data.
     usage: |
       /biomeremap reload
-  biomeremap remap chunk:
+  biomeremap chunk:
     description: Remaps the chunk a player is standing in OR of specified location
     usage: |
-      /biomeremap remap [--debug] chunk [<world> <x> <z>]
-  biomeremap remap region:
+      /biomeremap chunk [<world> <x> <z>]
+  biomeremap region:
     description: Remaps the region a player is standing in OR of specified location
     usage: |
-      /biomeremap remap [--debug] region [<world> <x> <z>]
+      /biomeremap region [<world> <x> <z>]
+  biomeremap scan chunk:
+    description: Scan the chunk a player is standing in OR of specified location
+    usage: |
+      /biomeremap scan chunk [<world> <x> <z>]
+  biomeremap scan region:
+    description: Scan the region a player is standing in OR of specified location
+    usage: |
+      /biomeremap scan region [<world> <x> <z>]
 
 permissions:
   biomeremap.*:
     description: Allows use of all commands.
-    default: op
+    default: none
     children:
       biomeremap.reload: true
+      biomeremap.remap: true
+      biomeremap.scan: true
       biomeremap.use: true
   biomeremap.reload:
     description: Allows use of /biomeremap reload command.
-    default: op
+    default: none
   biomeremap.remap:
-    description: Allows use of /biomeremap remap command.
-    default: op
+    description: Allows use of /biomeremap chunk and region commands.
+    default: none
+  biomeremap.scan:
+    description: Allows use of /biomeremap scan command.
+    default: none
   biomeremap.use:
     description: Allows use of /biomeremap command.
-    default: op
+    default: none

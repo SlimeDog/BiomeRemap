@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.util.StringUtil;
 
 import me.ford.biomeremap.BiomeRemap;
@@ -45,7 +46,7 @@ public class InfoSub extends SubCommand {
 
 	@Override
 	public boolean hasPermission(CommandSender sender) {
-		return sender.hasPermission(PERMS);
+		return sender.hasPermission(PERMS) || (sender instanceof ConsoleCommandSender);
 	}
 
 	@Override
