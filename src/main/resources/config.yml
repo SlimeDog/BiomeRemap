@@ -287,4 +287,4 @@ biomemaps:
 # ========== REPORT REMAP PROGRESS =================================================================
 # How often should region command report progress, as a percentage of completion?
 report-region-remap-progress: 5
-report-region-scan-progress: 0
+report-region-scan-progress: 10
