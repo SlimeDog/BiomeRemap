@@ -82,7 +82,7 @@ public class ScanSub extends SubCommand {
 				return false; // TODO - some error?
 			}
 			try {
-				z = Integer.parseInt(args[2]);
+				z = Integer.parseInt(args[3]);
 			} catch (NumberFormatException e) {
 				return false; // TODO - some error?
 			}
