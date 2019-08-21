@@ -89,7 +89,7 @@ public class ScanSub extends SubCommand {
 			}
 		}
 		if (world == null) {
-			sender.sendMessage(br.getMessages().errorWorldNotFound());
+			sender.sendMessage(br.getMessages().errorWorldNotFound(args[1]));
 			return true;
 		}
 		

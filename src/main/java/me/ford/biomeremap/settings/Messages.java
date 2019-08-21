@@ -96,8 +96,9 @@ public class Messages extends CustomConfigHandler {
 		return getMessage("ERROR_NO_PERMISSION", "You do not have permission to execute that command.");
 	}
 	
-	public String errorWorldNotFound() {
-		return getMessage("ERROR_WORLD_NOT_FOUND", "World name {WORLD_NAME} was not found.");
+	public String errorWorldNotFound(String worldName) {
+		return getMessage("ERROR_WORLD_NOT_FOUND", "World name {WORLD_NAME} was not found.")
+						.replace("{WORLD_NAME}", worldName);
 	}
 	
 	public String getMessage(String path, String def) {

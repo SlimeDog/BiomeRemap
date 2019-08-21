@@ -52,7 +52,7 @@ public class ListSub extends SubCommand {
 		} else {
 			worldName = args[0];
 			if (!worldNames.contains(worldName)) {
-				sender.sendMessage(br.getMessages().errorWorldNotFound());
+				sender.sendMessage(br.getMessages().errorWorldNotFound(worldName));
 				return true;
 			}
 			BiomeMap map = br.getSettings().getApplicableBiomeMap(worldName);

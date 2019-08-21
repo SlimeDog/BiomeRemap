@@ -55,7 +55,7 @@ public class ChunkSub extends SubCommand {
 			String worldName = args[0];
 			World world = br.getServer().getWorld(worldName);
 			if (world == null) {
-				sender.sendMessage(br.getMessages().errorWorldNotFound());
+				sender.sendMessage(br.getMessages().errorWorldNotFound(worldName));
 				return true;
 			}
 
