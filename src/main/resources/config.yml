@@ -1,18 +1,20 @@
 # BiomeRemap
-# $Id: config.yml,v 1.1 2019/08/16 09:08:20 ram Exp ram $
 # This file must contain valid YAML code. A YAML checker may be found at http://www.yamllint.com
 #
-# Regulate the core-temperatures of biomes
+# Remap biomes to create strange new worlds.
 #
 # Design: SlimeDog
-# Implementation: Tabuu
+# Implementation: drives_a_ford
 # Testing: SlimeDog
 #
 # Spigot version support: 1.14.4
 #
-# ========== WARNINGS AND DISCLAIMERS ==============================================================
+# ========== CAVEATS AND WARNINGS ==================================================================
 # BiomeRemap is provided for your enjoyment and entertainment. We cannot guarantee that the results
 # will meet your needs or desires.
+#
+# The most important caveat: BIOME REMAPPING CANNOT BE REVERSED. Always backup the server before
+# using this plugin, and test the functionality before you use it on a production server.
 #
 # BiomeRemap augments terrain generation by remapping biomes in the configured worlds as chunks are
 # generated. Remapping previously generated chunks carries negative performance impacts and other
@@ -38,10 +40,17 @@
 file: config.yml
 version: 1
 
+# ========== CHECK FOR UPDATES =====================================================================
 # If you do not want available updates announced in the console log, you may disable it here.
 check-for-updates: true
 
-# ========== CONFIGURATION =========================================================================
+# ========== BSTATS METRICS ========================================================================
+# By default, the plugins collects and transmits anonymous statistics to bstats.org.
+# Data collection may be disabled here, or generally in the bStats/config.yml.
+#
+enable-metrics: true
+
+# ========== BIOMEMAP CONFIGURATION ================================================================
 # The main configuration is a list of biomemaps, enabled in specific world(s).
 # Each biomemap contains a list of assigned worlds, and a list of biomes with replacement-biomes.
 #
@@ -80,12 +89,6 @@ check-for-updates: true
 #   * an invalid biome ENUM will generate a non-fatal warning in the console/log, and revert to the named biome
 #
 # Other configuration nodes may be added, as usage warrants.
-
-# ========== BSTATS METRICS ========================================================================
-# By default, the plugins collects and transmits anonymous statistics to bstats.org.
-# Data collection may be disabled here, or generally in the bStats/config.yml.
-#
-enable-metrics: true
 
 biomemaps:
   # ======== BiomeRemap example: snowbound ===========================================================
@@ -284,3 +287,4 @@ biomemaps:
 # ========== REPORT REMAP PROGRESS =================================================================
 # How often should region command report progress, as a percentage of completion?
 report-region-remap-progress: 5
+report-region-scan-progress: 0

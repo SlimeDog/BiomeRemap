@@ -28,7 +28,8 @@ public abstract class LargeTask {
 	private boolean done = false;
 	private int nextProgress;
 	
-	public LargeTask(BiomeRemap plugin, World world, int minX, int maxX, int minZ, int maxZ, boolean debug, Consumer<String> progress, Consumer<TaskReport> ender) {
+	public LargeTask(BiomeRemap plugin, World world, int minX, int maxX, int minZ, int maxZ, boolean debug, 
+					int progressStep, Consumer<String> progress, Consumer<TaskReport> ender) {
 		this.br = plugin;
 		this.world = world;
 		this.minX = minX;
@@ -41,10 +42,9 @@ public abstract class LargeTask {
 		this.ender = ender;
 		x = this.minX;
 		z = this.minZ;
-		int step = br.getSettings().getRegionRemapProgressStep();
-		if (step == 0) step = 100; // disable if set to 0
-		progressStep = step;
-		nextProgress = progressStep;
+		if (progressStep == 0) progressStep = 100;
+		this.progressStep = progressStep;
+		nextProgress = this.progressStep;
 		br.getServer().getScheduler().runTask(br, () -> remapChunks());
 	}
 	

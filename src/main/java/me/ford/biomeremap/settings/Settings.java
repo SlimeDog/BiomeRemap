@@ -63,6 +63,10 @@ public class Settings {
 		return br.getConfig().getInt("report-region-remap-progress", 5);
 	}
 	
+	public int getScanProgressStep() {
+		return br.getConfig().getInt("report-region-scan-progress", 0);
+	}
+	
 	public BiomeMap getBiomeMap(String name) {
 		return maps.get(name);
 	}

@@ -27,6 +27,7 @@ public class ScanSub extends SubCommand {
 	private static final String USAGE = "/biomeremap scan <chunk | region> [<world> <x> <z>]";
 	private final BiomeRemap br;
 	private final List<String> worldNames = new ArrayList<>();
+	private boolean scanning = false;
 
 	public ScanSub(BiomeRemap plugin) {
 		br = plugin;
@@ -105,9 +106,11 @@ public class ScanSub extends SubCommand {
 			sender.sendMessage(br.getMessages().getScanChunkStart(world.getName(), x, z));
 		}
 		new LargeScanTask(br, world, minX, maxX, minZ, maxZ, debug,
+				br.getSettings().getScanProgressStep(),
 				(progress) -> onProgress(sender, progress), 
 				(task) -> onEnd(sender, task, debug), 
 				(report) -> showMap(sender, report, region, debug, world.getName(), x, z));
+		scanning = true;
 		return true;
 	}
 	
@@ -120,6 +123,7 @@ public class ScanSub extends SubCommand {
 	private void onEnd(CommandSender sender, TaskReport report, boolean debug) {
 		sender.sendMessage(br.getMessages().getScanComplete());
 		if (debug) sender.sendMessage(String.format("Did %d chunks in %d ms in a total of %d ticks", report.getChunksDone(), report.getCompTime(), report.getTicksUsed())); // TODO - messaging
+		scanning = false;
 	}
 	
 	private void showMap(CommandSender sender, BiomeReport report, boolean region, boolean debug,

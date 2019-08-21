@@ -15,8 +15,8 @@ public class LargeScanTask extends LargeTask {
 	private int nulls = 0;
 	
 	public LargeScanTask(BiomeRemap plugin, World world, int minX, int maxX, int minZ, int maxZ, boolean debug,
-			Consumer<String> progress, Consumer<TaskReport> ender, Consumer<BiomeReport> biomes) {
-		super(plugin, world, minX, maxX, minZ, maxZ, debug, progress, ender);
+			int progressStep, Consumer<String> progress, Consumer<TaskReport> ender, Consumer<BiomeReport> biomes) {
+		super(plugin, world, minX, maxX, minZ, maxZ, debug, progressStep, progress, ender);
 		this.biomes = biomes;
 	}
 

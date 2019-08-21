@@ -1,7 +1,6 @@
 package me.ford.biomeremap.mapping;
 
 import java.util.function.Consumer;
-import java.util.logging.Level;
 
 import org.bukkit.World;
 
@@ -11,8 +10,8 @@ import me.ford.biomeremap.largetasks.LargeTask;
 public class LargeMappingTask extends LargeTask {
 
 	public LargeMappingTask(BiomeRemap plugin, World world, int minX, int maxX, int minZ, int maxZ, boolean debug,
-			Consumer<String> progress, Consumer<TaskReport> ender) {
-		super(plugin, world, minX, maxX, minZ, maxZ, debug, progress, ender);
+			int progressStep, Consumer<String> progress, Consumer<TaskReport> ender) {
+		super(plugin, world, minX, maxX, minZ, maxZ, debug, progressStep, progress, ender);
 	}
 
 	@Override

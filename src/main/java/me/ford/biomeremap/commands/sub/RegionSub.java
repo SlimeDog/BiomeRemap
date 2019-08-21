@@ -92,6 +92,7 @@ public class RegionSub extends SubCommand {
 		int chunkZStart = regionZ * 32;
 		remapping = true;
 		new LargeMappingTask(br, world, chunkXStart, chunkXStart + 32, chunkZStart, chunkZStart + 32, debug,
+				br.getSettings().getRegionRemapProgressStep(),
 				(progress) -> reportProgress(sender, progress),
 				(report) -> remappingEnded(sender, report, debug));
 		return true;

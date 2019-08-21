@@ -6,13 +6,13 @@ description: ${project.description}
 authors: [SlimeDog, drives_a_ford, Tabuu]
 load: POSTWORLD
 softdepend: [Multiverse-Core, MultiWorld]
-aliases: [bmap]
 
 commands:
   biomeremap:
     description: Regulate the core temperatures of biomes.
     usage: |
       /biomeremap
+    aliases: [bmap]
   biomeremap help:
     description: Displays the command list.
     permission: biomeremap.use
