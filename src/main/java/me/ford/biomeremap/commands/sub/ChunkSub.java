@@ -77,7 +77,7 @@ public class ChunkSub extends SubCommand {
 			sender.sendMessage("world not configured - which message?"); // TODO - messaging
 			return true;
 		}
-		sender.sendMessage(br.getMessages().getBiomeRemapStarted());
+		sender.sendMessage(br.getMessages().getChunkRemapStarted(chunk.getWorld().getName(), chunk.getX(), chunk.getZ()));
 		if (ingame) br.getLogger().info(String.format("Remapping world=%s, x=%d, z=%d", chunk.getWorld().getName(), chunk.getX(), chunk.getZ()));
 		long spent = BiomeRemapper.getInstance().remapChunk(chunk, debug);
 		sender.sendMessage(br.getMessages().getBiomeRemapComplete());

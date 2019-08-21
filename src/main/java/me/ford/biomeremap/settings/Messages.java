@@ -36,8 +36,14 @@ public class Messages extends CustomConfigHandler {
 		return getMessage("BIOMEREMAP_RELOAD", "BiomeRemap was reloaded successfully.");
 	}
 	
-	public String getBiomeRemapStarted() {
-		return getMessage("BIOMEREMAP_REMAP_START", "Remapping...");
+	public String getChunkRemapStarted(String worldName, int x, int z) {
+		return getMessage("BIOMEREMAP_REMAP_CHUNK_START", "Remapping chunk world:{WORLD_NAME} x:{X} y:{Y}")
+						.replace("{WORLD_NAME}", worldName).replace("{X}", String.valueOf(x)).replace("{Y}", String.valueOf(z));
+	}
+	
+	public String getRegionRemapStarted(String worldName, int x, int z) {
+		return getMessage("BIOMEREMAP_REMAP_REGION_START", "Remapping region world:{WORLD_NAME} x:{X} y:{Y}")
+						.replace("{WORLD_NAME}", worldName).replace("{X}", String.valueOf(x)).replace("{Y}", String.valueOf(z));
 	}
 	
 	public String getBiomeRemapComplete() {
@@ -52,6 +58,34 @@ public class Messages extends CustomConfigHandler {
 	public String getInfoWorldMapped(String world, String biome) {
 		return getMessage("INFO_WORLD_BIOME_MAPPED", "World {WORLD_NAME} was successfully mapped to biomemap {BIOME_ID}")
 						.replace("{WORLD_NAME}", world).replace("{BIOME_ID}", biome);
+	}
+	
+	public String getScanChunkStart(String worldName, int x, int z) {
+		return getMessage("BIOMEREMAP_SCAN_CHUNK_START", "Scanning chunk world:{WORLD_NAME} x:{X} y:{Y}")
+						.replace("{WORLD_NAME}", worldName).replace("{X}", String.valueOf(x)).replace("{Y}", String.valueOf(z));
+	}
+	
+	public String getScanRegionStart(String worldName, int x, int z) {
+		return getMessage("BIOMEREMAP_SCAN_REGION_START", "Scanning region world:{WORLD_NAME} x:{X} y:{Y}")
+						.replace("{WORLD_NAME}", worldName).replace("{X}", String.valueOf(x)).replace("{Y}", String.valueOf(z));
+	}
+	
+	public String getScanProgress(String progress) {
+		return getMessage("BIOMEREMAP_SCAN_PROGRESS", "{PERCENTAGE}").replace("{PERCENTAGE}", progress);
+	}
+	
+	public String getScanComplete() {
+		return getMessage("BIOMEREMAP_SCAN_COMPLETE", "Scan complete");
+	}
+	
+	public String getScanChunkHeader(String worldName, int x, int z) {
+		return getMessage("BIOMEREMAP_SCAN_CHUNK_HEADER", "Biomes in chunk world:{WORLD_NAME} x:{X} y:{Y}")
+						.replace("{WORLD_NAME}", worldName).replace("{X}", String.valueOf(x)).replace("{Y}", String.valueOf(z));
+	}
+	
+	public String getScanRegionHeader(String worldName, int x, int z) {
+		return getMessage("BIOMEREMAP_SCAN_REGION_HEADER", "Biomes in region world:{WORLD_NAME} x:{X} y:{Y}")
+						.replace("{WORLD_NAME}", worldName).replace("{X}", String.valueOf(x)).replace("{Y}", String.valueOf(z));
 	}
 	
 	public String errorBiomeNotFound(String biome) {

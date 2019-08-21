@@ -2,9 +2,11 @@ package me.ford.biomeremap.commands.sub;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -97,28 +99,41 @@ public class ScanSub extends SubCommand {
 			minZ = z * 32;
 			maxZ = minZ + 32;
 		}
-		sender.sendMessage("Staring... (TODO: message)"); // TODO - messaging
+		if (region) {
+			sender.sendMessage(br.getMessages().getScanRegionStart(world.getName(), x, z));
+		} else {
+			sender.sendMessage(br.getMessages().getScanChunkStart(world.getName(), x, z));
+		}
 		new LargeScanTask(br, world, minX, maxX, minZ, maxZ, debug,
 				(progress) -> onProgress(sender, progress), 
 				(task) -> onEnd(sender, task, debug), 
-				(report) -> showMap(sender, report));
+				(report) -> showMap(sender, report, region, debug, world.getName(), x, z));
 		return true;
 	}
 	
 	private void onProgress(CommandSender sender, String progress) {
-		sender.sendMessage(progress);
+		String msg = br.getMessages().getScanProgress(progress);
+		sender.sendMessage(msg);
 		if (!(sender instanceof ConsoleCommandSender)) br.getLogger().info(progress);
 	}
 	
 	private void onEnd(CommandSender sender, TaskReport report, boolean debug) {
-		sender.sendMessage("Finished"); // TODO - do I need this? This might be quicker than the other ones
+		sender.sendMessage(br.getMessages().getScanComplete());
 		if (debug) sender.sendMessage(String.format("Did %d chunks in %d ms in a total of %d ticks", report.getChunksDone(), report.getCompTime(), report.getTicksUsed())); // TODO - messaging
 	}
 	
-	private void showMap(CommandSender sender, BiomeReport report) {
-		sender.sendMessage("HEADER"); // TODO - messaging
+	private void showMap(CommandSender sender, BiomeReport report, boolean region, boolean debug,
+						String worldName, int x, int z) {
+		if (region) {
+			sender.sendMessage(br.getMessages().getScanRegionHeader(worldName, x, z));
+		} else {
+			sender.sendMessage(br.getMessages().getScanChunkHeader(worldName, x, z));
+		}
 		String format = "%d %s";
-		for (Entry<Biome, Integer> entry : report.getBiomes().entrySet()) {
+		Map<Biome, Integer> sortedMap = report.getBiomes().entrySet().stream()
+                .sorted((e1,e2) -> e1.getKey().name().compareTo(e2.getKey().name()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1,e2) -> e1, LinkedHashMap::new));
+		for (Entry<Biome, Integer> entry : sortedMap.entrySet()) {
 			sender.sendMessage(String.format(format, entry.getValue(), entry.getKey().name())); // TODO - messaging
 		}
 		int nr = report.nrOfNulls();
