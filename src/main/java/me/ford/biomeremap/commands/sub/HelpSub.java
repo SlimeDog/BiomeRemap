@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 
 import me.ford.biomeremap.commands.BiomeRemapCommand;
 import me.ford.biomeremap.commands.SubCommand;
@@ -41,7 +42,7 @@ public class HelpSub extends SubCommand {
 
 	@Override
 	public boolean hasPermission(CommandSender sender) {
-		return sender.hasPermission(PERMS);
+		return sender.hasPermission(PERMS) || sender instanceof ConsoleCommandSender;
 	}
 
 	@Override

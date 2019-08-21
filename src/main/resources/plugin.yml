@@ -50,7 +50,7 @@ commands:
 permissions:
   biomeremap.*:
     description: Allows use of all commands.
-    default: none
+    default: false
     children:
       biomeremap.reload: true
       biomeremap.remap: true
@@ -58,13 +58,13 @@ permissions:
       biomeremap.use: true
   biomeremap.reload:
     description: Allows use of /biomeremap reload command.
-    default: none
+    default: false
   biomeremap.remap:
     description: Allows use of /biomeremap chunk and region commands.
-    default: none
+    default: false
   biomeremap.scan:
     description: Allows use of /biomeremap scan command.
-    default: none
+    default: false
   biomeremap.use:
     description: Allows use of /biomeremap command.
-    default: none
+    default: false

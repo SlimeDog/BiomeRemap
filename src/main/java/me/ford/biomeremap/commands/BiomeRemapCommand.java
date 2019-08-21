@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.util.StringUtil;
 
 import me.ford.biomeremap.BiomeRemap;
@@ -19,6 +20,7 @@ import me.ford.biomeremap.commands.sub.ReloadSub;
 import me.ford.biomeremap.commands.sub.ScanSub;
 
 public class BiomeRemapCommand extends ArgSplittingCommand {
+	private static final String PERMS = "biomeremap.use";
 	private final Map<String, SubCommand> subCommands = new HashMap<>();
 	private final BiomeRemap br;
 	
@@ -40,6 +42,7 @@ public class BiomeRemapCommand extends ArgSplittingCommand {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, String[] args, String[] opts) {
 		List<String> list = new ArrayList<>();
+		if (!hasPermission(sender)) return list;
 		if (args.length == 1) {
 			return StringUtil.copyPartialMatches(args[0], subCommands.keySet(), list);
 		} else if (args.length > 1) {
@@ -60,8 +63,17 @@ public class BiomeRemapCommand extends ArgSplittingCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, String[] args, String[] opts) {
+		if (!hasPermission(sender)) {
+			sender.sendMessage(br.getMessages().errorNoPermissions());
+			return true;
+		}
 		if (args.length == 0) {
-			sender.sendMessage(getUsage(sender));
+			String usage = getUsage(sender);
+			if (usage.isEmpty()) {
+				sender.sendMessage(br.getMessages().errorNoPermissions());
+			} else {
+				sender.sendMessage(usage);
+			}
 			return true;
 		} else {
 			SubCommand cmd = subCommands.get(args[0]);
@@ -78,6 +90,10 @@ public class BiomeRemapCommand extends ArgSplittingCommand {
 			}
 			return true;
 		}
+	}
+	
+	private boolean hasPermission(CommandSender sender) {
+		return sender.hasPermission(PERMS) || sender instanceof ConsoleCommandSender;
 	}
 	
 	private String getUsage(CommandSender sender) {
