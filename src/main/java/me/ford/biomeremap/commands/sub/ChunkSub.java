@@ -42,6 +42,7 @@ public class ChunkSub extends SubCommand {
 	public boolean onCommand(CommandSender sender, String[] args, String[] opts) {
 		List<String> options = Arrays.asList(opts);
 		boolean debug = options.contains("--debug");
+		boolean scanAfter = options.contains("--scan") && (sender.hasPermission("biomeremap.scan") || sender instanceof ConsoleCommandSender);
 		boolean ingame = sender instanceof Player;
 		if (!ingame && args.length < 3) {
 			return false;
@@ -83,6 +84,11 @@ public class ChunkSub extends SubCommand {
 		long spent = BiomeRemapper.getInstance().remapChunk(chunk, debug);
 		sender.sendMessage(br.getMessages().getBiomeRemapComplete());
 		if (debug) sender.sendMessage("Took:" + spent + " ms"); // TODO - messaging
+		if (scanAfter) { // TODO - this can be done better if I redesign some things
+			String cmd = String.format("biomeremap scan chunk %s %d %d", chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
+			if (debug) cmd += "--debug";
+			sender.getServer().dispatchCommand(sender, cmd);
+		}
 		return true;
 	}
 

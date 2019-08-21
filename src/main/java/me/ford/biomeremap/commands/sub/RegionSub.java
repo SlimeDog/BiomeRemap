@@ -48,6 +48,7 @@ public class RegionSub extends SubCommand {
 		}
 		List<String> options = Arrays.asList(opts);
 		boolean debug = options.contains("--debug");
+		boolean scanAfter = options.contains("--scan") && (sender.hasPermission("biomeremap.scan") || sender instanceof ConsoleCommandSender);
 		boolean ingame = sender instanceof Player;
 		if (!ingame && args.length < 3) {
 			return false;
@@ -95,7 +96,7 @@ public class RegionSub extends SubCommand {
 		new LargeMappingTask(br, world, chunkXStart, chunkXStart + 32, chunkZStart, chunkZStart + 32, debug,
 				br.getSettings().getRegionRemapProgressStep(),
 				(progress) -> reportProgress(sender, progress),
-				(report) -> remappingEnded(sender, report, debug));
+				(report) -> remappingEnded(sender, report, debug, world, regionX, regionZ, scanAfter));
 		return true;
 	}
 	
@@ -105,10 +106,15 @@ public class RegionSub extends SubCommand {
 		if (!(sender instanceof ConsoleCommandSender)) br.getLogger().info(msg);
 	}
 	
-	private void remappingEnded(CommandSender sender, TaskReport report, boolean debug) {
+	private void remappingEnded(CommandSender sender, TaskReport report, boolean debug, World world, int x, int z, boolean scanAfter) {
 		remapping = false;
 		sender.sendMessage(br.getMessages().getBiomeRemapComplete());
 		if (debug) sender.sendMessage(String.format("Did %d chunks in %d ms in a total of %d ticks", report.getChunksDone(), report.getCompTime(), report.getTicksUsed())); // TODO - messaging
+		if (scanAfter) { // TODO - this can be done better if I redesign some things
+			String cmd = String.format("biomeremap scan region %s %d %d", world.getName(), x, z);
+			if (debug) cmd += "--debug";
+			sender.getServer().dispatchCommand(sender, cmd);
+		}
 	}
 
 	@Override
