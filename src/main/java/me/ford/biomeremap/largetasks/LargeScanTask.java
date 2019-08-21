@@ -28,6 +28,7 @@ public class LargeScanTask extends LargeTask {
 	private void findBiomes(World world, int chunkX, int chunkZ, boolean debug) {
 		int startX = chunkX * 16;
 		int startZ = chunkZ * 16;
+		world.getChunkAt(chunkX, chunkZ);
 		for (int x = startX; x < startX + 16; x++) {
 			for (int z = startZ; z < startZ + 16; z++) {
 				addBiome(world.getBiome(x, z));

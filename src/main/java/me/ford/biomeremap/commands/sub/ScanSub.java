@@ -49,6 +49,10 @@ public class ScanSub extends SubCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, String[] args, String[] opts) {
+		if (scanning) {
+			sender.sendMessage("Already working on a scan!");
+			return true;
+		}
 		if (args.length < 1) {
 			return false;
 		}
