@@ -24,6 +24,7 @@ public class RegionSub extends SubCommand {
 	private boolean remapping = false;
 
 	public RegionSub(BiomeRemap plugin) {
+		super("region");
 		br = plugin;
 		for (World world : br.getServer().getWorlds()) {
 			worldNames.add(world.getName());

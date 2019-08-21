@@ -17,6 +17,7 @@ public class InfoSub extends SubCommand {
 	private final BiomeRemap br;
 	
 	public InfoSub(BiomeRemap plugin) {
+		super("info");
 		br = plugin;
 	}
 

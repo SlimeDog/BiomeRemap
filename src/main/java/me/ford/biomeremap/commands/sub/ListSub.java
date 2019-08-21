@@ -19,6 +19,7 @@ public class ListSub extends SubCommand {
 	private final List<String> worldNames = new ArrayList<>();
 	
 	public ListSub(BiomeRemap plugin) {
+		super("list");
 		br = plugin;
 		for (World world : br.getServer().getWorlds()) {
 			worldNames.add(world.getName());

@@ -22,6 +22,7 @@ public class ChunkSub extends SubCommand {
 	private final List<String> worldNames = new ArrayList<>();
 
 	public ChunkSub(BiomeRemap plugin) {
+		super("chunk");
 		br = plugin;
 		for (World world : br.getServer().getWorlds()) {
 			worldNames.add(world.getName());

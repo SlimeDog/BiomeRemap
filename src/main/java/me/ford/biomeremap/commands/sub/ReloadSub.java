@@ -15,6 +15,7 @@ public class ReloadSub extends SubCommand {
 	private final BiomeRemap br;
 	
 	public ReloadSub(BiomeRemap plugin) {
+		super("reload");
 		br = plugin;
 	}
 

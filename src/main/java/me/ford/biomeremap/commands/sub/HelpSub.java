@@ -2,7 +2,6 @@ package me.ford.biomeremap.commands.sub;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -16,6 +15,7 @@ public class HelpSub extends SubCommand {
 	private final BiomeRemapCommand base;
 	
 	public HelpSub(BiomeRemapCommand base) {
+		super("help");
 		this.base = base;
 	}
 
@@ -32,9 +32,9 @@ public class HelpSub extends SubCommand {
 	
 	private List<String> getAllowedSubCommands(CommandSender sender) {
 		List<String> cmds = new ArrayList<>();
-		for (Entry<String, SubCommand> cmd : base.getSubCommands().entrySet()) {
-			if (cmd.getValue() != this && cmd.getValue().hasPermission(sender)) {
-				cmds.add(cmd.getKey());
+		for (SubCommand cmd : base.getSubCommands()) {
+			if (cmd != this && cmd.hasPermission(sender)) {
+				cmds.add(cmd.getName());
 			}
 		}
 		return cmds;

@@ -2,9 +2,7 @@ package me.ford.biomeremap.commands;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -21,22 +19,26 @@ import me.ford.biomeremap.commands.sub.ScanSub;
 
 public class BiomeRemapCommand extends ArgSplittingCommand {
 	private static final String PERMS = "biomeremap.use";
-	private final Map<String, SubCommand> subCommands = new HashMap<>();
+	private final List<SubCommand> subCommands = new ArrayList<>();
+	private final List<String> subCommandNames = new ArrayList<>();
 	private final BiomeRemap br;
 	
 	public BiomeRemapCommand(BiomeRemap plugin) {
-		br = plugin;
-		subCommands.put("chunk", new ChunkSub(br));
-		subCommands.put("region", new RegionSub(br));
-		subCommands.put("help", new HelpSub(this));
-		subCommands.put("info", new InfoSub(br));
-		subCommands.put("list", new ListSub(br));
-		subCommands.put("reload", new ReloadSub(br));
-		subCommands.put("scan", new ScanSub(br));
+		br = plugin;//help|info|list|chunk|region|scan|reload
+		subCommands.add(new HelpSub(this));
+		subCommands.add(new InfoSub(br));
+		subCommands.add(new ListSub(br));
+		subCommands.add(new ChunkSub(br));
+		subCommands.add(new RegionSub(br));
+		subCommands.add(new ScanSub(br));
+		subCommands.add(new ReloadSub(br));
+		for (SubCommand cmd : subCommands) {
+			subCommandNames.add(cmd.getName());
+		}
 	}
 	
-	public Map<String, SubCommand> getSubCommands() {
-		return new HashMap<>(subCommands);
+	public List<SubCommand> getSubCommands() {
+		return new ArrayList<>(subCommands);
 	}
 
 	@Override
@@ -44,9 +46,13 @@ public class BiomeRemapCommand extends ArgSplittingCommand {
 		List<String> list = new ArrayList<>();
 		if (!hasPermission(sender)) return list;
 		if (args.length == 1) {
-			return StringUtil.copyPartialMatches(args[0], subCommands.keySet(), list);
+			List<String> cmds = new ArrayList<>();
+			for (SubCommand cmd : subCommands) {
+				if (cmd.hasPermission(sender)) cmds.add(cmd.getName());
+			}
+			return StringUtil.copyPartialMatches(args[0], cmds, list);
 		} else if (args.length > 1) {
-			SubCommand cmd = subCommands.get(args[0]);
+			SubCommand cmd = getSuitableSubCommand(args[0]);
 			if (cmd == null) {
 				return list;
 			} else {
@@ -59,6 +65,17 @@ public class BiomeRemapCommand extends ArgSplittingCommand {
 		} else {
 			return null; // shouldn't really happen
 		}
+	}
+	
+	private SubCommand getSuitableSubCommand(String name) {
+		SubCommand cmd = null;
+		for (SubCommand sub : subCommands) {
+			if (sub.getName().equalsIgnoreCase(name)) {
+				cmd = sub;
+				break;
+			}
+		}
+		return cmd;
 	}
 
 	@Override
@@ -76,7 +93,7 @@ public class BiomeRemapCommand extends ArgSplittingCommand {
 			}
 			return true;
 		} else {
-			SubCommand cmd = subCommands.get(args[0]);
+			SubCommand cmd = getSuitableSubCommand(args[0]);
 			if (cmd == null || !cmd.hasPermission(sender)) {
 				if (cmd != null) {
 					sender.sendMessage(br.getMessages().errorNoPermissions());
@@ -98,7 +115,7 @@ public class BiomeRemapCommand extends ArgSplittingCommand {
 	
 	private String getUsage(CommandSender sender) {
 		StringBuilder msg = new StringBuilder();
-		for (SubCommand cmd : subCommands.values()) {
+		for (SubCommand cmd : subCommands) {
 			if (cmd.hasPermission(sender)) {
 				if (msg.length() > 0) {
 					msg.append("\n");

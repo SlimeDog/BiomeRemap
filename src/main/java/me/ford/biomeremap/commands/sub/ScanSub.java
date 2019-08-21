@@ -30,6 +30,7 @@ public class ScanSub extends SubCommand {
 	private boolean scanning = false;
 
 	public ScanSub(BiomeRemap plugin) {
+		super("scan");
 		br = plugin;
 		for (World world : br.getServer().getWorlds()) {
 			worldNames.add(world.getName());
