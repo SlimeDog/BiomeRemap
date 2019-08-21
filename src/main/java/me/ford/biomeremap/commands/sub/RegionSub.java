@@ -43,7 +43,7 @@ public class RegionSub extends SubCommand {
 	@Override
 	public boolean onCommand(CommandSender sender, String[] args, String[] opts) {
 		if (remapping) {
-			sender.sendMessage("Currently in the middle of a remap!");
+			sender.sendMessage(br.getMessages().getBiomeRemapInPrgoress());
 			return true;
 		}
 		List<String> options = Arrays.asList(opts);

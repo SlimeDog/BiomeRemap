@@ -41,6 +41,10 @@ public class Messages extends CustomConfigHandler {
 						.replace("{WORLD_NAME}", worldName).replace("{X}", String.valueOf(x)).replace("{Z}", String.valueOf(z));
 	}
 	
+	public String getBiomeRemapInPrgoress() {
+		return getMessage("BIOMEREMAP_REMAP_IN_PROGRESS", "A biome remap is already in progress; please try again in a few minutes");
+	}
+	
 	public String getRegionRemapStarted(String worldName, int x, int z) {
 		return getMessage("BIOMEREMAP_REMAP_REGION_START", "Remapping region world:{WORLD_NAME} x:{X} z:{Z}")
 						.replace("{WORLD_NAME}", worldName).replace("{X}", String.valueOf(x)).replace("{Z}", String.valueOf(z));
@@ -58,6 +62,10 @@ public class Messages extends CustomConfigHandler {
 	public String getInfoWorldMapped(String world, String biome) {
 		return getMessage("INFO_WORLD_BIOME_MAPPED", "World {WORLD_NAME} was successfully mapped to biomemap {BIOME_ID}")
 						.replace("{WORLD_NAME}", world).replace("{BIOME_ID}", biome);
+	}
+	
+	public String getScanInProgress() {
+		return getMessage("BIOMEREMAP_SCAN_IN_PROGRESS", "A biome scan is already in progress; please try again in a few minutes");
 	}
 	
 	public String getScanChunkStart(String worldName, int x, int z) {
