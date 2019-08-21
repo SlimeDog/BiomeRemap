@@ -37,13 +37,13 @@ public class Messages extends CustomConfigHandler {
 	}
 	
 	public String getChunkRemapStarted(String worldName, int x, int z) {
-		return getMessage("BIOMEREMAP_REMAP_CHUNK_START", "Remapping chunk world:{WORLD_NAME} x:{X} y:{Y}")
-						.replace("{WORLD_NAME}", worldName).replace("{X}", String.valueOf(x)).replace("{Y}", String.valueOf(z));
+		return getMessage("BIOMEREMAP_REMAP_CHUNK_START", "Remapping chunk world:{WORLD_NAME} x:{X} z:{Z}")
+						.replace("{WORLD_NAME}", worldName).replace("{X}", String.valueOf(x)).replace("{Z}", String.valueOf(z));
 	}
 	
 	public String getRegionRemapStarted(String worldName, int x, int z) {
-		return getMessage("BIOMEREMAP_REMAP_REGION_START", "Remapping region world:{WORLD_NAME} x:{X} y:{Y}")
-						.replace("{WORLD_NAME}", worldName).replace("{X}", String.valueOf(x)).replace("{Y}", String.valueOf(z));
+		return getMessage("BIOMEREMAP_REMAP_REGION_START", "Remapping region world:{WORLD_NAME} x:{X} z:{Z}")
+						.replace("{WORLD_NAME}", worldName).replace("{X}", String.valueOf(x)).replace("{Z}", String.valueOf(z));
 	}
 	
 	public String getBiomeRemapComplete() {
@@ -61,13 +61,13 @@ public class Messages extends CustomConfigHandler {
 	}
 	
 	public String getScanChunkStart(String worldName, int x, int z) {
-		return getMessage("BIOMEREMAP_SCAN_CHUNK_START", "Scanning chunk world:{WORLD_NAME} x:{X} y:{Y}")
-						.replace("{WORLD_NAME}", worldName).replace("{X}", String.valueOf(x)).replace("{Y}", String.valueOf(z));
+		return getMessage("BIOMEREMAP_SCAN_CHUNK_START", "Scanning chunk world:{WORLD_NAME} x:{X} z:{Z}")
+						.replace("{WORLD_NAME}", worldName).replace("{X}", String.valueOf(x)).replace("{Z}", String.valueOf(z));
 	}
 	
 	public String getScanRegionStart(String worldName, int x, int z) {
-		return getMessage("BIOMEREMAP_SCAN_REGION_START", "Scanning region world:{WORLD_NAME} x:{X} y:{Y}")
-						.replace("{WORLD_NAME}", worldName).replace("{X}", String.valueOf(x)).replace("{Y}", String.valueOf(z));
+		return getMessage("BIOMEREMAP_SCAN_REGION_START", "Scanning region world:{WORLD_NAME} x:{X} z:{Z}")
+						.replace("{WORLD_NAME}", worldName).replace("{X}", String.valueOf(x)).replace("{Z}", String.valueOf(z));
 	}
 	
 	public String getScanProgress(String progress) {
@@ -79,13 +79,13 @@ public class Messages extends CustomConfigHandler {
 	}
 	
 	public String getScanChunkHeader(String worldName, int x, int z) {
-		return getMessage("BIOMEREMAP_SCAN_CHUNK_HEADER", "Biomes in chunk world:{WORLD_NAME} x:{X} y:{Y}")
-						.replace("{WORLD_NAME}", worldName).replace("{X}", String.valueOf(x)).replace("{Y}", String.valueOf(z));
+		return getMessage("BIOMEREMAP_SCAN_CHUNK_HEADER", "Biomes in chunk world:{WORLD_NAME} x:{X} z:{Z}")
+						.replace("{WORLD_NAME}", worldName).replace("{X}", String.valueOf(x)).replace("{Z}", String.valueOf(z));
 	}
 	
 	public String getScanRegionHeader(String worldName, int x, int z) {
-		return getMessage("BIOMEREMAP_SCAN_REGION_HEADER", "Biomes in region world:{WORLD_NAME} x:{X} y:{Y}")
-						.replace("{WORLD_NAME}", worldName).replace("{X}", String.valueOf(x)).replace("{Y}", String.valueOf(z));
+		return getMessage("BIOMEREMAP_SCAN_REGION_HEADER", "Biomes in region world:{WORLD_NAME} x:{X} z:{Z}")
+						.replace("{WORLD_NAME}", worldName).replace("{X}", String.valueOf(x)).replace("{Z}", String.valueOf(z));
 	}
 	
 	public String errorBiomeNotFound(String biome) {
