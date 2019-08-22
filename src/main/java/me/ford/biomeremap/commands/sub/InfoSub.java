@@ -12,7 +12,7 @@ import me.ford.biomeremap.commands.SubCommand;
 import me.ford.biomeremap.mapping.BiomeMap;
 
 public class InfoSub extends SubCommand {
-	private static final String PERMS = "biomeremap.use"; // TODO - different perms?
+	private static final String PERMS = "biomeremap.use";
 	private static final String USAGE = "/biomeremap info <biomemap-id>";
 	private final BiomeRemap br;
 	

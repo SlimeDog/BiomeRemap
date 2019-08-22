@@ -13,7 +13,7 @@ import me.ford.biomeremap.commands.SubCommand;
 import me.ford.biomeremap.mapping.BiomeMap;
 
 public class ListSub extends SubCommand {
-	private static final String PERMS = "biomeremap.use"; // TODO - different perms?
+	private static final String PERMS = "biomeremap.use";
 	private static final String USAGE = "/biomeremap list [world]";
 	private final BiomeRemap br;
 	private final List<String> worldNames = new ArrayList<>();
