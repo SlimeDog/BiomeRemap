@@ -1,11 +1,11 @@
-package me.ford.biomeremap.mapping;
+package me.ford.biomeremap.largetasks;
 
 import java.util.function.Consumer;
 
 import org.bukkit.World;
 
 import me.ford.biomeremap.BiomeRemap;
-import me.ford.biomeremap.largetasks.LargeTask;
+import me.ford.biomeremap.mapping.BiomeRemapper;
 
 public class LargeMappingTask extends LargeTask {
 

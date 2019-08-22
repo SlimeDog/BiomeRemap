@@ -13,8 +13,8 @@ import org.bukkit.util.StringUtil;
 
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.commands.SubCommand;
+import me.ford.biomeremap.largetasks.LargeMappingTask;
 import me.ford.biomeremap.largetasks.LargeTask.TaskReport;
-import me.ford.biomeremap.mapping.LargeMappingTask;
 
 public class RegionSub extends SubCommand {
 	private static final String PERMS = "biomeremap.remap";

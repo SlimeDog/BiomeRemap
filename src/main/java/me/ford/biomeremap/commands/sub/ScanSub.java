@@ -2,15 +2,10 @@ package me.ford.biomeremap.commands.sub;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.block.Biome;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -18,9 +13,7 @@ import org.bukkit.util.StringUtil;
 
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.commands.SubCommand;
-import me.ford.biomeremap.largetasks.LargeScanTask;
-import me.ford.biomeremap.largetasks.LargeScanTask.BiomeReport;
-import me.ford.biomeremap.largetasks.LargeTask.TaskReport;
+import me.ford.biomeremap.largetasks.LargeScanTaskStarter;
 
 public class ScanSub extends SubCommand {
 	private static final String PERMS = "biomeremap.scan";
@@ -94,65 +87,18 @@ public class ScanSub extends SubCommand {
 			sender.sendMessage(br.getMessages().errorWorldNotFound(args[1]));
 			return true;
 		}
-		
-		int minX, maxX, minZ, maxZ;
-		if (!region) {
-			minX = x;
-			maxX = x + 1;
-			minZ = z;
-			maxZ = z + 1;
-		} else {
-			minX = x * 32;
-			maxX = minX + 32;
-			minZ = z * 32;
-			maxZ = minZ + 32;
-		}
 		if (region) {
 			sender.sendMessage(br.getMessages().getScanRegionStart(world.getName(), x, z));
 		} else {
 			sender.sendMessage(br.getMessages().getScanChunkStart(world.getName(), x, z));
 		}
-		new LargeScanTask(br, world, minX, maxX, minZ, maxZ, debug,
-				br.getSettings().getScanProgressStep(),
-				(progress) -> onProgress(sender, progress), 
-				(task) -> onEnd(sender, task, debug), 
-				(report) -> showMap(sender, report, region, debug, world.getName(), x, z));
+		new LargeScanTaskStarter(br, world, sender, x, z, region, debug, () -> taskDone());
 		scanning = true;
 		return true;
 	}
 	
-	private void onProgress(CommandSender sender, String progress) {
-		String msg = br.getMessages().getScanProgress(progress);
-		sender.sendMessage(msg);
-		if (!(sender instanceof ConsoleCommandSender)) br.getLogger().info(progress);
-	}
-	
-	private void onEnd(CommandSender sender, TaskReport report, boolean debug) {
-		sender.sendMessage(br.getMessages().getScanComplete());
-		if (debug) sender.sendMessage(br.getMessages().getBiomeRemapSummary(report.getChunksDone(), report.getCompTime(), report.getTicksUsed()));
+	public void taskDone() {
 		scanning = false;
-	}
-	
-	private void showMap(CommandSender sender, BiomeReport report, boolean region, boolean debug,
-						String worldName, int x, int z) {
-		if (region) {
-			sender.sendMessage(br.getMessages().getScanRegionHeader(worldName, x, z));
-		} else {
-			sender.sendMessage(br.getMessages().getScanChunkHeader(worldName, x, z));
-		}
-		Map<Biome, Integer> sortedMap = report.getBiomes().entrySet().stream()
-                .sorted((e1,e2) -> e1.getKey().name().compareTo(e2.getKey().name()))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1,e2) -> e1, LinkedHashMap::new));
-		double total = 0;
-		for (int val : sortedMap.values()) {
-			total += val;
-		}
-		for (Entry<Biome, Integer> entry : sortedMap.entrySet()) {
-			String percentage = String.format("%3.0f%%", 100*((double) entry.getValue())/total);
-			sender.sendMessage(br.getMessages().getScanListItem(percentage, entry.getKey().name()));
-		}
-		int nr = report.nrOfNulls();
-		if (nr > 0) sender.sendMessage(br.getMessages().getScanListItem("0", "null"));
 	}
 
 	@Override
