@@ -13,6 +13,7 @@ import org.bukkit.util.StringUtil;
 
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.commands.SubCommand;
+import me.ford.biomeremap.largetasks.LargeScanTaskStarter;
 import me.ford.biomeremap.mapping.BiomeRemapper;
 
 public class ChunkSub extends SubCommand {
@@ -86,10 +87,8 @@ public class ChunkSub extends SubCommand {
 		if (ingame) br.getLogger().info(startMsg);
 		BiomeRemapper.getInstance().remapChunk(chunk, debug);
 		sender.sendMessage(br.getMessages().getBiomeRemapComplete());
-		if (scanAfter) { // TODO - this can be done better if I redesign some things
-			String cmd = String.format("biomeremap scan chunk %s %d %d", chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
-			if (debug) cmd += "--debug";
-			sender.getServer().dispatchCommand(sender, cmd);
+		if (scanAfter) { 
+			new LargeScanTaskStarter(br, chunk.getWorld(), sender, chunk.getX(), chunk.getZ(), false, debug, null);
 		}
 		return true;
 	}
