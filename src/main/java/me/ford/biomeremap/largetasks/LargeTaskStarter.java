@@ -39,7 +39,7 @@ public abstract class LargeTaskStarter {
 			stopX = chunkX + 1;
 			stopZ = chunkZ + 1;
 		}
-		startTask();
+		br.getServer().getScheduler().runTask(br, () -> startTask());
 	}
 	
 	protected abstract void startTask();

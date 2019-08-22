@@ -92,7 +92,6 @@ public class RegionSub extends SubCommand {
 		sender.sendMessage(startedMsg);
 		if (!ingame) br.getLogger().info(startedMsg);
 		remapping = true;
-
 		new LargeMappingTaskStarter(br, world, sender, regionX, regionZ, true, debug, () -> remapEnded(), scanAfter);
 		return true;
 	}
