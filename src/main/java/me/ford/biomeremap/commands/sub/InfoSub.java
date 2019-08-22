@@ -38,7 +38,7 @@ public class InfoSub extends SubCommand {
 		}
 		BiomeMap map = br.getSettings().getBiomeMap(args[0]);
 		if (map == null) {
-			sender.sendMessage(br.getMessages().errorBiomeNotFound(args[0]));
+			sender.sendMessage(br.getMessages().errorBiomeMapNotFound(args[0]));
 			return true;
 		}
 		sender.sendMessage(br.getMessages().getBiomeRemapInfo(map.getDescription(), map.getApplicableWorldNames()));

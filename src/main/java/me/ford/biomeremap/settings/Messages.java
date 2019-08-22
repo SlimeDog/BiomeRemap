@@ -59,6 +59,13 @@ public class Messages extends CustomConfigHandler {
 						.replace("{PERCENTAGE}", progress);
 	}
 	
+	public String getBiomeRemapSummary(int chunks, long ms, int ticks) {
+		return getMessage("BIOMEREMAP_REMAP_SUMMARY", "Remapped {CHUNKS} chunks in {MILLISECONDS} ms in a total of {TICKS} ticks")
+						.replace("{CHUNKS}", String.valueOf(chunks))
+						.replace("{MILLISECONDS", String.valueOf(ms))
+						.replace("{TICKS}", String.valueOf(ticks));
+	}
+	
 	public String getInfoWorldMapped(String world, String biome) {
 		return getMessage("INFO_WORLD_BIOME_MAPPED", "World {WORLD_NAME} was successfully mapped to biomemap {BIOME_ID}")
 						.replace("{WORLD_NAME}", world).replace("{BIOME_ID}", biome);
@@ -97,7 +104,11 @@ public class Messages extends CustomConfigHandler {
 	}
 	
 	public String errorBiomeNotFound(String biome) {
-		return getMessage("ERROR_BIOME_NOT_FOUND", "Biome id {BIOME_ID} was not found.").replace("{BIOME_ID}", biome);
+		return getMessage("ERROR_BIOME_NOT_FOUND", "Biome {BIOME_ID} does not exist").replace("{BIOME_ID}", biome);
+	}
+	
+	public String errorBiomeMapNotFound(String mapName) {
+		return getMessage("ERROR_BIOMEMAP_NOT_FOUND", "Biomemap {BIOMEMAP} does not exist").replace("{BIOMEMAP}", mapName);
 	}
 	
 	public String errorNoPermissions() {

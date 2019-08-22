@@ -127,7 +127,7 @@ public class ScanSub extends SubCommand {
 	
 	private void onEnd(CommandSender sender, TaskReport report, boolean debug) {
 		sender.sendMessage(br.getMessages().getScanComplete());
-		if (debug) sender.sendMessage(String.format("Did %d chunks in %d ms in a total of %d ticks", report.getChunksDone(), report.getCompTime(), report.getTicksUsed())); // TODO - messaging
+		if (debug) sender.sendMessage(br.getMessages().getBiomeRemapSummary(report.getChunksDone(), report.getCompTime(), report.getTicksUsed()));
 		scanning = false;
 	}
 	

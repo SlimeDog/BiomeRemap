@@ -1,3 +1,5 @@
+# messages.yml
+#
 # All messages produced by BiomeRemap may be localized here.
 # This file must contain valid YAML code. A YAML checker may be found at http://www.yamllint.com
 #
@@ -26,6 +28,7 @@ BIOMEREMAP_REMAP_CHUNK_START: "Remapping chunk world:{WORLD_NAME} x:{X} z:{Z}"
 BIOMEREMAP_REMAP_REGION_START: "Remapping region world:{WORLD_NAME} x:{X} z:{Z}"
 BIOMEREMAP_REMAP_PROGRESS: "{PERCENTAGE}"
 BIOMEREMAP_REMAP_COMPLETE: "Remap complete"
+BIOMEREMAP_REMAP_SUMMARY: "Remapped {CHUNKS} chunks in {MILLISECONDS} ms in a total of {TICKS} ticks"
 
 # Messages produced by /biomeremap scan
 #
@@ -37,12 +40,14 @@ BIOMEREMAP_SCAN_COMPLETE: "Scan complete"
 BIOMEREMAP_SCAN_CHUNK_HEADER: "Biomes in chunk world:{WORLD_NAME} x:{X} z:{Z}"
 BIOMEREMAP_SCAN_REGION_HEADER: "Biomes in region world:{WORLD_NAME} x:{X} z:{Z}"
 
-# Error messages
-#
-ERROR_BIOME_NOT_FOUND: "Biome id {BIOME_ID} was not found"
-ERROR_NO_PERMISSION: "You do not have permission to execute that command"
-ERROR_WORLD_NOT_FOUND: "World name {WORLD_NAME} was not found"
-
 # Information messages
 # 
 INFO_WORLD_BIOME_MAPPED: "World {WORLD_NAME} was successfully mapped to biomemap {BIOME_ID}"
+
+# Error messages
+#
+ERROR_BIOME_NOT_FOUND: "Biome {BIOME_ID} does not exist"
+ERROR_BIOMEMAP_NOT_FOUND: "Biomemap {BIOMEMAP} does not exist"
+ERROR_WORLD_NOT_FOUND: "World {WORLD_NAME} does not exist"
+
+ERROR_NO_PERMISSION: "You do not have permission to execute that command"

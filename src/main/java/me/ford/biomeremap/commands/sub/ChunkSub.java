@@ -76,14 +76,13 @@ public class ChunkSub extends SubCommand {
 			chunk = world.getChunkAt(x, z);
 		}
 		if (br.getSettings().getApplicableBiomeMap(chunk.getWorld().getName()) == null) {
-			sender.sendMessage("world not configured - which message?"); // TODO - messaging
+			sender.sendMessage(br.getMessages().getBiomeRemapNoMap(chunk.getWorld().getName()));
 			return true;
 		}
 		sender.sendMessage(br.getMessages().getChunkRemapStarted(chunk.getWorld().getName(), chunk.getX(), chunk.getZ()));
 		if (ingame) br.getLogger().info(String.format("Remapping world=%s, x=%d, z=%d", chunk.getWorld().getName(), chunk.getX(), chunk.getZ()));
-		long spent = BiomeRemapper.getInstance().remapChunk(chunk, debug);
+		BiomeRemapper.getInstance().remapChunk(chunk, debug);
 		sender.sendMessage(br.getMessages().getBiomeRemapComplete());
-		if (debug) sender.sendMessage("Took:" + spent + " ms"); // TODO - messaging
 		if (scanAfter) { // TODO - this can be done better if I redesign some things
 			String cmd = String.format("biomeremap scan chunk %s %d %d", chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
 			if (debug) cmd += "--debug";

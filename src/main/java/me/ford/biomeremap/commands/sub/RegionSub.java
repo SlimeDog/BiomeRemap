@@ -84,7 +84,7 @@ public class RegionSub extends SubCommand {
 			}
 		}
 		if (br.getSettings().getApplicableBiomeMap(world.getName()) == null) {
-			sender.sendMessage("world not configured - which message?"); // TODO - messaging
+			sender.sendMessage(br.getMessages().getBiomeRemapNoMap(world.getName()));
 			return true;
 		}
 		String startedMsg = br.getMessages().getRegionRemapStarted(world.getName(), regionX, regionZ);
@@ -109,7 +109,7 @@ public class RegionSub extends SubCommand {
 	private void remappingEnded(CommandSender sender, TaskReport report, boolean debug, World world, int x, int z, boolean scanAfter) {
 		remapping = false;
 		sender.sendMessage(br.getMessages().getBiomeRemapComplete());
-		if (debug) sender.sendMessage(String.format("Did %d chunks in %d ms in a total of %d ticks", report.getChunksDone(), report.getCompTime(), report.getTicksUsed())); // TODO - messaging
+		if (debug) sender.sendMessage(br.getMessages().getBiomeRemapSummary(report.getChunksDone(), report.getCompTime(), report.getTicksUsed()));
 		if (scanAfter) { // TODO - this can be done better if I redesign some things
 			String cmd = String.format("biomeremap scan region %s %d %d", world.getName(), x, z);
 			if (debug) cmd += "--debug";
