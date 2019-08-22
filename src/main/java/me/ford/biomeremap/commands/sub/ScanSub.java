@@ -138,7 +138,7 @@ public class ScanSub extends SubCommand {
 		} else {
 			sender.sendMessage(br.getMessages().getScanChunkHeader(worldName, x, z));
 		}
-		String format = "%d %s";
+		String format = "%d %s"; // TODO - messaging
 		Map<Biome, Integer> sortedMap = report.getBiomes().entrySet().stream()
                 .sorted((e1,e2) -> e1.getKey().name().compareTo(e2.getKey().name()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1,e2) -> e1, LinkedHashMap::new));

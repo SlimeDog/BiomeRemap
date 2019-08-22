@@ -56,7 +56,6 @@ public class BiomeRemapper {
 		}
 		if (!toChange.isEmpty()) {
 			if (debug) BiomeRemap.debug("Found:" + changes);
-			// TODO - might want to spread it out? But then again, if they are gonna load chunks, they'll do many at a time...
 			doMapping(chunk, toChange, debug);
 		}
 		return System.currentTimeMillis() - start;
@@ -94,7 +93,6 @@ public class BiomeRemapper {
 		}
 		if (!toChange.isEmpty()) {
 			BiomeRemap.debug("Found:" + toChange);
-			// TODO - might want to spread it out? But then again, if they are gonna load chunks, they'll do many a
 			br.getServer().getScheduler().runTask(br, () -> doMapping(chunk, toChange));
 		}
 	}
