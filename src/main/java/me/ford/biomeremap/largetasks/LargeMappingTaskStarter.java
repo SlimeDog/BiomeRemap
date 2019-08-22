@@ -13,16 +13,19 @@ import org.bukkit.command.ConsoleCommandSender;
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.largetasks.LargeScanTask.BiomeReport;
 import me.ford.biomeremap.largetasks.LargeTask.TaskReport;
+import me.ford.biomeremap.mapping.BiomeMap;
 
 public class LargeMappingTaskStarter extends LargeTaskStarter {
 	private final Runnable runnable;
 	private final boolean scan;
+	private BiomeMap map;
 
 	public LargeMappingTaskStarter(BiomeRemap plugin, World world, CommandSender owner, int x, int z, boolean region,
-			boolean debug, Runnable runnable, boolean scan) {
+			boolean debug, Runnable runnable, boolean scan, BiomeMap map) {
 		super(plugin, world, owner, x, z, region, debug);
 		this.runnable = runnable;
 		this.scan = scan;
+		this.map = map;
 	}
 
 	@Override
@@ -31,12 +34,12 @@ public class LargeMappingTaskStarter extends LargeTaskStarter {
 			new LargeMappingTask(br(), world(), chunkX(), stopX(), chunkZ(), stopZ(), debug(),
 					br().getSettings().getRegionRemapProgressStep(),
 					(progress) -> reportProgress(owner(), progress),
-					(report) -> remappingEnded(owner(), report, debug(), world(), x(), z(), scan));
+					(report) -> remappingEnded(owner(), report, debug(), world(), x(), z(), scan), map);
 		} else {
 			new LargeMappingWithScanTask(br(), world(), chunkX(), stopX(), chunkZ(), stopZ(), debug(),
 					br().getSettings().getRegionRemapProgressStep(),
 					(progress) -> reportProgress(owner(), progress),
-					(report) -> remappingEnded(owner(), report, debug(), world(), x(), z(), scan),
+					(report) -> remappingEnded(owner(), report, debug(), world(), x(), z(), scan), map,
 					(report) -> showMap(owner(), report, true, debug(), world().getName(), x(), z()));
 		}
 	}

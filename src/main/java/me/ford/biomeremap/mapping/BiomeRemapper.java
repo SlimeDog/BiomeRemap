@@ -31,11 +31,19 @@ public class BiomeRemapper {
 		return remapChunk(chunk, true);
 	}
 	
+	public long remapChunk(Chunk chunk, BiomeMap map) {
+		return remapChunk(chunk, false, map);
+	}
+	
 	public long remapChunk(Chunk chunk, boolean debug) {
+		BiomeMap map = br.getSettings().getApplicableBiomeMap(chunk.getWorld().getName());
+		return remapChunk(chunk, debug, map);
+	}
+	
+	public long remapChunk(Chunk chunk, boolean debug, BiomeMap map) {
 		long start = System.currentTimeMillis();
 		if (debug) BiomeRemap.debug("Looking for biomes to remap (SYNC) in chunk:" + chunk.getX() + "," + chunk.getZ() + "...");
 		World world = chunk.getWorld();
-		BiomeMap map = br.getSettings().getApplicableBiomeMap(world.getName());
 		if (map == null) return 0;
 		if (debug) BiomeRemap.debug(world.getName() + "->Mapping " + map.getName());
 		int chunkX = chunk.getX() * 16;

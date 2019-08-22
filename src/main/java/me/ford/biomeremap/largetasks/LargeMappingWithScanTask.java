@@ -9,6 +9,7 @@ import org.bukkit.block.Biome;
 
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.largetasks.LargeScanTask.BiomeReport;
+import me.ford.biomeremap.mapping.BiomeMap;
 import me.ford.biomeremap.mapping.BiomeScanner;
 
 public class LargeMappingWithScanTask extends LargeMappingTask {
@@ -16,8 +17,9 @@ public class LargeMappingWithScanTask extends LargeMappingTask {
 	private final Consumer<BiomeReport> biomeReport;
 
 	public LargeMappingWithScanTask(BiomeRemap plugin, World world, int minX, int maxX, int minZ, int maxZ,
-			boolean debug, int progressStep, Consumer<String> progress, Consumer<TaskReport> ender, Consumer<BiomeReport> biomeReport) {
-		super(plugin, world, minX, maxX, minZ, maxZ, debug, progressStep, progress, ender);
+			boolean debug, int progressStep, Consumer<String> progress, Consumer<TaskReport> ender, BiomeMap map, 
+			Consumer<BiomeReport> biomeReport) {
+		super(plugin, world, minX, maxX, minZ, maxZ, debug, progressStep, progress, ender, map);
 		this.biomeReport = biomeReport;
 	}
 
