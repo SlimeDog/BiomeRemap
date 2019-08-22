@@ -61,8 +61,6 @@ public class LargeScanTaskStarter extends LargeTaskStarter {
 			String percentage = String.format("%3.0f%%", 100*((double) entry.getValue())/total);
 			sender.sendMessage(br().getMessages().getScanListItem(percentage, entry.getKey().name()));
 		}
-		int nr = report.nrOfNulls();
-		if (nr > 0) sender.sendMessage(br().getMessages().getScanListItem("0", "null"));
 	}
 
 }

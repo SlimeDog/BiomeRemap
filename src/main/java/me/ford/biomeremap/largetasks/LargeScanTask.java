@@ -8,11 +8,11 @@ import org.bukkit.World;
 import org.bukkit.block.Biome;
 
 import me.ford.biomeremap.BiomeRemap;
+import me.ford.biomeremap.mapping.BiomeScanner;
 
 public class LargeScanTask extends LargeTask {
 	private final Map<Biome, Integer> biomeMap = new HashMap<>();
 	private final Consumer<BiomeReport> biomes;
-	private int nulls = 0;
 	
 	public LargeScanTask(BiomeRemap plugin, World world, int minX, int maxX, int minZ, int maxZ, boolean debug,
 			int progressStep, Consumer<String> progress, Consumer<TaskReport> ender, Consumer<BiomeReport> biomes) {
@@ -26,49 +26,23 @@ public class LargeScanTask extends LargeTask {
 	}
 	
 	private void findBiomes(World world, int chunkX, int chunkZ, boolean debug) {
-		int startX = chunkX * 16;
-		int startZ = chunkZ * 16;
-		world.getChunkAt(chunkX, chunkZ);
-		for (int x = startX; x < startX + 16; x++) {
-			for (int z = startZ; z < startZ + 16; z++) {
-				addBiome(world.getBiome(x, z));
-			}
-		}
-	}
-	
-	private void addBiome(Biome biome) {
-		if (biome == null) {
-			nulls++;
-			return;
-		}
-		Integer cur = biomeMap.get(biome);
-		if (cur == null) {
-			cur = 0;
-		}
-		cur++;
-		biomeMap.put(biome, cur);
+		BiomeScanner.getInstance().addBiomesFor(biomeMap, world, chunkX, chunkZ);
 	}
 
 	@Override
 	protected void whenDone() {
-		biomes.accept(new BiomeReport(biomeMap, nulls));
+		biomes.accept(new BiomeReport(biomeMap));
 	}
 	
 	public static class BiomeReport {
 		private final Map<Biome, Integer> biomes;
-		private final int nrOfNulls;
 		
-		public BiomeReport(Map<Biome, Integer> biomes, int nrOfNulls) {
+		public BiomeReport(Map<Biome, Integer> biomes) {
 			this.biomes = biomes;
-			this.nrOfNulls = nrOfNulls;
 		}
 		
 		public Map<Biome, Integer> getBiomes() {
 			return biomes;
-		}
-		
-		public int nrOfNulls() {
-			return nrOfNulls;
 		}
 	}
 
