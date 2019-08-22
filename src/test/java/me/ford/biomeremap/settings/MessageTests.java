@@ -56,11 +56,17 @@ public class MessageTests {
 		assertMessage(msg);
 		msg = plugin.getMessages().getScanRegionStart("starting a region", -11, 11);
 		assertMessage(msg);
+		msg = plugin.getMessages().getScanListItem("THEIS", "BIUUM");
+		assertMessage(msg);
 		msg = plugin.getMessages().errorBiomeMapNotFound("I know you!");
 		assertMessage(msg);
 		msg = plugin.getMessages().errorBiomeNotFound("This isn't a biome!");
 		assertMessage(msg);
 		msg = plugin.getMessages().errorWorldNotFound("There's no world!");
+		assertMessage(msg);
+		msg = plugin.getMessages().errorNotInteger("DOUBLE!");
+		assertMessage(msg);
+		msg = plugin.getMessages().errorDuplicateBiomeMapsForWorld("The One, the only!!");
 		assertMessage(msg);
 	}
 

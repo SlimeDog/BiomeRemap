@@ -39,15 +39,18 @@ BIOMEREMAP_SCAN_PROGRESS: "{PERCENTAGE}"
 BIOMEREMAP_SCAN_COMPLETE: "Scan complete"
 BIOMEREMAP_SCAN_CHUNK_HEADER: "Biomes in chunk world:{WORLD_NAME} x:{X} z:{Z}"
 BIOMEREMAP_SCAN_REGION_HEADER: "Biomes in region world:{WORLD_NAME} x:{X} z:{Z}"
+BIOMEREMAP_SCAN_LIST_ITEM: "{PERCENTAGE} {BIOME_ID}"
 
 # Information messages
 # 
-INFO_WORLD_BIOME_MAPPED: "World {WORLD_NAME} was successfully mapped to biomemap {BIOME_ID}"
+INFO_WORLD_BIOME_MAPPED: "Biomemap {BIOMEMAP} was successfully assigned to World {WORLD_NAME}"
 
 # Error messages
 #
 ERROR_BIOME_NOT_FOUND: "Biome {BIOME_ID} does not exist"
 ERROR_BIOMEMAP_NOT_FOUND: "Biomemap {BIOMEMAP} does not exist"
+ERROR_PARAMETER_INVALID_INTEGER: "{VALUE} is not a value integer"
+ERROR_WORLD_DUPLICATE_ASSIGNMENT: "Multiple biomemaps are assigned to world {WORLD_NAME}; fix configuration and reload"
 ERROR_WORLD_NOT_FOUND: "World {WORLD_NAME} does not exist"
 
 ERROR_NO_PERMISSION: "You do not have permission to execute that command"

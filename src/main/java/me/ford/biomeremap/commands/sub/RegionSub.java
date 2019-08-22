@@ -75,12 +75,14 @@ public class RegionSub extends SubCommand {
 			try {
 				regionX = Integer.parseInt(args[1]);
 			} catch (NumberFormatException e) {
-				return false; // USAGE - maybe somethinge else?
+				sender.sendMessage(br.getMessages().errorNotInteger(args[1]));
+				return true;
 			}
 			try {
 				regionZ = Integer.parseInt(args[2]);
 			} catch (NumberFormatException e) {
-				return false; // USAGE - maybe somethinge else?
+				sender.sendMessage(br.getMessages().errorNotInteger(args[2]));
+				return true;
 			}
 		}
 		if (br.getSettings().getApplicableBiomeMap(world.getName()) == null) {

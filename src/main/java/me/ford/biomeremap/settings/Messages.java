@@ -66,9 +66,9 @@ public class Messages extends CustomConfigHandler {
 						.replace("{TICKS}", String.valueOf(ticks));
 	}
 	
-	public String getInfoWorldMapped(String world, String biome) {
-		return getMessage("INFO_WORLD_BIOME_MAPPED", "World {WORLD_NAME} was successfully mapped to biomemap {BIOME_ID}")
-						.replace("{WORLD_NAME}", world).replace("{BIOME_ID}", biome);
+	public String getInfoWorldMapped(String world, String biomemap) {
+		return getMessage("INFO_WORLD_BIOME_MAPPED", "Biomemap {BIOMEMAP} was successfully assigned to World {WORLD_NAME}")
+						.replace("{WORLD_NAME}", world).replace("{BIOMEMAP}", biomemap);
 	}
 	
 	public String getScanInProgress() {
@@ -103,6 +103,11 @@ public class Messages extends CustomConfigHandler {
 						.replace("{WORLD_NAME}", worldName).replace("{X}", String.valueOf(x)).replace("{Z}", String.valueOf(z));
 	}
 	
+	public String getScanListItem(String percentage, String biome) {
+		return getMessage("BIOMEREMAP_SCAN_LIST_ITEM", "{PERCENTAGE} {BIOME_ID}")
+						.replace("{PERCENTAGE}", percentage).replace("{BIOME_ID}", biome);
+	}
+	
 	public String errorBiomeNotFound(String biome) {
 		return getMessage("ERROR_BIOME_NOT_FOUND", "Biome {BIOME_ID} does not exist").replace("{BIOME_ID}", biome);
 	}
@@ -117,6 +122,16 @@ public class Messages extends CustomConfigHandler {
 	
 	public String errorWorldNotFound(String worldName) {
 		return getMessage("ERROR_WORLD_NOT_FOUND", "World name {WORLD_NAME} was not found.")
+						.replace("{WORLD_NAME}", worldName);
+	}
+	
+	public String errorNotInteger(String value) {
+		return getMessage("ERROR_PARAMETER_INVALID_INTEGER", "{VALUE} is not a value integer")
+						.replace("{VALUE}", value);
+	}
+	
+	public String errorDuplicateBiomeMapsForWorld(String worldName) {
+		return getMessage("ERROR_WORLD_DUPLICATE_ASSIGNMENT", "Multiple biomemaps are assigned to world {WORLD_NAME}; fix configuration and reload")
 						.replace("{WORLD_NAME}", worldName);
 	}
 	

@@ -33,7 +33,10 @@ public class Settings {
 		}
 		for (BiomeMap map : maps.values()) {
 			for (String worldName : map.getApplicableWorldNames()) {
-				worldMap.put(worldName, map); // TODO - what happens with multiple mappings?
+				BiomeMap prev = worldMap.put(worldName, map);
+				if (prev != null) {
+					br.getLogger().warning(br.getMessages().errorDuplicateBiomeMapsForWorld(worldName));
+				}
 				br.getLogger().info(br.getMessages().getInfoWorldMapped(worldName, map.getName()));
 			}
 		}

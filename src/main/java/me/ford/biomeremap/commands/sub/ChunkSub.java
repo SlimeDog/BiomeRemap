@@ -65,13 +65,15 @@ public class ChunkSub extends SubCommand {
 			try {
 				x = Integer.parseInt(args[1]);
 			} catch (NumberFormatException e) {
-				return false; // USAGE - maybe somethinge else?
+				sender.sendMessage(br.getMessages().errorNotInteger(args[1]));
+				return true;
 			}
 			int z;
 			try {
 				z = Integer.parseInt(args[2]);
 			} catch (NumberFormatException e) {
-				return false; // USAGE - maybe somethinge else?
+				sender.sendMessage(br.getMessages().errorNotInteger(args[2]));
+				return true;
 			}
 			chunk = world.getChunkAt(x, z);
 		}

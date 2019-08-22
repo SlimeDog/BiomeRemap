@@ -80,12 +80,14 @@ public class ScanSub extends SubCommand {
 			try {
 				x = Integer.parseInt(args[2]);
 			} catch (NumberFormatException e) {
-				return false; // TODO - some error?
+				sender.sendMessage(br.getMessages().errorNotInteger(args[2]));
+				return true;
 			}
 			try {
 				z = Integer.parseInt(args[3]);
 			} catch (NumberFormatException e) {
-				return false; // TODO - some error?
+				sender.sendMessage(br.getMessages().errorNotInteger(args[3]));
+				return true;
 			}
 		}
 		if (world == null) {
@@ -138,15 +140,19 @@ public class ScanSub extends SubCommand {
 		} else {
 			sender.sendMessage(br.getMessages().getScanChunkHeader(worldName, x, z));
 		}
-		String format = "%d %s"; // TODO - messaging
 		Map<Biome, Integer> sortedMap = report.getBiomes().entrySet().stream()
                 .sorted((e1,e2) -> e1.getKey().name().compareTo(e2.getKey().name()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1,e2) -> e1, LinkedHashMap::new));
+		double total = 0;
+		for (int val : sortedMap.values()) {
+			total += val;
+		}
 		for (Entry<Biome, Integer> entry : sortedMap.entrySet()) {
-			sender.sendMessage(String.format(format, entry.getValue(), entry.getKey().name())); // TODO - messaging
+			String percentage = String.format("%3.0f%%", 100*((double) entry.getValue())/total);
+			sender.sendMessage(br.getMessages().getScanListItem(percentage, entry.getKey().name()));
 		}
 		int nr = report.nrOfNulls();
-		if (nr > 0) sender.sendMessage(String.format(format, nr, "null"));
+		if (nr > 0) sender.sendMessage(br.getMessages().getScanListItem("0", "null"));
 	}
 
 	@Override
