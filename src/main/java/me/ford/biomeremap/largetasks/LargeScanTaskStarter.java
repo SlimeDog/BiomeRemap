@@ -40,7 +40,7 @@ public class LargeScanTaskStarter extends LargeTaskStarter {
 	private void onEnd(CommandSender sender, TaskReport report, boolean debug) {
 		sender.sendMessage(br().getMessages().getScanComplete());
 		if (debug) sender.sendMessage(br().getMessages().getBiomeRemapSummary(report.getChunksDone(), report.getCompTime(), report.getTicksUsed()));
-		runnable.run();
+		if (runnable != null) runnable.run();
 	}
 	
 	private void showMap(CommandSender sender, BiomeReport report, boolean region, boolean debug,

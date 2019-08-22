@@ -13,8 +13,7 @@ import org.bukkit.util.StringUtil;
 
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.commands.SubCommand;
-import me.ford.biomeremap.largetasks.LargeMappingTask;
-import me.ford.biomeremap.largetasks.LargeTask.TaskReport;
+import me.ford.biomeremap.largetasks.LargeMappingTaskStarter;
 
 public class RegionSub extends SubCommand {
 	private static final String PERMS = "biomeremap.remap";
@@ -92,31 +91,14 @@ public class RegionSub extends SubCommand {
 		String startedMsg = br.getMessages().getRegionRemapStarted(world.getName(), regionX, regionZ);
 		sender.sendMessage(startedMsg);
 		if (!ingame) br.getLogger().info(startedMsg);
-		int chunkXStart = regionX * 32;
-		int chunkZStart = regionZ * 32;
 		remapping = true;
-		new LargeMappingTask(br, world, chunkXStart, chunkXStart + 32, chunkZStart, chunkZStart + 32, debug,
-				br.getSettings().getRegionRemapProgressStep(),
-				(progress) -> reportProgress(sender, progress),
-				(report) -> remappingEnded(sender, report, debug, world, regionX, regionZ, scanAfter));
+
+		new LargeMappingTaskStarter(br, world, sender, regionX, regionZ, true, debug, () -> remapEnded(), scanAfter);
 		return true;
 	}
 	
-	private void reportProgress(CommandSender sender, String progress) {
-		String msg = br.getMessages().getBiomeRemapProgress(progress);
-		sender.sendMessage(msg);
-		if (!(sender instanceof ConsoleCommandSender)) br.getLogger().info(msg);
-	}
-	
-	private void remappingEnded(CommandSender sender, TaskReport report, boolean debug, World world, int x, int z, boolean scanAfter) {
+	private void remapEnded() {
 		remapping = false;
-		sender.sendMessage(br.getMessages().getBiomeRemapComplete());
-		if (debug) sender.sendMessage(br.getMessages().getBiomeRemapSummary(report.getChunksDone(), report.getCompTime(), report.getTicksUsed()));
-		if (scanAfter) { // TODO - this can be done better if I redesign some things
-			String cmd = String.format("biomeremap scan region %s %d %d", world.getName(), x, z);
-			if (debug) cmd += "--debug";
-			sender.getServer().dispatchCommand(sender, cmd);
-		}
 	}
 
 	@Override
