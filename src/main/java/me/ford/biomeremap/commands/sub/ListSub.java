@@ -11,17 +11,21 @@ import org.bukkit.util.StringUtil;
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.commands.SubCommand;
 import me.ford.biomeremap.mapping.BiomeMap;
+import me.ford.biomeremap.settings.Messages;
+import me.ford.biomeremap.settings.Settings;
 
 public class ListSub extends SubCommand {
 	private static final String PERMS = "biomeremap.use";
 	private static final String USAGE = "/biomeremap list [world]";
-	private final BiomeRemap br;
+	private final Settings settings;
+	private final Messages messages;
 	private final List<String> worldNames = new ArrayList<>();
 	
 	public ListSub(BiomeRemap plugin) {
 		super("list");
-		br = plugin;
-		for (World world : br.getServer().getWorlds()) {
+		this.settings = plugin.getSettings();
+		this.messages = plugin.getMessages();
+		for (World world : plugin.getServer().getWorlds()) {
 			worldNames.add(world.getName());
 		}
 	}
@@ -41,10 +45,10 @@ public class ListSub extends SubCommand {
 		List<BiomeMap> list = new ArrayList<>();
 		String worldName = null;
 		if (args.length == 0) {
-			for (String name : br.getSettings().getBiomeMapNames()) {
-				BiomeMap map = br.getSettings().getBiomeMap(name);
+			for (String name : settings.getBiomeMapNames()) {
+				BiomeMap map = settings.getBiomeMap(name);
 				if (map == null) {
-					br.getLogger().warning("BiomeMap by name '" + name + "' listed, but returns null!");
+					BiomeRemap.logger().warning("BiomeMap by name '" + name + "' listed, but returns null!");
 					continue;
 				}
 				list.add(map);
@@ -52,18 +56,18 @@ public class ListSub extends SubCommand {
 		} else {
 			worldName = args[0];
 			if (!worldNames.contains(worldName)) {
-				sender.sendMessage(br.getMessages().errorWorldNotFound(worldName));
+				sender.sendMessage(messages.errorWorldNotFound(worldName));
 				return true;
 			}
-			BiomeMap map = br.getSettings().getApplicableBiomeMap(worldName);
+			BiomeMap map = settings.getApplicableBiomeMap(worldName);
 			if (map != null) list.add(map);
 		}
 		if (list.isEmpty() && worldName != null) {
-			sender.sendMessage(br.getMessages().getBiomeRemapNoMap(worldName));
+			sender.sendMessage(messages.getBiomeRemapNoMap(worldName));
 		} else {
-			sender.sendMessage(br.getMessages().getBiomeRemapListHeaders());
+			sender.sendMessage(messages.getBiomeRemapListHeaders());
 			for (BiomeMap map : list) {
-				sender.sendMessage(br.getMessages().getBiomeRemapListItem(map.getName()));
+				sender.sendMessage(messages.getBiomeRemapListItem(map.getName()));
 			}
 		}
 		return true;

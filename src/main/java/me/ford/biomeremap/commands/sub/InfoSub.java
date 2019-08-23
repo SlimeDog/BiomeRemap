@@ -7,25 +7,28 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.util.StringUtil;
 
-import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.commands.SubCommand;
 import me.ford.biomeremap.mapping.BiomeMap;
+import me.ford.biomeremap.settings.Messages;
+import me.ford.biomeremap.settings.Settings;
 
 public class InfoSub extends SubCommand {
 	private static final String PERMS = "biomeremap.use";
 	private static final String USAGE = "/biomeremap info <biomemap-id>";
-	private final BiomeRemap br;
+	private final Settings settings;
+	private final Messages messages;
 	
-	public InfoSub(BiomeRemap plugin) {
+	public InfoSub(Settings settings, Messages messages) {
 		super("info");
-		br = plugin;
+		this.settings = settings;
+		this.messages = messages;
 	}
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, String[] args, List<String> opts) {
 		List<String> list = new ArrayList<>();
 		if (args.length == 1) {
-			return StringUtil.copyPartialMatches(args[0], br.getSettings().getBiomeMapNames(), list);
+			return StringUtil.copyPartialMatches(args[0], settings.getBiomeMapNames(), list);
 		} else {
 			return list;
 		}
@@ -36,12 +39,12 @@ public class InfoSub extends SubCommand {
 		if (args.length < 1) {
 			return false;
 		}
-		BiomeMap map = br.getSettings().getBiomeMap(args[0]);
+		BiomeMap map = settings.getBiomeMap(args[0]);
 		if (map == null) {
-			sender.sendMessage(br.getMessages().errorBiomeMapNotFound(args[0]));
+			sender.sendMessage(messages.errorBiomeMapNotFound(args[0]));
 			return true;
 		}
-		sender.sendMessage(br.getMessages().getBiomeRemapInfo(map.getDescription(), map.getApplicableWorldNames()));
+		sender.sendMessage(messages.getBiomeRemapInfo(map.getDescription(), map.getApplicableWorldNames()));
 		return true;
 	}
 

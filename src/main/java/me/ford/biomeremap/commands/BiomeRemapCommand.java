@@ -26,7 +26,7 @@ public class BiomeRemapCommand extends ArgSplittingCommand {
 	public BiomeRemapCommand(BiomeRemap plugin) {
 		br = plugin;//help|info|list|chunk|region|scan|reload
 		subCommands.add(new HelpSub(this));
-		subCommands.add(new InfoSub(br));
+		subCommands.add(new InfoSub(br.getSettings(), br.getMessages()));
 		subCommands.add(new ListSub(br));
 		subCommands.add(new ChunkSub(br));
 		subCommands.add(new RegionSub(br));
