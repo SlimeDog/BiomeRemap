@@ -5,7 +5,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.bukkit.World;
@@ -48,6 +50,11 @@ public class BiomeRemap extends JavaPlugin {
 		getCommand("biomeremap").setExecutor(new BiomeRemapCommand(this));
 	}
 	
+	@Override
+	public void onDisable() {
+		saveDebug();
+	}
+	
 	public void reload() {
 		reloadConfig();
 		settings.reload();
@@ -66,24 +73,28 @@ public class BiomeRemap extends JavaPlugin {
 		return JavaPlugin.getPlugin(BiomeRemap.class).getLogger();
 	}
 	
-	private static String debugBuffer = "";
+	private static List<String> debugBuffer = new ArrayList<>();
 	
 	public static void debug(String msg) {
-		debugBuffer += "\n" + msg;
-		if (StringUtils.countMatches(debugBuffer, "\n") > 20) {
-		    BufferedWriter writer;
-			try {
-				writer = new BufferedWriter(
-				                            new FileWriter(JavaPlugin.getPlugin(BiomeRemap.class).getDataFolder().getAbsolutePath() + File.separatorChar + "debug.log", true)  //Set true for append mode
-				                        );
-			    writer.newLine();   //Add new line
-			    writer.write(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()) + ": " + msg);
-			    writer.close();
-			} catch (IOException e) {
-				logger().warning("Unable to save debug logging data!");
-			}
-			debugBuffer = "";
+		debugBuffer.add(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()) + ": " + msg);
+		if (debugBuffer.size() > 20) {
+			saveDebug();
 		}
+	}
+	
+	private static void saveDebug() {
+	    BufferedWriter writer;
+		try {
+			writer = new BufferedWriter(
+			                            new FileWriter(JavaPlugin.getPlugin(BiomeRemap.class).getDataFolder().getAbsolutePath() + File.separatorChar + "debug.log", true)  //Set true for append mode
+			                        );
+			writer.newLine();   //Add new line
+		    writer.write(String.join("\n", debugBuffer));
+		    writer.close();
+		} catch (IOException e) {
+			logger().warning("Unable to save debug logging data!");
+		}
+		debugBuffer.clear();
 	}
 
 }
