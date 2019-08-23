@@ -12,7 +12,6 @@ import me.ford.biomeremap.largetasks.LargeMappingTaskStarter;
 import me.ford.biomeremap.largetasks.LargeScanTask.BiomeReport;
 import me.ford.biomeremap.largetasks.LargeScanTaskStarter;
 import me.ford.biomeremap.mapping.BiomeMap;
-import me.ford.biomeremap.mapping.BiomeRemapper;
 
 public class BiomeRemapAPI {
 	
@@ -25,7 +24,7 @@ public class BiomeRemapAPI {
 	public static void remapChunk(World world, int chunkX, int chunkZ, BiomeMap map) {
 		Validate.notNull(map);
 		Chunk chunk = world.getChunkAt(chunkX, chunkZ);
-		BiomeRemapper.getInstance().remapChunk(chunk, map);
+		getPlugin().getRemapper().remapChunk(chunk, map);
 	}
 	
 	public static void remapRegion(World world, int regionX, int regionZ, BiomeMap map) {

@@ -8,7 +8,6 @@ import org.bukkit.World;
 import org.bukkit.block.Biome;
 
 import me.ford.biomeremap.BiomeRemap;
-import me.ford.biomeremap.mapping.BiomeScanner;
 
 public class LargeScanTask extends LargeTask {
 	private final Map<Biome, Integer> biomeMap = new HashMap<>();
@@ -26,7 +25,7 @@ public class LargeScanTask extends LargeTask {
 	}
 	
 	private void findBiomes(World world, int chunkX, int chunkZ, boolean debug) {
-		BiomeScanner.getInstance().addBiomesFor(biomeMap, world, chunkX, chunkZ);
+		getPlugin().getScanner().addBiomesFor(biomeMap, world, chunkX, chunkZ);
 	}
 
 	@Override

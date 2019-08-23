@@ -7,17 +7,6 @@ import org.bukkit.block.Biome;
 
 public final class BiomeScanner {
 	
-	private static BiomeScanner instance = null;
-	
-	private BiomeScanner() { }
-	
-	public static BiomeScanner getInstance() {
-		if (instance == null) {
-			instance = new BiomeScanner();
-		}
-		return instance;
-	}
-	
 	public void addBiomesFor(Map<Biome, Integer> map, World world, int chunkX, int chunkZ) {
 		int startX = chunkX * 16;
 		int startZ = chunkZ * 16;

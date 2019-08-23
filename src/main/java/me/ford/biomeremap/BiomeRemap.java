@@ -12,12 +12,13 @@ import java.util.logging.Logger;
 
 import org.bstats.bukkit.Metrics;
 import org.bukkit.World;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 
 import me.ford.biomeremap.commands.BiomeRemapCommand;
+import me.ford.biomeremap.mapping.BiomeRemapper;
+import me.ford.biomeremap.mapping.BiomeScanner;
 import me.ford.biomeremap.populator.MappingPopulator;
 import me.ford.biomeremap.settings.Messages;
 import me.ford.biomeremap.settings.Settings;
@@ -27,6 +28,8 @@ public class BiomeRemap extends JavaPlugin {
 	private Messages messages;
 	private Settings settings;
 	private boolean testing = false;
+	private BiomeRemapper remapper;
+	private BiomeScanner scanner;
 	
 	public BiomeRemap() {
 		super();
@@ -46,15 +49,21 @@ public class BiomeRemap extends JavaPlugin {
 		messages = new Messages(this);
 		settings = new Settings(this);
 		messages.saveDefaultConfig();
-		MappingPopulator populator = new MappingPopulator();
-		for (World world : getServer().getWorlds()) {
-			world.getPopulators().add(populator);
-		}
 		// commands
 		getCommand("biomeremap").setExecutor(new BiomeRemapCommand(this));
 		
 		// saving debug message periodically
 		this.getServer().getScheduler().runTaskTimer(this, () -> saveDebug(), 120 * 20L, 120 * 20L);
+		
+		// remapper, scanner
+		remapper = new BiomeRemapper(this);
+		scanner = new BiomeScanner();
+		
+		// setup up populator
+		MappingPopulator populator = new MappingPopulator(remapper);
+		for (World world : getServer().getWorlds()) {
+			world.getPopulators().add(populator);
+		}
 	}
 	
 	@Override
@@ -78,6 +87,14 @@ public class BiomeRemap extends JavaPlugin {
 	
 	public Messages getMessages() {
 		return messages;
+	}
+	
+	public BiomeRemapper getRemapper() {
+		return remapper;
+	}
+	
+	public BiomeScanner getScanner() {
+		return scanner;
 	}
 	
 	public static Logger logger() {

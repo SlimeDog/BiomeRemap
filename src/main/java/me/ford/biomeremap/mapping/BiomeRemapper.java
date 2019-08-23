@@ -7,22 +7,14 @@ import java.util.Map.Entry;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import me.ford.biomeremap.BiomeRemap;
 
 public class BiomeRemapper {
-	private static BiomeRemapper instance = null;
-	
 	private final BiomeRemap br;
 	
-	private BiomeRemapper(BiomeRemap plugin) { 
+	public BiomeRemapper(BiomeRemap plugin) { 
 		br = plugin;
-	}
-	
-	public static BiomeRemapper getInstance() {
-		if (instance == null) instance = new BiomeRemapper(JavaPlugin.getPlugin(BiomeRemap.class));
-		return instance;
 	}
 	
 	public long remapChunk(Chunk chunk) {

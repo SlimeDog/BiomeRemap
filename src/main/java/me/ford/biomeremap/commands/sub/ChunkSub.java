@@ -83,7 +83,7 @@ public class ChunkSub extends SubCommand {
 		String startMsg = br.getMessages().getChunkRemapStarted(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
 		sender.sendMessage(startMsg);
 		if (ingame) br.getLogger().info(startMsg);
-		BiomeRemapper.getInstance().remapChunk(chunk, debug);
+		br.getRemapper().remapChunk(chunk, debug);
 		sender.sendMessage(br.getMessages().getBiomeRemapComplete());
 		if (scanAfter) { 
 			new LargeScanTaskStarter(br, chunk.getWorld(), sender, chunk.getX(), chunk.getZ(), false, debug, null);

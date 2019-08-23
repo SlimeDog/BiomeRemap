@@ -6,7 +6,6 @@ import org.bukkit.World;
 
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.mapping.BiomeMap;
-import me.ford.biomeremap.mapping.BiomeRemapper;
 
 public class LargeMappingTask extends LargeTask {
 	private BiomeMap map;
@@ -25,7 +24,7 @@ public class LargeMappingTask extends LargeTask {
 		if (!world.isChunkGenerated(x, z)) {
 			world.getChunkAt(x, z); // populator takes care
 		} else {
-			BiomeRemapper.getInstance().remapChunk(world.getChunkAt(x, z), debug, map);
+			getPlugin().getRemapper().remapChunk(world.getChunkAt(x, z), debug, map);
 		}
 	}
 

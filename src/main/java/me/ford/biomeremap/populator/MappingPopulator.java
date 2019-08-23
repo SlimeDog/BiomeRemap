@@ -11,11 +11,15 @@ import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.mapping.BiomeRemapper;
 
 public class MappingPopulator extends BlockPopulator {
+	private final BiomeRemapper mapper;
+	
+	public MappingPopulator(BiomeRemapper mapper) {
+		this.mapper = mapper;
+	}
 
 	@Override
 	public void populate(World world, Random random, Chunk source) {
-//		BiomeRemapper.getInstance().remapChunk(source.getChunkSnapshot());
-		BiomeRemapper.getInstance().remapChunk(source, JavaPlugin.getPlugin(BiomeRemap.class).getSettings().debugAutoremap());
+		mapper.remapChunk(source, JavaPlugin.getPlugin(BiomeRemap.class).getSettings().debugAutoremap());
 	}
 
 }
