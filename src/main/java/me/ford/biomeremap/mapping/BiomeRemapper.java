@@ -4,9 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
-import org.bukkit.ChunkSnapshot;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -72,46 +70,6 @@ public class BiomeRemapper {
 	private void doMapping(Chunk chunk, Map<Integer, Biome> toChange, boolean debug) {
 		if (debug) BiomeRemap.debug("Remapping biomes");
 		World world = chunk.getWorld();
-		int startX = chunk.getX() * 16;
-		int startZ = chunk.getZ() * 16;
-		for (Entry<Integer, Biome> entry : toChange.entrySet()) {
-			int x = entry.getKey()/16;
-			int z = entry.getKey()%16;
-			world.setBiome(startX + x, startZ + z, entry.getValue());
-		}
-	}
-	
-	
-	public void remapChunk(ChunkSnapshot chunk) {
-		if (Bukkit.isPrimaryThread()) {
-			br.getLogger().warning("Chunk remap attempted in sync! Falling back async.");
-			br.getServer().getScheduler().runTaskAsynchronously(br, () -> remapChunk(chunk));
-		}
-		BiomeRemap.debug("Looking for biomes to remap in chunk:" + chunk.getX() + "," + chunk.getZ() + "...");
-		BiomeMap map = br.getSettings().getBiomeMap(chunk.getWorldName());
-		Map<Integer, Biome> toChange = new HashMap<>();
-		for (int x = 0; x < 16; x++) {
-			for (int z = 0; z < 16; z++) {
-				Biome cur = chunk.getBiome(x, z);
-				Biome req = map.getBiomeFor(cur);
-				if (req != null) {
-					toChange.put(x * 16 + z, req);
-				}
-			}
-		}
-		if (!toChange.isEmpty()) {
-			BiomeRemap.debug("Found:" + toChange);
-			br.getServer().getScheduler().runTask(br, () -> doMapping(chunk, toChange));
-		}
-	}
-	
-	private void doMapping(ChunkSnapshot chunk, Map<Integer, Biome> toChange) {
-		BiomeRemap.debug("Remapping biomes");
-		World world = br.getServer().getWorld(chunk.getWorldName());
-		if (world == null) {
-			br.getLogger().severe("World of a chunk snapshot does not exist!");
-			return;
-		}
 		int startX = chunk.getX() * 16;
 		int startZ = chunk.getZ() * 16;
 		for (Entry<Integer, Biome> entry : toChange.entrySet()) {

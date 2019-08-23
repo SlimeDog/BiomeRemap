@@ -17,7 +17,6 @@ import org.bukkit.plugin.java.JavaPluginLoader;
 
 import me.ford.biomeremap.commands.BiomeRemapCommand;
 import me.ford.biomeremap.populator.MappingPopulator;
-//import me.ford.biomeremap.listeners.ChunkListener;
 import me.ford.biomeremap.settings.Messages;
 import me.ford.biomeremap.settings.Settings;
 
@@ -38,7 +37,6 @@ public class BiomeRemap extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		staticInstance = this;
-//		getServer().getPluginManager().registerEvents(new ChunkListener(this), this);
 		saveDefaultConfig();
 		messages = new Messages(this);
 		settings = new Settings(this);
