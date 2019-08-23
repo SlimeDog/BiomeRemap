@@ -49,6 +49,9 @@ public class BiomeRemap extends JavaPlugin {
 		}
 		// commands
 		getCommand("biomeremap").setExecutor(new BiomeRemapCommand(this));
+		
+		// saving debug message periodically
+		this.getServer().getScheduler().runTaskTimer(this, () -> saveDebug(), 120 * 20L, 120 * 20L);
 	}
 	
 	@Override
@@ -84,6 +87,7 @@ public class BiomeRemap extends JavaPlugin {
 	}
 	
 	private static void saveDebug() {
+		if (debugBuffer.isEmpty()) return;
 	    BufferedWriter writer;
 		try {
 			writer = new BufferedWriter(
