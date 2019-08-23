@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 
 import org.bstats.bukkit.Metrics;
 import org.bukkit.World;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
@@ -61,10 +62,14 @@ public class BiomeRemap extends JavaPlugin {
 		saveDebug();
 	}
 	
-	public void reload() {
+	public boolean reload() {
+		boolean success = true;
 		reloadConfig();
+		if (getConfig().getKeys(true).isEmpty()) success = false;
 		settings.reload();
 		messages.reloadCustomConfig();
+		if (messages.getCustomConfig().getKeys(true).isEmpty()) success = false;
+		return success;
 	}
 	
 	public Settings getSettings() {

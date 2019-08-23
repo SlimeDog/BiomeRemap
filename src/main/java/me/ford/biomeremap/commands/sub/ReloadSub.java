@@ -26,8 +26,11 @@ public class ReloadSub extends SubCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, String[] args, List<String> opts) {
-		br.reload();
-		sender.sendMessage(br.getMessages().getBiomeRemapReload());
+		if (br.reload()) {
+			sender.sendMessage(br.getMessages().getBiomeRemapReload());
+		} else {
+			sender.sendMessage("Problem with configurations!");
+		}
 		return true;
 	}
 
