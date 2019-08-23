@@ -40,7 +40,6 @@ public class BiomeRemap extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		if (!testing) new Metrics(this);
-		getLogger().info("Testing:" + testing);
 		staticInstance = this;
 		saveDefaultConfig();
 		messages = new Messages(this);
