@@ -22,7 +22,7 @@ public class InfoSub extends SubCommand {
 	}
 
 	@Override
-	public List<String> onTabComplete(CommandSender sender, String[] args, String[] opts) {
+	public List<String> onTabComplete(CommandSender sender, String[] args, List<String> opts) {
 		List<String> list = new ArrayList<>();
 		if (args.length == 1) {
 			return StringUtil.copyPartialMatches(args[0], br.getSettings().getBiomeMapNames(), list);
@@ -32,7 +32,7 @@ public class InfoSub extends SubCommand {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, String[] args, String[] opts) {
+	public boolean onCommand(CommandSender sender, String[] args, List<String> opts) {
 		if (args.length < 1) {
 			return false;
 		}

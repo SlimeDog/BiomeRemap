@@ -20,12 +20,12 @@ public class HelpSub extends SubCommand {
 	}
 
 	@Override
-	public List<String> onTabComplete(CommandSender sender, String[] args, String[] opts) {
+	public List<String> onTabComplete(CommandSender sender, String[] args, List<String> opts) {
 		return new ArrayList<>();
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, String[] args, String[] opts) {
+	public boolean onCommand(CommandSender sender, String[] args, List<String> opts) {
 		sender.sendMessage(String.format("/biomeremap <%s>", String.join("|", getAllowedSubCommands(sender))));
 		return true;
 	}

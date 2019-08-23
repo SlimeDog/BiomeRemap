@@ -1,7 +1,6 @@
 package me.ford.biomeremap.commands.sub;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Chunk;
@@ -31,7 +30,7 @@ public class ChunkSub extends SubCommand {
 	}
 
 	@Override
-	public List<String> onTabComplete(CommandSender sender, String[] args, String[] opts) {
+	public List<String> onTabComplete(CommandSender sender, String[] args, List<String> opts) {
 		List<String> list = new ArrayList<>();
 		if (args.length == 1) {
 			return StringUtil.copyPartialMatches(args[0], worldNames, list);
@@ -40,10 +39,9 @@ public class ChunkSub extends SubCommand {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, String[] args, String[] opts) {
-		List<String> options = Arrays.asList(opts);
-		boolean debug = options.contains("--debug");
-		boolean scanAfter = options.contains("--scan") && (sender.hasPermission("biomeremap.scan") || sender instanceof ConsoleCommandSender);
+	public boolean onCommand(CommandSender sender, String[] args, List<String> opts) {
+		boolean debug = opts.contains("--debug");
+		boolean scanAfter = opts.contains("--scan") && (sender.hasPermission("biomeremap.scan") || sender instanceof ConsoleCommandSender);
 		boolean ingame = sender instanceof Player;
 		if (!ingame && args.length < 3) {
 			return false;

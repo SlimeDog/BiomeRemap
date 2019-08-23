@@ -28,7 +28,7 @@ public class ListSub extends SubCommand {
 	
 	
 	@Override
-	public List<String> onTabComplete(CommandSender sender, String[] args, String[] opts) {
+	public List<String> onTabComplete(CommandSender sender, String[] args, List<String> opts) {
 		List<String> list = new ArrayList<>();
 		if (args.length == 1) {
 			return StringUtil.copyPartialMatches(args[0], worldNames, list);
@@ -37,7 +37,7 @@ public class ListSub extends SubCommand {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, String[] args, String[] opts) {
+	public boolean onCommand(CommandSender sender, String[] args, List<String> opts) {
 		List<BiomeMap> list = new ArrayList<>();
 		String worldName = null;
 		if (args.length == 0) {

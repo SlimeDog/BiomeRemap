@@ -42,7 +42,7 @@ public class BiomeRemapCommand extends ArgSplittingCommand {
 	}
 
 	@Override
-	public List<String> onTabComplete(CommandSender sender, String[] args, String[] opts) {
+	public List<String> onTabComplete(CommandSender sender, String[] args, List<String> opts) {
 		List<String> list = new ArrayList<>();
 		if (!hasPermission(sender)) return list;
 		if (args.length == 1) {
@@ -79,7 +79,7 @@ public class BiomeRemapCommand extends ArgSplittingCommand {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, String[] args, String[] opts) {
+	public boolean onCommand(CommandSender sender, String[] args, List<String> opts) {
 		if (!hasPermission(sender)) {
 			sender.sendMessage(br.getMessages().errorNoPermissions());
 			return true;

@@ -11,17 +11,17 @@ public abstract class ArgSplittingCommand implements TabExecutor, CommandWithOpt
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-		Pair<String, String> pair = splitArgsToArgsAndOptions(args);
+		Pair<String, List<String>> pair = splitArgsToArgsAndOptions(args);
 		return onTabComplete(sender, pair.getFirst(), pair.getSecond());
 	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		Pair<String, String> pair = splitArgsToArgsAndOptions(args);
+		Pair<String, List<String>> pair = splitArgsToArgsAndOptions(args);
 		return onCommand(sender, pair.getFirst(), pair.getSecond());
 	}
 	
-	protected Pair<String, String> splitArgsToArgsAndOptions(String[] args) {
+	protected Pair<String, List<String>> splitArgsToArgsAndOptions(String[] args) {
 		List<String> arguments = new ArrayList<>();
 		List<String> options = new ArrayList<>();
 		for (String arg : args) {
@@ -31,14 +31,14 @@ public abstract class ArgSplittingCommand implements TabExecutor, CommandWithOpt
 				arguments.add(arg);
 			}
 		}
-		return new Pair<String, String>(arguments.toArray(new String[0]), options.toArray(new String[0]));
+		return new Pair<String, List<String>>(arguments.toArray(new String[0]), options);
 	}
 	
 	private static class Pair<T, U> {
 		private final T[] t;
-		private final U[] u;
+		private final U u;
 		
-		private Pair(T[] t, U[] u) {
+		private Pair(T[] t, U u) {
 			this.t = t;
 			this.u = u;
 		}
@@ -47,7 +47,7 @@ public abstract class ArgSplittingCommand implements TabExecutor, CommandWithOpt
 			return t;
 		}
 		
-		private U[] getSecond() {
+		private U getSecond() {
 			return u;
 		}
 	}

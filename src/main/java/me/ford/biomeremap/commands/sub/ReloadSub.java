@@ -20,12 +20,12 @@ public class ReloadSub extends SubCommand {
 	}
 
 	@Override
-	public List<String> onTabComplete(CommandSender sender, String[] args, String[] opts) {
+	public List<String> onTabComplete(CommandSender sender, String[] args, List<String> opts) {
 		return new ArrayList<>();
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, String[] args, String[] opts) {
+	public boolean onCommand(CommandSender sender, String[] args, List<String> opts) {
 		br.reload();
 		sender.sendMessage(br.getMessages().getBiomeRemapReload());
 		return true;

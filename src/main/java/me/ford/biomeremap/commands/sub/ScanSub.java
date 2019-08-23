@@ -31,7 +31,7 @@ public class ScanSub extends SubCommand {
 	}
 
 	@Override
-	public List<String> onTabComplete(CommandSender sender, String[] args, String[] opts) {
+	public List<String> onTabComplete(CommandSender sender, String[] args, List<String> opts) {
 		List<String> list = new ArrayList<>();
 		if (args.length == 1) {
 			return StringUtil.copyPartialMatches(args[0], Arrays.asList(new String[] {"chunk", "region"}), list);
@@ -42,7 +42,7 @@ public class ScanSub extends SubCommand {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, String[] args, String[] opts) {
+	public boolean onCommand(CommandSender sender, String[] args, List<String> opts) {
 		if (scanning) {
 			sender.sendMessage(br.getMessages().getScanInProgress());
 			return true;
@@ -56,7 +56,7 @@ public class ScanSub extends SubCommand {
 		}
 		boolean region = regionOrChunk.equalsIgnoreCase("region");
 		boolean ingame = sender instanceof Player;
-		boolean debug = Arrays.asList(opts).contains("--debug");
+		boolean debug = opts.contains("--debug");
 		World world;
 		int x, z;
 

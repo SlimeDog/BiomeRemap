@@ -31,7 +31,7 @@ public class RegionSub extends SubCommand {
 	}
 
 	@Override
-	public List<String> onTabComplete(CommandSender sender, String[] args, String[] opts) {
+	public List<String> onTabComplete(CommandSender sender, String[] args, List<String> opts) {
 		List<String> list = new ArrayList<>();
 		if (args.length == 1) {
 			return StringUtil.copyPartialMatches(args[0], worldNames, list);
@@ -40,14 +40,13 @@ public class RegionSub extends SubCommand {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, String[] args, String[] opts) {
+	public boolean onCommand(CommandSender sender, String[] args, List<String> opts) {
 		if (remapping) {
 			sender.sendMessage(br.getMessages().getBiomeRemapInPrgoress());
 			return true;
 		}
-		List<String> options = Arrays.asList(opts);
-		boolean debug = options.contains("--debug");
-		boolean scanAfter = options.contains("--scan") && (sender.hasPermission("biomeremap.scan") || sender instanceof ConsoleCommandSender);
+		boolean debug = opts.contains("--debug");
+		boolean scanAfter = opts.contains("--scan") && (sender.hasPermission("biomeremap.scan") || sender instanceof ConsoleCommandSender);
 		boolean ingame = sender instanceof Player;
 		if (!ingame && args.length < 3) {
 			return false;
