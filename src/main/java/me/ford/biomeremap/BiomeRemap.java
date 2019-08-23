@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.bstats.bukkit.Metrics;
 import org.bukkit.World;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -24,6 +25,7 @@ public class BiomeRemap extends JavaPlugin {
 	private static BiomeRemap staticInstance;
 	private Messages messages;
 	private Settings settings;
+	private boolean testing = false;
 	
 	public BiomeRemap() {
 		super();
@@ -31,11 +33,14 @@ public class BiomeRemap extends JavaPlugin {
 	
 	protected BiomeRemap(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
         super(loader, description, dataFolder, file);
+        testing = true;
     }
 
 	
 	@Override
 	public void onEnable() {
+		if (!testing) new Metrics(this);
+		getLogger().info("Testing:" + testing);
 		staticInstance = this;
 		saveDefaultConfig();
 		messages = new Messages(this);
