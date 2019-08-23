@@ -67,7 +67,7 @@ public class Messages extends CustomConfigHandler {
 	}
 	
 	public String getInfoWorldMapped(String world, String biomemap) {
-		return getMessage("INFO_WORLD_BIOME_MAPPED", "Biomemap {BIOMEMAP} was successfully assigned to World {WORLD_NAME}")
+		return getMessage("INFO_WORLD_BIOME_MAPPED", "Biomemap {BIOMEMAP} was successfully assigned to world {WORLD_NAME}")
 						.replace("{WORLD_NAME}", world).replace("{BIOMEMAP}", biomemap);
 	}
 	
@@ -133,6 +133,10 @@ public class Messages extends CustomConfigHandler {
 	public String errorDuplicateBiomeMapsForWorld(String worldName) {
 		return getMessage("ERROR_WORLD_DUPLICATE_ASSIGNMENT", "Multiple biomemaps are assigned to world {WORLD_NAME}; fix configuration and reload")
 						.replace("{WORLD_NAME}", worldName);
+	}
+	
+	public String errorConfigUnreadable() {
+		return getMessage("ERROR_CONFIG_FILE_UNREADABLE", "Cannot read config.yml; no biomemaps are assigned to worlds");
 	}
 	
 	public String getMessage(String path, String def) {

@@ -29,7 +29,7 @@ public class ReloadSub extends SubCommand {
 		if (br.reload()) {
 			sender.sendMessage(br.getMessages().getBiomeRemapReload());
 		} else {
-			sender.sendMessage("Problem with configurations!");
+			sender.sendMessage(br.getMessages().errorConfigUnreadable());
 		}
 		return true;
 	}
