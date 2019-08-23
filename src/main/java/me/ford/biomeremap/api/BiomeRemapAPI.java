@@ -1,5 +1,7 @@
 package me.ford.biomeremap.api;
 
+import java.util.function.Consumer;
+
 import org.apache.commons.lang.Validate;
 import org.bukkit.Chunk;
 import org.bukkit.World;
@@ -7,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.largetasks.LargeMappingTaskStarter;
+import me.ford.biomeremap.largetasks.LargeScanTask.BiomeReport;
 import me.ford.biomeremap.largetasks.LargeScanTaskStarter;
 import me.ford.biomeremap.mapping.BiomeMap;
 import me.ford.biomeremap.mapping.BiomeRemapper;
@@ -30,9 +33,9 @@ public class BiomeRemapAPI {
 						regionX, regionZ, true, false, null, false, map);
 	}
 	
-	public static void scanRegion(World world, int regionX, int regionZ) {
+	public static void scanRegion(World world, int regionX, int regionZ, Consumer<BiomeReport> report) {
 		new LargeScanTaskStarter(getPlugin(), world, getPlugin().getServer().getConsoleSender(),
-						regionX, regionZ, true, false, null);
+						regionX, regionZ, true, false, null, report);
 	}
 
 }
