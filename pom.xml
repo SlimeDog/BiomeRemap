@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>me.ford</groupId>
   <artifactId>biomeremap</artifactId>
-  <version>0.1.2-SNAPSHOT</version>
+  <version>0.1.3-SNAPSHOT</version>
   <name>BiomeRemap</name>
   <description>Remap biomes to create strange new worlds.</description>
   <properties>
