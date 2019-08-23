@@ -22,6 +22,7 @@ import me.ford.biomeremap.settings.Messages;
 import me.ford.biomeremap.settings.Settings;
 
 public class BiomeRemap extends JavaPlugin {
+	private static BiomeRemap staticInstance;
 	private Messages messages;
 	private Settings settings;
 	
@@ -36,6 +37,7 @@ public class BiomeRemap extends JavaPlugin {
 	
 	@Override
 	public void onEnable() {
+		staticInstance = this;
 //		getServer().getPluginManager().registerEvents(new ChunkListener(this), this);
 		saveDefaultConfig();
 		messages = new Messages(this);
@@ -85,7 +87,7 @@ public class BiomeRemap extends JavaPlugin {
 	    BufferedWriter writer;
 		try {
 			writer = new BufferedWriter(
-			                            new FileWriter(JavaPlugin.getPlugin(BiomeRemap.class).getDataFolder().getAbsolutePath() + File.separatorChar + "debug.log", true)  //Set true for append mode
+			                            new FileWriter(staticInstance.getDataFolder().getAbsolutePath() + File.separatorChar + "debug.log", true)  //Set true for append mode
 			                        );
 			writer.newLine();   //Add new line
 		    writer.write(String.join("\n", debugBuffer));
