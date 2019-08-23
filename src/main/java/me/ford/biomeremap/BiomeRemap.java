@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.bukkit.World;
-import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.StringUtils;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
