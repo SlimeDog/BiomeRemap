@@ -46,18 +46,23 @@ public class LargeScanTaskStarter extends LargeTaskStarter {
 	}
 
 	private void onEnd(CommandSender sender, TaskReport report, boolean debug) {
-		sender.sendMessage(br().getMessages().getScanComplete());
+		String completeMsg = br().getMessages().getScanComplete();
+		sender.sendMessage(completeMsg);
+		if (!(sender instanceof ConsoleCommandSender)) br().getLogger().info(completeMsg);
 		if (debug) sender.sendMessage(br().getMessages().getBiomeRemapSummary(report.getChunksDone(), report.getCompTime(), report.getTicksUsed()));
 		if (runnable != null) runnable.run();
 	}
 
 	private void showMap(CommandSender sender, BiomeReport report, boolean region, boolean debug,
 			String worldName, int x, int z) {
+		String header;
 		if (region) {
-			sender.sendMessage(br().getMessages().getScanRegionHeader(worldName, x, z));
+			header = br().getMessages().getScanRegionHeader(worldName, x, z);
 		} else {
-			sender.sendMessage(br().getMessages().getScanChunkHeader(worldName, x, z));
+			header = br().getMessages().getScanChunkHeader(worldName, x, z);
 		}
+		sender.sendMessage(header);
+		if (!(sender instanceof ConsoleCommandSender)) br().getLogger().info(header);
 		Map<Biome, Integer> sortedMap = report.getBiomes().entrySet().stream()
 				.sorted((e1,e2) -> e1.getKey().name().compareTo(e2.getKey().name()))
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1,e2) -> e1, LinkedHashMap::new));
@@ -67,7 +72,9 @@ public class LargeScanTaskStarter extends LargeTaskStarter {
 		}
 		for (Entry<Biome, Integer> entry : sortedMap.entrySet()) {
 			String percentage = String.format("%3.0f%%", 100*((double) entry.getValue())/total);
-			sender.sendMessage(br().getMessages().getScanListItem(percentage, entry.getKey().name()));
+			String msg = br().getMessages().getScanListItem(percentage, entry.getKey().name());
+			sender.sendMessage(msg);
+			if (!(sender instanceof ConsoleCommandSender)) br().getLogger().info(msg);
 		}
 		if (mapReturner != null) mapReturner.accept(report);
 	}
