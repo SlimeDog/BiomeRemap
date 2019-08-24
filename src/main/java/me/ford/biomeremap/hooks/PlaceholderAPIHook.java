@@ -38,7 +38,6 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
 				Biome biome = CraftBlock.biomeBaseToBiome(base);
 				int nr = ((RegistryMaterials<BiomeBase>) IRegistry.BIOME).a(base);
 				byBiome.put(biome, nr);
-				br.getLogger().info(biome.name() + ":" + nr);
 			}
 		}
 	}
