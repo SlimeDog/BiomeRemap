@@ -9,7 +9,7 @@ softdepend: [Multiverse-Core, MultiWorld]
 
 commands:
   biomeremap:
-    description: Regulate the core temperatures of biomes.
+    description: ${project.description}
     usage: |
       /biomeremap
     aliases: [bmap]
