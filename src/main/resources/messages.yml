@@ -15,7 +15,7 @@
 # Trailing space is required to conform with standard prefix format.
 # If no prefix is desired (not recommended), use "".
 #
-BIOMEREMAP_PREFIX: "[BIOMEREMAP] "
+BIOMEREMAP_PREFIX: "[BiomeRemap] "
 
 # Messages produced by /biomeremap info
 #
