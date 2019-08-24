@@ -88,7 +88,7 @@ public class RegionSub extends SubCommand {
 		}
 		String startedMsg = br.getMessages().getRegionRemapStarted(world.getName(), regionX, regionZ);
 		sender.sendMessage(startedMsg);
-		if (!ingame) br.getLogger().info(startedMsg);
+		if (ingame) br.getLogger().info(startedMsg);
 		remapping = true;
 		new LargeMappingTaskStarter(br, world, sender, regionX, regionZ, true, debug, () -> remapEnded(), scanAfter, null);
 		return true;
