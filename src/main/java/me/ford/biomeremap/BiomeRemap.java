@@ -17,6 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 
 import me.ford.biomeremap.commands.BiomeRemapCommand;
+import me.ford.biomeremap.hooks.PlaceholderAPIHook;
 import me.ford.biomeremap.mapping.BiomeRemapper;
 import me.ford.biomeremap.mapping.BiomeScanner;
 import me.ford.biomeremap.populator.MappingPopulator;
@@ -63,6 +64,13 @@ public class BiomeRemap extends JavaPlugin {
 		MappingPopulator populator = new MappingPopulator(remapper);
 		for (World world : getServer().getWorlds()) {
 			world.getPopulators().add(populator);
+		}
+		
+		// hooks
+		if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+			new PlaceholderAPIHook(this);
+		} else {
+			getLogger().warning("PlaceholderAPI not found!");
 		}
 	}
 	
