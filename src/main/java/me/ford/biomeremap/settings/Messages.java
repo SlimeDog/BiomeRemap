@@ -11,6 +11,10 @@ public class Messages extends CustomConfigHandler {
 	public Messages(JavaPlugin plugin) {
 		super(plugin, FILE_NAME);
 	}
+
+	public String getPrefix() {
+		return getMessage("BIOMEREMAP_PREFIX", "[BiomeRemap] ");
+	}
 	
 	public String getBiomeRemapInfo(String description, List<String> worldNames) {
 		String wn = worldNames.isEmpty() ? "none" : String.join(", ", worldNames);

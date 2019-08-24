@@ -1,11 +1,21 @@
 # messages.yml
 #
 # All messages produced by BiomeRemap may be localized here.
-# This file must contain valid YAML code. A YAML checker may be found at http://www.yamllint.com
+# This file must contain valid YAML code.
+# A YAML checker may be found at http://www.yamllint.com
+#
+# Message may contain color codes and other format codes. Both & and Â§ are recognized.
+# A list of valid formatting codes may be found at https://minecraft.gamepedia.com/Formatting_codes
 #
 # Message placeholders are indicated by {PLACEHOLDER}.
 # PlaceholderAPI variables are not supported.
 #
+
+# Console/log prefix
+# Trailing space is required to conform with standard prefix format.
+# If no prefix is desired (not recommended), use "".
+#
+BIOMEREMAP_PREFIX: "[BIOMEREMAP] "
 
 # Messages produced by /biomeremap info
 #

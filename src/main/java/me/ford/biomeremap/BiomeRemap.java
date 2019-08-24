@@ -105,12 +105,8 @@ public class BiomeRemap extends JavaPlugin {
 		return scanner;
 	}
 	
-	public void logMessage(Settings settings, String msg) { // For use inside Settings constructor when the field is still null
-		getServer().getConsoleSender().sendMessage(settings.getPrefix() + msg);
-	}
-	
 	public void logMessage(String msg) {
-		logMessage(getSettings(), msg);
+		getServer().getConsoleSender().sendMessage(getMessages().getPrefix() + msg);
 	}
 	
 	public static Logger logger() {
