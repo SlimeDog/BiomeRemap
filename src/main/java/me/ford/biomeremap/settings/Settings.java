@@ -35,9 +35,9 @@ public class Settings {
 			for (String worldName : map.getApplicableWorldNames()) {
 				BiomeMap prev = worldMap.put(worldName, map);
 				if (prev != null) {
-					br.getServer().getConsoleSender().sendMessage(br.getMessages().errorDuplicateBiomeMapsForWorld(worldName));
+					br.logMessage(this, br.getMessages().errorDuplicateBiomeMapsForWorld(worldName));
 				}
-				br.getServer().getConsoleSender().sendMessage(br.getMessages().getInfoWorldMapped(worldName, map.getName()));
+				br.logMessage(this, br.getMessages().getInfoWorldMapped(worldName, map.getName()));
 			}
 		}
 	}
@@ -56,6 +56,10 @@ public class Settings {
 	
 	public Set<String> getBiomeMapNames() {
 		return maps.keySet();
+	}
+
+	public String getPrefix() {
+		return br.getConfig().getString("prefix", "[BiomeRemap] ");
 	}
 	
 	public boolean debugAutoremap() {

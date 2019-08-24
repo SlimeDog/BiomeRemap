@@ -53,7 +53,7 @@ public class LargeMappingTaskStarter extends LargeTaskStarter {
 			header = br().getMessages().getScanChunkHeader(worldName, x, z);
 		}
 		sender.sendMessage(header);
-		if (!(sender instanceof ConsoleCommandSender)) br().getServer().getConsoleSender().sendMessage(header);
+		if (!(sender instanceof ConsoleCommandSender)) br().logMessage(header);
 		Map<Biome, Integer> sortedMap = report.getBiomes().entrySet().stream()
 				.sorted((e1,e2) -> e1.getKey().name().compareTo(e2.getKey().name()))
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1,e2) -> e1, LinkedHashMap::new));
@@ -65,20 +65,20 @@ public class LargeMappingTaskStarter extends LargeTaskStarter {
 			String percentage = String.format("%3.0f%%", 100*((double) entry.getValue())/total);
 			String msg = br().getMessages().getScanListItem(percentage, entry.getKey().name());
 			sender.sendMessage(msg);
-			if (!(sender instanceof ConsoleCommandSender)) br().getServer().getConsoleSender().sendMessage(msg);
+			if (!(sender instanceof ConsoleCommandSender)) br().logMessage(msg);
 		}
 	}
 
 	private void reportProgress(CommandSender sender, String progress) {
 		String msg = br().getMessages().getBiomeRemapProgress(progress);
 		sender.sendMessage(msg);
-		if (!(sender instanceof ConsoleCommandSender)) br().getServer().getConsoleSender().sendMessage(msg);
+		if (!(sender instanceof ConsoleCommandSender)) br().logMessage(msg);
 	}
 
 	private void remappingEnded(CommandSender sender, TaskReport report, boolean debug, World world, int x, int z, boolean scanAfter) {
 		String completeMsg = br().getMessages().getBiomeRemapComplete();
 		sender.sendMessage(completeMsg);
-		if (!(sender instanceof ConsoleCommandSender)) br().getServer().getConsoleSender().sendMessage(completeMsg);
+		if (!(sender instanceof ConsoleCommandSender)) br().logMessage(completeMsg);
 		if (debug) sender.sendMessage(br().getMessages().getBiomeRemapSummary(report.getChunksDone(), report.getCompTime(), report.getTicksUsed()));
 		if (runnable != null) runnable.run();
 	}
