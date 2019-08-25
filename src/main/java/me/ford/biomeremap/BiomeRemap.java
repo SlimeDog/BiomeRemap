@@ -82,7 +82,7 @@ public class BiomeRemap extends JavaPlugin {
 	
 	public boolean reload() {
 		boolean success = true;
-		if (!getDataFolder().exists() || getDataFolder().list(new ConfigMessageFilter()).length < 2) {
+		if (!getDataFolder().exists() || !getDataFolder().canRead() || getDataFolder().list(new ConfigMessageFilter()).length < 2) {
 			getLogger().warning("Files have been deleted, recreating!");
 			saveDefaultConfig();
 			messages.saveDefaultConfig();
