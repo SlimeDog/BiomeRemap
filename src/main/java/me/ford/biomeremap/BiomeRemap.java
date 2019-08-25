@@ -81,9 +81,11 @@ public class BiomeRemap extends JavaPlugin {
 	
 	public boolean reload() {
 		boolean success = true;
+		saveDefaultConfig();
 		reloadConfig();
 		if (getConfig().getKeys(true).isEmpty()) success = false;
 		settings.reload();
+		messages.saveDefaultConfig();
 		messages.reloadCustomConfig();
 		if (messages.getCustomConfig().getKeys(true).isEmpty()) success = false;
 		return success;
