@@ -81,11 +81,14 @@ public class BiomeRemap extends JavaPlugin {
 	
 	public boolean reload() {
 		boolean success = true;
-		saveDefaultConfig();
+		if (!getDataFolder().exists() || getDataFolder().listFiles().length == 0) {
+			getLogger().warning("Files have been deleted, recreating!");
+			saveDefaultConfig();
+			messages.saveDefaultConfig();
+		}
 		reloadConfig();
 		if (getConfig().getKeys(true).isEmpty()) success = false;
 		settings.reload();
-		messages.saveDefaultConfig();
 		messages.reloadCustomConfig();
 		if (messages.getCustomConfig().getKeys(true).isEmpty()) success = false;
 		return success;
