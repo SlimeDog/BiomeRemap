@@ -3,6 +3,7 @@ package me.ford.biomeremap;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -81,7 +82,7 @@ public class BiomeRemap extends JavaPlugin {
 	
 	public boolean reload() {
 		boolean success = true;
-		if (!getDataFolder().exists() || getDataFolder().listFiles().length == 0) {
+		if (!getDataFolder().exists() || getDataFolder().list(new ConfigMessageFilter()).length < 2) {
 			getLogger().warning("Files have been deleted, recreating!");
 			saveDefaultConfig();
 			messages.saveDefaultConfig();
@@ -141,6 +142,15 @@ public class BiomeRemap extends JavaPlugin {
 			logger().warning("Unable to save debug logging data!");
 		}
 		debugBuffer.clear();
+	}
+	
+	private static class ConfigMessageFilter implements FilenameFilter {
+
+		@Override
+		public boolean accept(File dir, String name) {
+			return name.equals("config.yml") || name.equals("messages.yml");
+		}
+
 	}
 
 }
