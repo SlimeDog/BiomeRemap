@@ -112,6 +112,10 @@ public class Messages extends CustomConfigHandler {
 						.replace("{PERCENTAGE}", percentage).replace("{BIOME_ID}", biome);
 	}
 	
+	public String warnConfigRecreated() {
+		return getMessage("WARN_CONFIG_FILES_RECREATED", "Configuration files do not exist; default files were created");
+	}
+	
 	public String errorBiomeNotFound(String biome) {
 		return getMessage("ERROR_BIOME_NOT_FOUND", "Biome {BIOME_ID} does not exist").replace("{BIOME_ID}", biome);
 	}
