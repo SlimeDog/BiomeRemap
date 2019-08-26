@@ -32,6 +32,14 @@ public class BiomeRemap extends JavaPlugin {
 	private boolean testing = false;
 	private BiomeRemapper remapper;
 	private BiomeScanner scanner;
+
+	// helpers 
+	private boolean existsDataFolder;
+	private boolean existsConfig;
+	private boolean existsMessages;
+	private boolean canReadDataFolder;
+	private boolean canReadConfig;
+	private boolean canReadMessages;
 	
 	public BiomeRemap() {
 		super();
@@ -47,17 +55,10 @@ public class BiomeRemap extends JavaPlugin {
 	public void onEnable() {
 		if (!testing) new Metrics(this);
 		staticInstance = this;
-		boolean canRead = getDataFolder().canRead();
-		if (canRead) saveDefaultConfig();
+		
 		messages = new Messages(this);
+		attempConfigReloads(true);
 		settings = new Settings(this);
-		if (canRead) messages.saveDefaultConfig();
-		if (!canRead) {
-			getLogger().severe(getMessages().errorConfigUnreadable());
-		}
-		if (canRead) {
-			getLogger().info(getMessages().getInfoConfigLoaded());
-		}
 		// commands
 		getCommand("biomeremap").setExecutor(new BiomeRemapCommand(this));
 		
@@ -86,24 +87,43 @@ public class BiomeRemap extends JavaPlugin {
 	public void onDisable() {
 		saveDebug();
 	}
+
+	private void attemptConfigReloads() {
+		attempConfigReloads(false);
+	}
+
+	private void attempConfigReloads(boolean first) {
+		File config = new File(getDataFolder(), "config.yml");
+		File msgs = new File(getDataFolder(), "messages.yml");
+		existsDataFolder = getDataFolder().exists();
+		existsConfig = config.exists();
+		existsMessages = msgs.exists();
+		canReadDataFolder = getDataFolder().canRead();
+		canReadConfig = config.canRead();
+		canReadMessages = msgs.canRead();
+		if (!canReadDataFolder || !canReadConfig || !canReadMessages) {
+			getLogger().severe(getMessages().errorConfigUnreadable());
+			if (!canReadConfig && !canReadMessages)	return;
+		}
+		if (!existsDataFolder || !existsConfig || !existsMessages) {
+			if (!first) getLogger().warning(getMessages().warnConfigRecreated());
+			if (!existsConfig) saveDefaultConfig();
+			if (!existsMessages) messages.saveDefaultConfig();
+		}
+	}
 	
 	public boolean reload() {
 		boolean success = true;
-		boolean canRead = getDataFolder().canRead();
-		if (!canRead) {
-			getLogger().severe(getMessages().errorConfigUnreadable());
-			return false;
+		attemptConfigReloads();
+		if (canReadConfig) {
+			reloadConfig();
+			if (getConfig().getKeys(true).isEmpty()) success = false;
+			if (success) settings.reload();
 		}
-		if (!getDataFolder().exists() || !canRead || getDataFolder().list(new ConfigMessageFilter()).length < 2) {
-			getLogger().warning(getMessages().warnConfigRecreated());
-			saveDefaultConfig();
-			messages.saveDefaultConfig();
+		if (canReadMessages) {
+			messages.reloadCustomConfig();
+			if (messages.getCustomConfig().getKeys(true).isEmpty()) success = false;
 		}
-		reloadConfig();
-		if (getConfig().getKeys(true).isEmpty()) success = false;
-		settings.reload();
-		messages.reloadCustomConfig();
-		if (messages.getCustomConfig().getKeys(true).isEmpty()) success = false;
 		if (success) {
 			getLogger().info(getMessages().getInfoConfigLoaded());
 		}
