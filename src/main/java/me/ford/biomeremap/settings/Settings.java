@@ -40,7 +40,9 @@ public class Settings {
 					duplicates.add(worldName);
 					br.getLogger().severe(br.getMessages().errorDuplicateBiomeMapsForWorld(worldName));
 				}
-				br.logMessage(br.getMessages().getInfoWorldMapped(worldName, map.getName()));
+				if (!duplicates.contains(worldName)) {
+					br.logMessage(br.getMessages().getInfoWorldMapped(worldName, map.getName()));
+				}
 			}
 		}
 		for (String worldName : duplicates) { //otherwise the third (or 5th, so on) duplicate would stay
