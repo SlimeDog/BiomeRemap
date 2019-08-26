@@ -30,7 +30,7 @@ public class Settings {
 				br.getLogger().warning("Biomemap by the name of '" + key + "' is incomplete");
 				continue;
 			}
-			maps.put(key, new BiomeMap(curMapSection));
+			maps.put(key, new BiomeMap(br.getMessages(), curMapSection));
 		}
 		Set<String> duplicates = new HashSet<>();
 		for (BiomeMap map : maps.values()) {
