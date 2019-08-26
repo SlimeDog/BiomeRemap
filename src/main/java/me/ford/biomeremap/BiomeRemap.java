@@ -47,10 +47,14 @@ public class BiomeRemap extends JavaPlugin {
 	public void onEnable() {
 		if (!testing) new Metrics(this);
 		staticInstance = this;
-		saveDefaultConfig();
+		boolean canRead = getDataFolder().canRead();
+		if (canRead) saveDefaultConfig();
 		messages = new Messages(this);
 		settings = new Settings(this);
-		messages.saveDefaultConfig();
+		if (canRead) messages.saveDefaultConfig();
+		if (!canRead) {
+			getLogger().severe(getMessages().errorConfigUnreadable());
+		}
 		// commands
 		getCommand("biomeremap").setExecutor(new BiomeRemapCommand(this));
 		
@@ -121,7 +125,7 @@ public class BiomeRemap extends JavaPlugin {
 	}
 	
 	public static Logger logger() {
-		return JavaPlugin.getPlugin(BiomeRemap.class).getLogger();
+		return staticInstance.getLogger();
 	}
 	
 	private static List<String> debugBuffer = new ArrayList<>();
