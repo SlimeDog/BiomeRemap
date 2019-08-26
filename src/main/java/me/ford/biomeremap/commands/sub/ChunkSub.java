@@ -13,7 +13,6 @@ import org.bukkit.util.StringUtil;
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.commands.SubCommand;
 import me.ford.biomeremap.largetasks.LargeScanTaskStarter;
-import me.ford.biomeremap.mapping.BiomeRemapper;
 
 public class ChunkSub extends SubCommand {
 	private static final String PERMS = "biomeremap.remap";
