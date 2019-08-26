@@ -285,6 +285,7 @@ biomemaps:
         replacement-biome: WOODED_BADLANDS_PLATEAU
 
 # ========== REPORT REMAP PROGRESS =================================================================
-# How often should region command report progress, as a percentage of completion?
+# How often region commands should report progress, as a percentage of completion.
+# If 0, progress will not be reported.
 report-region-remap-progress: 5
 report-region-scan-progress: 10
