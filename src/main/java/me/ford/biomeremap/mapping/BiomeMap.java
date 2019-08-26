@@ -9,24 +9,23 @@ import org.bukkit.block.Biome;
 import org.bukkit.configuration.ConfigurationSection;
 
 import me.ford.biomeremap.BiomeRemap;
+import me.ford.biomeremap.settings.Messages;
 
 public class BiomeMap {
 	private final String name;
 	private final String description;
 	private final List<String> worldNames;
 	private final Map<Biome, Biome> biomeMap = new HashMap<>();
-	private final String prefix;
 	
-	public BiomeMap(ConfigurationSection section) {
+	public BiomeMap(Messages messages, ConfigurationSection section) {
 		name = section.getName();
 		description = section.getString("description", "");
 		worldNames = section.getStringList("enabled-worlds");
-		prefix = "[BiomeMap:" + name + "] ";
 		
 		// setup biome mapping
 		ConfigurationSection mapSection = section.getConfigurationSection("biomes");
 		if (mapSection == null) {
-			BiomeRemap.logger().warning(prefix + "No mapping of biomes detected!");
+			BiomeRemap.logger().warning(messages.getPrefix() + "No mapping of biomes detected!");
 			return;
 		}
 		for (String key : mapSection.getKeys(false)) {
@@ -34,7 +33,7 @@ public class BiomeMap {
 			try {
 				from = Biome.valueOf(key);
 			} catch (IllegalArgumentException e) {
-				BiomeRemap.logger().warning(prefix + "Unrecognized Biome Enum defined: " + key);
+				BiomeRemap.logger().warning(messages.getPrefix() + "Unrecognized Biome Enum defined: " + key);
 				continue;
 			}
 			ConfigurationSection curSection = mapSection.getConfigurationSection(key);
@@ -46,7 +45,7 @@ public class BiomeMap {
 			try {
 				to = Biome.valueOf(toName);
 			} catch (IllegalArgumentException e) {
-				BiomeRemap.logger().warning(prefix + "Unrecognized Biome Enum defined as replacement: " + toName);
+				BiomeRemap.logger().warning(messages.getPrefix() + "Unrecognized Biome Enum defined as replacement: " + toName);
 				continue;
 			}
 			biomeMap.put(from, to);
