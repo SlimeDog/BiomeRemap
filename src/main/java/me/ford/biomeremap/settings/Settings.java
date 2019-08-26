@@ -1,6 +1,7 @@
 package me.ford.biomeremap.settings;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,15 +32,19 @@ public class Settings {
 			}
 			maps.put(key, new BiomeMap(curMapSection));
 		}
+		Set<String> duplicates = new HashSet<>();
 		for (BiomeMap map : maps.values()) {
 			for (String worldName : map.getApplicableWorldNames()) {
 				BiomeMap prev = worldMap.put(worldName, map);
 				if (prev != null) {
-					worldMap.remove(worldName);
+					duplicates.add(worldName);
 					br.getLogger().severe(br.getMessages().errorDuplicateBiomeMapsForWorld(worldName));
 				}
 				br.logMessage(br.getMessages().getInfoWorldMapped(worldName, map.getName()));
 			}
+		}
+		for (String worldName : duplicates) { //otherwise the third (or 5th, so on) duplicate would stay
+			worldMap.remove(worldName);
 		}
 	}
 	
