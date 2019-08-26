@@ -25,7 +25,7 @@ public class BiomeMap {
 		// setup biome mapping
 		ConfigurationSection mapSection = section.getConfigurationSection("biomes");
 		if (mapSection == null) {
-			BiomeRemap.logger().warning(messages.getPrefix() + "No mapping of biomes detected!");
+			BiomeRemap.logger().warning(messages.errorBiomeMapIncomplete(name));
 			return;
 		}
 		for (String key : mapSection.getKeys(false)) {
@@ -33,7 +33,7 @@ public class BiomeMap {
 			try {
 				from = Biome.valueOf(key);
 			} catch (IllegalArgumentException e) {
-				BiomeRemap.logger().warning(messages.getPrefix() + "Unrecognized Biome Enum defined: " + key);
+				BiomeRemap.logger().warning(messages.errorBiomeNotFound(key));
 				continue;
 			}
 			ConfigurationSection curSection = mapSection.getConfigurationSection(key);
@@ -45,7 +45,7 @@ public class BiomeMap {
 			try {
 				to = Biome.valueOf(toName);
 			} catch (IllegalArgumentException e) {
-				BiomeRemap.logger().warning(messages.getPrefix() + "Unrecognized Biome Enum defined as replacement: " + toName);
+				BiomeRemap.logger().warning(messages.errorBiomeNotFound(toName));
 				continue;
 			}
 			biomeMap.put(from, to);

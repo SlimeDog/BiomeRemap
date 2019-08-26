@@ -69,6 +69,10 @@ public class Messages extends CustomConfigHandler {
 						.replace("{MILLISECONDS", String.valueOf(ms))
 						.replace("{TICKS}", String.valueOf(ticks));
 	}
+
+	public String getInfoConfigLoaded() {
+		return getMessage("INFO_CONFIG_FILES_LOADED_SUCCESSFULLY", "Configuration files loaded successfully");
+	}
 	
 	public String getInfoWorldMapped(String world, String biomemap) {
 		return getMessage("INFO_WORLD_BIOME_MAPPED", "Biomemap {BIOMEMAP} was successfully assigned to world {WORLD_NAME}")
@@ -114,6 +118,11 @@ public class Messages extends CustomConfigHandler {
 	
 	public String warnConfigRecreated() {
 		return getMessage("WARN_CONFIG_FILES_RECREATED", "Configuration files do not exist; default files were created");
+	}
+
+	public String errorBiomeMapIncomplete(String map) {
+		return getMessage("ERROR_BIOMEMAP_INCOMPLETE", "Biomemap {BIOMEMAP} definition is incomplete")
+						.replace("{BIOMEMAP}",map);
 	}
 	
 	public String errorBiomeNotFound(String biome) {

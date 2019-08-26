@@ -27,7 +27,7 @@ public class Settings {
 		for (String key : mapsSection.getKeys(false)) {
 			ConfigurationSection curMapSection = mapsSection.getConfigurationSection(key);
 			if (curMapSection == null) {
-				br.getLogger().warning("Biomemap by the name of '" + key + "' is incomplete");
+				br.getLogger().warning(br.getMessages().errorBiomeMapIncomplete(key));
 				continue;
 			}
 			maps.put(key, new BiomeMap(br.getMessages(), curMapSection));

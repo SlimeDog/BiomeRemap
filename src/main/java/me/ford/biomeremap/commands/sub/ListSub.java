@@ -48,7 +48,7 @@ public class ListSub extends SubCommand {
 			for (String name : settings.getBiomeMapNames()) {
 				BiomeMap map = settings.getBiomeMap(name);
 				if (map == null) {
-					BiomeRemap.logger().warning("BiomeMap by name '" + name + "' listed, but returns null!");
+					BiomeRemap.logger().warning(messages.errorBiomeMapNotFound(name));
 					continue;
 				}
 				list.add(map);

@@ -55,6 +55,9 @@ public class BiomeRemap extends JavaPlugin {
 		if (!canRead) {
 			getLogger().severe(getMessages().errorConfigUnreadable());
 		}
+		if (canRead) {
+			getLogger().info(getMessages().getInfoConfigLoaded());
+		}
 		// commands
 		getCommand("biomeremap").setExecutor(new BiomeRemapCommand(this));
 		
@@ -101,6 +104,9 @@ public class BiomeRemap extends JavaPlugin {
 		settings.reload();
 		messages.reloadCustomConfig();
 		if (messages.getCustomConfig().getKeys(true).isEmpty()) success = false;
+		if (success) {
+			getLogger().info(getMessages().getInfoConfigLoaded());
+		}
 		return success;
 	}
 	
