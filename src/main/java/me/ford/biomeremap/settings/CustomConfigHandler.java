@@ -2,6 +2,7 @@ package me.ford.biomeremap.settings;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
@@ -30,10 +31,13 @@ public class CustomConfigHandler {
 
 		// Look for defaults in the jar
 		Reader defConfigStream = null;
-		try {
-			defConfigStream = new InputStreamReader(plugin.getResource(fileName), "UTF8");
-		} catch (UnsupportedEncodingException e) {
-			plugin.getLogger().log(Level.SEVERE, "Unsupported encoding while loading resource " + fileName, e);
+		InputStream resource = plugin.getResource(fileName);
+		if (resource != null) {
+			try {
+				defConfigStream = new InputStreamReader(resource, "UTF8");
+			} catch (UnsupportedEncodingException e) {
+				plugin.getLogger().log(Level.SEVERE, "Unsupported encoding while loading resource " + fileName, e);
+			}
 		}
 		if (defConfigStream != null) {
 			YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
