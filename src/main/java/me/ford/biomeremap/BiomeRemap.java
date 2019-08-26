@@ -83,7 +83,11 @@ public class BiomeRemap extends JavaPlugin {
 	public boolean reload() {
 		boolean success = true;
 		boolean canRead = getDataFolder().canRead();
-		if (!getDataFolder().exists() || canRead || getDataFolder().list(new ConfigMessageFilter()).length < 2) {
+		if (!canRead) {
+			getLogger().severe(getMessages().errorConfigUnreadable());
+			return false;
+		}
+		if (!getDataFolder().exists() || !canRead || getDataFolder().list(new ConfigMessageFilter()).length < 2) {
 			getLogger().warning(getMessages().warnConfigRecreated());
 			saveDefaultConfig();
 			messages.saveDefaultConfig();
