@@ -40,7 +40,7 @@ public class BiomeMap {
 			if (section == null) {
 				continue;
 			}
-			String toName = curSection.getString("replacement-biome");
+			String toName = curSection.getString("replacement-biome", "");
 			Biome to;
 			try {
 				to = Biome.valueOf(toName);
