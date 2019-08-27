@@ -24,7 +24,7 @@ public class BiomeMap {
 		
 		// setup biome mapping
 		ConfigurationSection mapSection = section.getConfigurationSection("biomes");
-		if (mapSection == null) {
+		if (mapSection == null || mapSection.getKeys(false).isEmpty()) {
 			throw new IncompleteBiomeMapException();
 		}
 		for (String key : mapSection.getKeys(false)) {
