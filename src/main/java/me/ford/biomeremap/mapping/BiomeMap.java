@@ -25,15 +25,14 @@ public class BiomeMap {
 		// setup biome mapping
 		ConfigurationSection mapSection = section.getConfigurationSection("biomes");
 		if (mapSection == null) {
-			BiomeRemap.logger().warning(messages.errorBiomeMapIncomplete(name));
-			return;
+			throw new IncompleteBiomeMapException();
 		}
 		for (String key : mapSection.getKeys(false)) {
 			Biome from;
 			try {
 				from = Biome.valueOf(key);
 			} catch (IllegalArgumentException e) {
-				BiomeRemap.logger().warning(messages.errorBiomeNotFound(key));
+				BiomeRemap.logger().severe(messages.errorBiomeNotFound(key));
 				continue;
 			}
 			ConfigurationSection curSection = mapSection.getConfigurationSection(key);
@@ -45,7 +44,7 @@ public class BiomeMap {
 			try {
 				to = Biome.valueOf(toName);
 			} catch (IllegalArgumentException e) {
-				BiomeRemap.logger().warning(messages.errorBiomeNotFound(toName));
+				BiomeRemap.logger().severe(messages.errorBiomeNotFound(toName));
 				continue;
 			}
 			biomeMap.put(from, to);
@@ -70,6 +69,16 @@ public class BiomeMap {
 	
 	public Biome getBiomeFor(Biome biome) {
 		return biomeMap.get(biome);
+	}
+
+	public static final class IncompleteBiomeMapException extends IllegalStateException {
+
+		private static final long serialVersionUID = 1L;
+
+		public IncompleteBiomeMapException() {
+			super("BiomeMap incomplete!");
+		}
+
 	}
 
 }

@@ -9,6 +9,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.mapping.BiomeMap;
+import me.ford.biomeremap.mapping.BiomeMap.IncompleteBiomeMapException;
 
 public class Settings {
 	private final BiomeRemap br;
@@ -27,10 +28,17 @@ public class Settings {
 		for (String key : mapsSection.getKeys(false)) {
 			ConfigurationSection curMapSection = mapsSection.getConfigurationSection(key);
 			if (curMapSection == null) {
-				br.getLogger().warning(br.getMessages().errorBiomeMapIncomplete(key));
+				br.getLogger().severe(br.getMessages().errorBiomeMapIncomplete(key));
 				continue;
 			}
-			maps.put(key, new BiomeMap(br.getMessages(), curMapSection));
+			BiomeMap map;
+			try {
+				map = new BiomeMap(br.getMessages(), curMapSection);
+			} catch (IncompleteBiomeMapException e) {
+				br.getLogger().severe(br.getMessages().errorBiomeMapIncomplete(key));
+				continue;
+			}
+			maps.put(key, map);
 		}
 		Set<String> duplicates = new HashSet<>();
 		Set<String> successes = new HashSet<>();
