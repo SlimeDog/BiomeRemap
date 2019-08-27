@@ -178,14 +178,5 @@ public class BiomeRemap extends JavaPlugin {
 		}
 		debugBuffer.clear();
 	}
-	
-	private static class ConfigMessageFilter implements FilenameFilter {
-
-		@Override
-		public boolean accept(File dir, String name) {
-			return name.equals("config.yml") || name.equals("messages.yml");
-		}
-
-	}
 
 }
