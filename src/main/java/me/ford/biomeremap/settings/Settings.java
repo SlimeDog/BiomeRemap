@@ -56,14 +56,19 @@ public class Settings {
 					map.removeWorld(worldName);
 					br.getLogger().severe(br.getMessages().errorDuplicateBiomeMapsForWorld(worldName));
 				} else {
-					successes.add(worldName);
+					if (br.getServer().getWorld(worldName) != null) {
+						successes.add(worldName);
+					} else {
+						br.getLogger().severe(br.getMessages().errorWorldNotFound(worldName));
+						map.removeWorld(worldName);
+					}
 				}
 			}
 		}
 		for (Entry<String, BiomeMap> entry : new HashMap<>(maps).entrySet()) {
 			if (entry.getValue().getApplicableWorldNames().isEmpty()) {
+				br.getLogger().severe(br.getMessages().errorBiomeMapIncomplete(entry.getKey()));
 			}
-			br.logMessage(br.getMessages().errorBiomeMapIncomplete(entry.getKey()));
 		}
 		successes.removeAll(duplicates);
 		for (String worldName : successes) {
