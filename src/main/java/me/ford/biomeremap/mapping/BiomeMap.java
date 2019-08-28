@@ -36,7 +36,7 @@ public class BiomeMap {
 				continue;
 			}
 			ConfigurationSection curSection = mapSection.getConfigurationSection(key);
-			if (section == null) {
+			if (curSection == null) {
 				BiomeRemap.logger().severe(messages.errorConfigMapincomplete(key, from.name()));
 				throw new MappingException();
 			}
