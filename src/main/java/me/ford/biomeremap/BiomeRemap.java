@@ -100,7 +100,7 @@ public class BiomeRemap extends JavaPlugin {
 		canReadDataFolder = getDataFolder().canRead();
 		canReadConfig = config.canRead();
 		canReadMessages = msgs.canRead();
-		if (!canReadDataFolder || !canReadConfig || !canReadMessages) {
+		if ((!canReadDataFolder && existsDataFolder) || (!canReadConfig && existsConfig) || (!canReadMessages && existsMessages)) {
 			getLogger().severe(getMessages().errorConfigUnreadable());
 			if (!canReadConfig && !canReadMessages)	return;
 		}
