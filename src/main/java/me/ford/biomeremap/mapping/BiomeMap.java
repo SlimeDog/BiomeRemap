@@ -37,8 +37,8 @@ public class BiomeMap {
 			}
 			ConfigurationSection curSection = mapSection.getConfigurationSection(key);
 			if (section == null) {
-				BiomeRemap.logger().severe(messages.errorBiomeMapNotFound("replacement biome for " + key));
-				continue;
+				BiomeRemap.logger().severe(messages.errorConfigMapincomplete(key, from.name()));
+				throw new MappingException();
 			}
 			String toName = curSection.getString("replacement-biome", "");
 			Biome to;
@@ -84,6 +84,16 @@ public class BiomeMap {
 			super("BiomeMap incomplete!");
 		}
 
+	}
+
+	public static final class MappingException extends IllegalStateException {
+
+		private static final long serialVersionUID = 1L;
+
+		public MappingException() {
+			super("Problem mapping biomes");
+		}
+		
 	}
 
 }

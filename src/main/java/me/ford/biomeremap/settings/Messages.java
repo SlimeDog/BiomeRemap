@@ -153,7 +153,17 @@ public class Messages extends CustomConfigHandler {
 	}
 	
 	public String errorConfigUnreadable() {
-		return getMessage("ERROR_CONFIG_FILE_UNREADABLE", "Cannot read config.yml; no biomemaps are assigned to worlds");
+		return getMessage("ERROR_CONFIG_FILE_UNREADABLE", "Cannot read config.yml; no biomemaps were assigned to worlds");
+	}
+
+	public String errorConfigMapincomplete(String map, String biome) {
+		return getMessage("ERROR_CONFIG_MAP_INCOMPLETE", "Biomemap {BIOMEMAP} has incomplete map for biome {BIOME_ID}; fix configuration and reload")
+						.replace("{BIOMEMAP}", map).replace("{BIOME_ID}", biome);
+	}
+
+	public String errorNoBiomeMapAssigned(String map) {
+		return getMessage("ERROR_NO_BIOMEMAP_ASSIGNMENT", "Errors were found in biomemap {BIOMEMAP}; biomemap was not assigned to any worlds")
+						.replace("{BIOMEMAP}", map);
 	}
 	
 	public String getMessage(String path, String def) {

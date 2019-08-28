@@ -11,6 +11,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.mapping.BiomeMap;
 import me.ford.biomeremap.mapping.BiomeMap.IncompleteBiomeMapException;
+import me.ford.biomeremap.mapping.BiomeMap.MappingException;
 
 public class Settings {
 	private final BiomeRemap br;
@@ -38,6 +39,9 @@ public class Settings {
 			} catch (IncompleteBiomeMapException e) {
 				br.getLogger().severe(br.getMessages().errorBiomeMapIncomplete(key));
 				continue;
+			} catch (MappingException e) {
+				br.getLogger().severe(br.getMessages().errorNoBiomeMapAssigned(key));
+				continue;
 			}
 			maps.put(key, map);
 		}
@@ -58,8 +62,8 @@ public class Settings {
 		}
 		for (Entry<String, BiomeMap> entry : new HashMap<>(maps).entrySet()) {
 			if (entry.getValue().getApplicableWorldNames().isEmpty()) {
-				br.logMessage(br.getMessages().errorBiomeMapIncomplete(entry.getKey()));
 			}
+			br.logMessage(br.getMessages().errorBiomeMapIncomplete(entry.getKey()));
 		}
 		successes.removeAll(duplicates);
 		for (String worldName : successes) {
