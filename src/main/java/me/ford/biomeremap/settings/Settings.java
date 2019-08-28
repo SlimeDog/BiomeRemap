@@ -1,7 +1,9 @@
 package me.ford.biomeremap.settings;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -41,18 +43,27 @@ public class Settings {
 			maps.put(key, map);
 		}
 		Set<String> duplicates = new HashSet<>();
+		List<BiomeMap> mapsWithDuplicateWorlds = new ArrayList<>();
 		Set<String> successes = new HashSet<>();
 		for (BiomeMap map : maps.values()) {
 			for (String worldName : map.getApplicableWorldNames()) {
 				BiomeMap prev = worldMap.put(worldName, map);
 				if (prev != null) {
 					duplicates.add(worldName);
+					mapsWithDuplicateWorlds.add(prev);
+					mapsWithDuplicateWorlds.add(map);
 					br.getLogger().severe(br.getMessages().errorDuplicateBiomeMapsForWorld(worldName));
 				} else {
 					successes.add(worldName);
 				}
 			}
 		}
+		for (String worldName : duplicates) {
+			for (BiomeMap map : mapsWithDuplicateWorlds) {
+				map.removeWorld(worldName);
+			}
+		}
+		successes.removeAll(duplicates);
 		for (String worldName : successes) {
 			br.logMessage(br.getMessages().getInfoWorldMapped(worldName, worldMap.get(worldName).getName()));
 		}

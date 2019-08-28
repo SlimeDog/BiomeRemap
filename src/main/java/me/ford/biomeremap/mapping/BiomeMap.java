@@ -58,6 +58,10 @@ public class BiomeMap {
 	public String getDescription() {
 		return description;
 	}
+
+	public boolean removeWorld(String worldName) {
+		return worldNames.remove(worldName);
+	}
 	
 	public List<String> getApplicableWorldNames() {
 		return new ArrayList<>(worldNames);
