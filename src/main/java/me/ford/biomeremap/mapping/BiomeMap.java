@@ -37,6 +37,7 @@ public class BiomeMap {
 			}
 			ConfigurationSection curSection = mapSection.getConfigurationSection(key);
 			if (section == null) {
+				BiomeRemap.logger().severe(messages.errorBiomeMapNotFound("replacement biome for " + key));
 				continue;
 			}
 			String toName = curSection.getString("replacement-biome", "");
