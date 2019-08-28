@@ -58,7 +58,7 @@ public class Settings {
 		}
 		for (Entry<String, BiomeMap> entry : new HashMap<>(maps).entrySet()) {
 			if (entry.getValue().getApplicableWorldNames().isEmpty()) {
-				br.logMessage(br.getMessages().errorBiomeMapIncomplete(entry.getKey());
+				br.logMessage(br.getMessages().errorBiomeMapIncomplete(entry.getKey()));
 			}
 		}
 		successes.removeAll(duplicates);
