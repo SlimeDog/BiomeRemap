@@ -3,7 +3,7 @@ version: ${project.version}
 api-version: 1.14
 main: ${project.groupId}.${project.artifactId}.${project.name}
 description: ${project.description}
-authors: [SlimeDog, drives_a_ford, Tabuu]
+authors: [SlimeDog, drives_a_ford]
 load: POSTWORLD
 softdepend: [Multiverse-Core, MultiWorld]
 
@@ -46,7 +46,6 @@ commands:
     description: Scan the region a player is standing in OR of specified location
     usage: |
       /biomeremap scan region [<world> <x> <z>]
-
 permissions:
   biomeremap.*:
     description: Allows use of all commands.
