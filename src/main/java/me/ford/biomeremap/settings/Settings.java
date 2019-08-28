@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -53,6 +54,11 @@ public class Settings {
 				} else {
 					successes.add(worldName);
 				}
+			}
+		}
+		for (Entry<String, BiomeMap> entry : new HashMap<>(maps).entrySet()) {
+			if (entry.getValue().getApplicableWorldNames().isEmpty()) {
+				br.logMessage(br.getMessages().errorBiomeMapIncomplete(entry.getKey());
 			}
 		}
 		successes.removeAll(duplicates);
