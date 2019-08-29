@@ -65,11 +65,6 @@ public class Settings {
 				}
 			}
 		}
-		for (Entry<String, BiomeMap> entry : new HashMap<>(maps).entrySet()) {
-			if (entry.getValue().getApplicableWorldNames().isEmpty()) {
-				br.getLogger().severe(br.getMessages().errorBiomeMapIncomplete(entry.getKey()));
-			}
-		}
 		successes.removeAll(duplicates);
 		for (String worldName : successes) {
 			br.logMessage(br.getMessages().getInfoWorldMapped(worldName, worldMap.get(worldName).getName()));
