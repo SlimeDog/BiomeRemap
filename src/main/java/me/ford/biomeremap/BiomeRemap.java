@@ -106,8 +106,14 @@ public class BiomeRemap extends JavaPlugin {
 		}
 		if (!existsDataFolder || !existsConfig || !existsMessages) {
 			if (!first) getLogger().warning(getMessages().warnConfigRecreated());
-			if (!existsConfig) saveDefaultConfig();
-			if (!existsMessages) messages.saveDefaultConfig();
+			if (!existsConfig) {
+				saveDefaultConfig();
+				canReadConfig = config.canRead();
+			}
+			if (!existsMessages) {
+				messages.saveDefaultConfig();
+				canReadMessages = msgs.canRead();
+			}
 		}
 	}
 	
