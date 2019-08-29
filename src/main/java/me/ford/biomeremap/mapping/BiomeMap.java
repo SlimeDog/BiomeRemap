@@ -33,7 +33,7 @@ public class BiomeMap {
 				from = Biome.valueOf(key);
 			} catch (IllegalArgumentException e) {
 				BiomeRemap.logger().severe(messages.errorBiomeNotFound(key));
-				continue;
+				throw new MappingException();
 			}
 			ConfigurationSection curSection = mapSection.getConfigurationSection(key);
 			if (curSection == null) {
@@ -46,7 +46,7 @@ public class BiomeMap {
 				to = Biome.valueOf(toName);
 			} catch (IllegalArgumentException e) {
 				BiomeRemap.logger().severe(messages.errorBiomeNotFound(toName));
-				continue;
+				throw new MappingException();
 			}
 			biomeMap.put(from, to);
 		}
