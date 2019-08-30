@@ -48,6 +48,9 @@ public class ChunkSub extends SubCommand {
 		boolean myLocation = args.length < 3;
 		Chunk chunk;
 		if (myLocation) {
+			if (args.length > 0) {// either no arguments for current chunk or specify chunk
+				return false;
+			}
 			chunk = ((Player) sender).getLocation().getChunk();
 		} else {
 			// check world

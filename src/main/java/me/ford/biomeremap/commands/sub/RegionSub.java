@@ -55,6 +55,9 @@ public class RegionSub extends SubCommand {
 		int regionX;
 		int regionZ;
 		if (myLocation) {
+			if (args.length > 0) { // either no arguments for current region or specify region
+				return false;
+			}
 			Chunk chunk = ((Player) sender).getLocation().getChunk();
 			regionX = chunk.getX() >> 5;
 			regionZ = chunk.getZ() >> 5;
