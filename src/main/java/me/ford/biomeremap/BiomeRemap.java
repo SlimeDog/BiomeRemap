@@ -52,12 +52,16 @@ public class BiomeRemap extends JavaPlugin {
 	
 	@Override
 	public void onEnable() {
-		if (!testing) new Metrics(this);
 		staticInstance = this;
 		
 		messages = new Messages(this);
 		attempConfigReloads(true);
 		settings = new Settings(this);
+
+		if (settings.enableMetrics() && !testing) {
+			new Metrics(this);
+		}
+
 		// commands
 		getCommand("biomeremap").setExecutor(new BiomeRemapCommand(this));
 		
