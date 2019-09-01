@@ -64,6 +64,9 @@ public class ScanSub extends SubCommand {
 			return false;
 		}
 		if (args.length < 4) { // has to be in game
+			if (args.length > 1) { // either no arguments for current chunk/region or specify chunk/region
+				return false;
+			}
 			Location loc = ((Player) sender).getLocation();
 			world = loc.getWorld();
 			x = loc.getChunk().getX();
