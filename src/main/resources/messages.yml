@@ -56,6 +56,12 @@ BIOMEREMAP_SCAN_LIST_ITEM: "{PERCENTAGE} {BIOME_ID}"
 INFO_CONFIG_FILES_LOADED_SUCCESSFULLY: "Configuration files loaded successfully"
 INFO_WORLD_BIOME_MAPPED: "Biomemap {BIOMEMAP} was successfully assigned to world {WORLD_NAME}"
 
+# Update messages
+#
+BIOMEREMAP_UPDATE_NEW_VERSION: "A new version {VERSION} is available for download"
+BIOMEREMAP_UPDATE_CURRENT_VERSION: "You are running the latest version"
+BIOMEREMAP_UPDATE_INFO_UNAVAILABLE: "Version update information is not available at this time"
+
 # Warning messages
 #
 WARN_CONFIG_FILES_RECREATED: "Configuration files do not exist; default files were created"

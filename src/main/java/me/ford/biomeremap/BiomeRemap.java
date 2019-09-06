@@ -23,6 +23,7 @@ import me.ford.biomeremap.mapping.BiomeScanner;
 import me.ford.biomeremap.populator.MappingPopulator;
 import me.ford.biomeremap.settings.Messages;
 import me.ford.biomeremap.settings.Settings;
+import me.ford.biomeremap.updates.UpdateChecker;
 
 public class BiomeRemap extends JavaPlugin {
 	private static BiomeRemap staticInstance;
@@ -83,6 +84,23 @@ public class BiomeRemap extends JavaPlugin {
 			new PlaceholderAPIHook(this);
 		} else {
 			getLogger().warning("PlaceholderAPI not found!");
+		}
+
+		// update
+		if (settings.checkForUpdates()) {
+			new UpdateChecker(this, (response, version) -> {
+				switch(response) {
+					case LATEST:
+						logMessage(messages.updateCurrentVersion());
+						break;
+					case FOUND_NEW:
+						logMessage(messages.updateNewVersionAvailable(version));
+						break;
+					case UNAVAILABLE:
+						logMessage(messages.updateInfoUnavailable());
+						break;
+				}
+			}).check();
 		}
 	}
 	

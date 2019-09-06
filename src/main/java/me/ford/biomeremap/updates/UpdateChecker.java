@@ -14,7 +14,7 @@ import com.google.common.net.HttpHeaders;
 import me.ford.biomeremap.BiomeRemap;
 
 public class UpdateChecker {
-    private static final String SPIGOT_URL = "https://api.spigotmc.org/legacy/update.php?resource=XXX"; // TODO - ID (and use)
+    private static final String SPIGOT_URL = "https://api.spigotmc.org/legacy/update.php?resource=70973"; // TODO - ID (and use)
 
     private final BiomeRemap br;
 
@@ -22,7 +22,7 @@ public class UpdateChecker {
     
     private final BiConsumer<VersionResponse, String> versionResponse;
 
-    private UpdateChecker(BiomeRemap plugin, BiConsumer<VersionResponse, String> consumer) {
+    public UpdateChecker(BiomeRemap plugin, BiConsumer<VersionResponse, String> consumer) {
         this.br = plugin;
         this.currentVersion = br.getDescription().getVersion();
         this.versionResponse = consumer;

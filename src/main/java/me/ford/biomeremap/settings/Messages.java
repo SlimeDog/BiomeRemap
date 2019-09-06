@@ -165,6 +165,21 @@ public class Messages extends CustomConfigHandler {
 		return getMessage("ERROR_NO_BIOMEMAP_ASSIGNMENT", "Errors were found in biomemap {BIOMEMAP}; biomemap was not assigned to any worlds")
 						.replace("{BIOMEMAP}", map);
 	}
+
+	// Update messages
+
+	public String updateNewVersionAvailable(String version) {
+		return getMessage("BIOMEREMAP_UPDATE_NEW_VERSION", "A new version {VERSION} is available for download")
+						.replace("{VERSION}", version);
+	}
+
+	public String updateCurrentVersion() {
+		return getMessage("BIOMEREMAP_UPDATE_CURRENT_VERSION", "You are running the latest version");
+	}
+
+	public String updateInfoUnavailable() {
+		return getMessage("+BIOMEREMAP_UPDATE_INFO_UNAVAILABLE", "Version update information is not available at this time");
+	}
 	
 	public String getMessage(String path, String def) {
 		return ChatColor.translateAlternateColorCodes('&', getCustomConfig().getString(path, def));
