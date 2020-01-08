@@ -40,8 +40,8 @@ public class BiomeRemapper {
 		int chunkZ = chunk.getZ() * 16;
 		Map<Integer, Biome> toChange = new HashMap<>();
 		Map<Biome, Biome> changes = new HashMap<>();
-		for (int x = 0; x < 16; x+=5) { // the grid only has 4 sections per horizontal axis
-			for (int z = 0; z < 16; z+=5) { // the grid only has 4 sections per horizontal axis
+		for (int x = 0; x < 16; x++) { // the grid only has 4 sections per horizontal axis
+			for (int z = 0; z < 16; z++) { // the grid only has 4 sections per horizontal axis
 				Biome cur = world.getBiome(chunkX + x, 0, chunkZ + z); // TODO - in the future, we might need to change/get biomes at other y values, but for now only y=0 has an effect
 				Biome req = map.getBiomeFor(cur);
 				if (req != null) {
