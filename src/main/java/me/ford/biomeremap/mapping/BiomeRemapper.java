@@ -40,9 +40,9 @@ public class BiomeRemapper {
 		int chunkZ = chunk.getZ() * 16;
 		Map<Integer, Biome> toChange = new HashMap<>();
 		Map<Biome, Biome> changes = new HashMap<>();
-		for (int x = 0; x < 16; x++) {
-			for (int z = 0; z < 16; z++) {
-				Biome cur = world.getBiome(chunkX + x, chunkZ + z);
+		for (int x = 0; x < 4; x++) { // the grid only has 4 sections per horizontal axis
+			for (int z = 0; z < 4; z++) { // the grid only has 4 sections per horizontal axis
+				Biome cur = world.getBiome(chunkX + x, 0, chunkZ + z); // TODO - in the future, we might need to change/get biomes at other y values, but for now only y=0 has an effect
 				Biome req = map.getBiomeFor(cur);
 				if (req != null) {
 					toChange.put(x * 16 + z, req);
@@ -67,7 +67,7 @@ public class BiomeRemapper {
 		for (Entry<Integer, Biome> entry : toChange.entrySet()) {
 			int x = entry.getKey()/16;
 			int z = entry.getKey()%16;
-			world.setBiome(startX + x, startZ + z, entry.getValue());
+			world.setBiome(startX + x, 0, startZ + z, entry.getValue()); // TODO - in the future, we might need to change/get biomes at other y values, but for now only y=0 has an effect
 		}
 	}
 
