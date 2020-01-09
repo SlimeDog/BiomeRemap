@@ -182,9 +182,19 @@ public class BiomeRemap extends JavaPlugin {
 	}
 	
 	private static List<String> debugBuffer = new ArrayList<>();
+	private static boolean debugIsSaving = false;
 	
 	public static void debug(String msg) {
-		debugBuffer.add(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()) + ": " + msg);
+		String debugMsg = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()) + ": " + msg;
+		if (debugIsSaving) {
+			staticInstance.getServer().getScheduler().runTaskLater(staticInstance, () -> debugMessage(debugMsg), 1L);
+			return;
+		}
+		debugMessage(debugMsg);
+	}
+	
+	private static void debugMessage(String msg) {
+		debugBuffer.add(msg);
 		if (debugBuffer.size() > 20) {
 			saveDebug();
 		}
@@ -192,6 +202,7 @@ public class BiomeRemap extends JavaPlugin {
 	
 	private static void saveDebug() {
 		if (debugBuffer.isEmpty()) return;
+		debugIsSaving = true;
 	    BufferedWriter writer;
 		try {
 			writer = new BufferedWriter(
@@ -204,6 +215,7 @@ public class BiomeRemap extends JavaPlugin {
 			logger().warning("Unable to save debug logging data!");
 		}
 		debugBuffer.clear();
+		debugIsSaving = true;
 	}
 
 }
