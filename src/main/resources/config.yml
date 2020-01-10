@@ -7,7 +7,8 @@
 # Implementation: drives_a_ford
 # Testing: SlimeDog
 #
-# Spigot version support: 1.14.4
+# Spigot version support: 1.14.4     Use BiomeRemap-1.0.1
+# Spigot version support: 1.15.x     Use BiomeRemap-2.0.x
 #
 # ========== CAVEATS AND WARNINGS ==================================================================
 # BiomeRemap is provided for your enjoyment and entertainment. We cannot guarantee that the results
@@ -27,8 +28,8 @@
 # remap the chunks initially-generated on world creation. These chunks must be remapped manually.
 # Commands to do so are described in the wiki.
 #
-# Note that all 1.14 biomes are included in the configured biomemaps. Biomes that do not exist in
-# your Spigot version will generate warnings in the console/log on server start-up; these may be
+# Note that all 1.14/1.15 biomes are included in the configured biomemaps. Biomes that do not exist
+# in your Spigot version will generate warnings in the console/log on server start-up; these may be
 # safely ignored.
 #
 # Changes of this magnitude should always be performed first on a test server, in order to verify
@@ -123,15 +124,15 @@ biomemaps:
       DARK_FOREST_HILLS:
         replacement-biome: SNOWY_TAIGA_HILLS
       DEEP_COLD_OCEAN:
-        replacement-biome: FROZEN_OCEAN
+        replacement-biome: DEEP_FROZEN_OCEAN
       DEEP_FROZEN_OCEAN:
-        replacement-biome: FROZEN_OCEAN
+        replacement-biome: DEEP_FROZEN_OCEAN
       DEEP_LUKEWARM_OCEAN:
-        replacement-biome: FROZEN_OCEAN
+        replacement-biome: DEEP_FROZEN_OCEAN
       DEEP_OCEAN:
-        replacement-biome: FROZEN_OCEAN
+        replacement-biome: DEEP_FROZEN_OCEAN
       DEEP_WARM_OCEAN:
-        replacement-biome: FROZEN_OCEAN
+        replacement-biome: DEEP_FROZEN_OCEAN
       DESERT:
         replacement-biome: SNOWY_TUNDRA
       DESERT_HILLS:
@@ -236,15 +237,15 @@ biomemaps:
       COLD_OCEAN:
         replacement-biome: WARM_OCEAN
       DEEP_COLD_OCEAN:
-        replacement-biome: WARM_OCEAN
+        replacement-biome: DEEP_WARM_OCEAN
       DEEP_FROZEN_OCEAN:
-        replacement-biome: WARM_OCEAN
+        replacement-biome: DEEP_WARM_OCEAN
       DEEP_LUKEWARM_OCEAN:
-        replacement-biome: WARM_OCEAN
+        replacement-biome: DEEP_WARM_OCEAN
       DEEP_OCEAN:
-        replacement-biome: WARM_OCEAN
+        replacement-biome: DEEP_WARM_OCEAN
       DEEP_WARM_OCEAN:
-        replacement-biome: WARM_OCEAN
+        replacement-biome: DEEP_WARM_OCEAN
       DESERT:
         replacement-biome: DESERT
       DESERT_HILLS:
