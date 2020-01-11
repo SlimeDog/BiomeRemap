@@ -76,6 +76,7 @@ public class BiomeRemapper {
 		if (debug) BiomeRemap.debug("Remapping biomes");
 		for (Entry<Integer, BiomeChoice> entry : toChange.entrySet()) {
 			changeBiomeInChunk(chunk, entry.getKey(), entry.getValue().choose());
+			br.getTeleportListener().sendUpdatesIfNeeded(chunk);
 		}
 	}
 

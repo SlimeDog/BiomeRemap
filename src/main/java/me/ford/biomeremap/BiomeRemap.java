@@ -20,6 +20,7 @@ import me.ford.biomeremap.commands.BiomeRemapCommand;
 import me.ford.biomeremap.hooks.PlaceholderAPIHook;
 import me.ford.biomeremap.mapping.BiomeRemapper;
 import me.ford.biomeremap.mapping.BiomeScanner;
+import me.ford.biomeremap.mapping.TeleportListener;
 import me.ford.biomeremap.populator.MappingPopulator;
 import me.ford.biomeremap.settings.Messages;
 import me.ford.biomeremap.settings.Settings;
@@ -32,6 +33,7 @@ public class BiomeRemap extends JavaPlugin {
 	private boolean testing = false;
 	private BiomeRemapper remapper;
 	private BiomeScanner scanner;
+	private TeleportListener teleListener;
 
 	// helpers 
 	private boolean existsDataFolder;
@@ -72,6 +74,7 @@ public class BiomeRemap extends JavaPlugin {
 		// remapper, scanner
 		remapper = new BiomeRemapper(this);
 		scanner = new BiomeScanner();
+		teleListener = new TeleportListener(this);
 		
 		// setup up populator
 		MappingPopulator populator = new MappingPopulator(remapper);
@@ -171,6 +174,10 @@ public class BiomeRemap extends JavaPlugin {
 	
 	public BiomeScanner getScanner() {
 		return scanner;
+	}
+
+	public TeleportListener getTeleportListener() {
+		return teleListener;
 	}
 	
 	public void logMessage(String msg) {

@@ -109,4 +109,8 @@ public class Settings {
 		return worldMap.get(worldName);
 	}
 
+	public long getTeleportCacheTime() {
+		return br.getConfig().getLong("teleport-cache-time-ticks", 20L); // TODO - add and/or change config path
+	}
+
 }
