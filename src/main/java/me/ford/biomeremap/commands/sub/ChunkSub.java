@@ -90,7 +90,7 @@ public class ChunkSub extends SubCommand {
 		sender.sendMessage(completeMsg);
 		if (ingame) br.logMessage(completeMsg);
 		if (scanAfter) { 
-			new LargeScanTaskStarter(br, chunk.getWorld(), sender, chunk.getX(), chunk.getZ(), false, debug, null);
+			new LargeScanTaskStarter(br, chunk.getWorld(), sender, chunk.getX(), 0, chunk.getZ(), false, debug, null, false);
 		}
 		return true;
 	}

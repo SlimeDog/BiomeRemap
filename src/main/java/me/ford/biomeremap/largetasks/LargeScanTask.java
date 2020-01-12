@@ -13,13 +13,15 @@ public class LargeScanTask extends LargeTask {
 	private final Map<Biome, Integer> biomeMap = new HashMap<>();
 	private final Consumer<BiomeReport> biomes;
 	private final int yLayer;
+	private final boolean useNMS;
 	
 	public LargeScanTask(BiomeRemap plugin, World world, int minX, int maxX, int minZ, int maxZ, boolean debug,
 			int progressStep, Consumer<String> progress, Consumer<TaskReport> ender, Consumer<BiomeReport> biomes,
-			int yLayer) {
+			int yLayer, boolean useNMS) {
 		super(plugin, world, minX, maxX, minZ, maxZ, debug, progressStep, progress, ender);
 		this.biomes = biomes;
 		this.yLayer = yLayer;
+		this.useNMS = useNMS;
 	}
 
 	@Override
@@ -28,7 +30,7 @@ public class LargeScanTask extends LargeTask {
 	}
 	
 	private void findBiomes(World world, int chunkX, int chunkZ, boolean debug) {
-		getPlugin().getScanner().addBiomesFor(biomeMap, world, chunkX, chunkZ, yLayer);
+		getPlugin().getScanner().addBiomesFor(biomeMap, world, chunkX, chunkZ, yLayer, useNMS);
 	}
 
 	@Override

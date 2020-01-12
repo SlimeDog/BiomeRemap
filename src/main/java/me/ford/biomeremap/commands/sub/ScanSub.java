@@ -60,6 +60,10 @@ public class ScanSub extends SubCommand {
 		boolean region = regionOrChunk.equalsIgnoreCase("region");
 		boolean ingame = sender instanceof Player;
 		boolean debug = opts.contains("--debug");
+		boolean useNMS = opts.contains("--nms");
+		if (useNMS) {
+			sender.sendMessage("Using NMS"); // TODO - message?
+		}
 		int layer = 0;
 		for (String opt : opts) {
 			Matcher matcher = layerPattern.matcher(opt);
@@ -112,7 +116,7 @@ public class ScanSub extends SubCommand {
 		} else {
 			sender.sendMessage(br.getMessages().getScanChunkStart(world.getName(), x, z));
 		}
-		new LargeScanTaskStarter(br, world, sender, x, layer, z, region, debug, () -> taskDone());
+		new LargeScanTaskStarter(br, world, sender, x, layer, z, region, debug, () -> taskDone(), useNMS);
 		scanning = true;
 		return true;
 	}
