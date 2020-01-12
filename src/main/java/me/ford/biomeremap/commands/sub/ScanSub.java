@@ -78,6 +78,10 @@ public class ScanSub extends SubCommand {
 				break;
 			}
 		}
+		if (useNMS && layer > 63) {
+			layer = 63; // higher = same
+			sender.sendMessage("Biome for layers higher than 63 is the same as for layer 63");
+		}
 		World world;
 		int x, z;
 
