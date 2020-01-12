@@ -3,6 +3,8 @@ package me.ford.biomeremap.commands.sub;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -21,6 +23,7 @@ public class ScanSub extends SubCommand {
 	private final BiomeRemap br;
 	private final List<String> worldNames = new ArrayList<>();
 	private boolean scanning = false;
+	private final Pattern layerPattern = Pattern.compile("--layer(\\d+)");
 
 	public ScanSub(BiomeRemap plugin) {
 		super("scan");
@@ -57,6 +60,20 @@ public class ScanSub extends SubCommand {
 		boolean region = regionOrChunk.equalsIgnoreCase("region");
 		boolean ingame = sender instanceof Player;
 		boolean debug = opts.contains("--debug");
+		int layer = 0;
+		for (String opt : opts) {
+			Matcher matcher = layerPattern.matcher(opt);
+			if (matcher.matches()) {
+				try {
+					layer = Integer.parseInt(matcher.group(1));
+				} catch (NumberFormatException e) {
+					sender.sendMessage("Could not parse number for layer from option: " + opt); // shouldn't happen because of the regex
+					return true;
+				}
+				sender.sendMessage("Scanning at layer " + layer + " instead of 0"); // TODO - message?
+				break;
+			}
+		}
 		World world;
 		int x, z;
 
@@ -95,7 +112,7 @@ public class ScanSub extends SubCommand {
 		} else {
 			sender.sendMessage(br.getMessages().getScanChunkStart(world.getName(), x, z));
 		}
-		new LargeScanTaskStarter(br, world, sender, x, z, region, debug, () -> taskDone());
+		new LargeScanTaskStarter(br, world, sender, x, layer, z, region, debug, () -> taskDone());
 		scanning = true;
 		return true;
 	}
