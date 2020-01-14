@@ -11,6 +11,7 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.StringUtil;
 
 import me.ford.biomeremap.BiomeRemap;
@@ -24,6 +25,7 @@ public class ScanSub extends SubCommand {
 	private final List<String> worldNames = new ArrayList<>();
 	private boolean scanning = false;
 	private final Pattern layerPattern = Pattern.compile("--layer(\\d+)");
+	private final Pattern multiLayerPattern = Pattern.compile("--layers(\\d+)-(\\d+)");
 
 	public ScanSub(BiomeRemap plugin) {
 		super("scan");
@@ -77,6 +79,26 @@ public class ScanSub extends SubCommand {
 				sender.sendMessage("Scanning at layer " + layer + " instead of 0"); // TODO - message?
 				break;
 			}
+			matcher = multiLayerPattern.matcher(opt);
+			if (matcher.matches()) {
+				int start;
+				try {
+					start = Integer.parseInt(matcher.group(1));
+				} catch (NumberFormatException e) {
+					sender.sendMessage("Could not parse number for layers from option(1): " + opt); // shouldn't happen because of the regex
+					return true;
+				}
+				int stop;
+				try { 
+					stop = Integer.parseInt(matcher.group(2));
+				} catch (NumberFormatException e) {
+					sender.sendMessage("Could not parse number for layers from option(2): " + opt); // shouldn't happen because of the regex
+					return true;
+				}
+				sender.sendMessage("Running for multiple layers"); // TODO - message?
+				runLayers(sender, args, opts, opt, start, stop);
+				return true;
+			}
 		}
 		if (useNMS && layer > 63) {
 			layer = 63; // higher = same
@@ -123,6 +145,27 @@ public class ScanSub extends SubCommand {
 		new LargeScanTaskStarter(br, world, sender, x, layer, z, region, debug, () -> taskDone(), useNMS);
 		scanning = true;
 		return true;
+	}
+
+	private void runLayers(CommandSender sender, String[] args, List<String> opts, String curOpt, int start, int stop) {
+		List<String> newOpts = new ArrayList<>(opts);
+		newOpts.remove(curOpt);
+		new BukkitRunnable(){
+			private int nr = start;
+		
+			@Override
+			public void run() {
+				if (!scanning) {
+					newOpts.add(String.format("--layer%d", nr));
+					onCommand(sender, args, newOpts);
+					newOpts.remove(newOpts.size() - 1);
+					nr++;
+					if (nr > stop) {
+						cancel();
+					}
+				}
+			}
+		}.runTaskTimer(br, 4L, 4L);
 	}
 	
 	public void taskDone() {
