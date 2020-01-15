@@ -17,6 +17,7 @@ import org.bukkit.util.StringUtil;
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.commands.SubCommand;
 import me.ford.biomeremap.largetasks.LargeScanTaskStarter;
+import me.ford.biomeremap.largetasks.LargeTempScanTaskStarter;
 
 public class ScanSub extends SubCommand {
 	private static final String PERMS = "biomeremap.scan";
@@ -63,6 +64,7 @@ public class ScanSub extends SubCommand {
 		boolean ingame = sender instanceof Player;
 		boolean debug = opts.contains("--debug");
 		boolean useNMS = opts.contains("--nms");
+		boolean temp = opts.contains("--temp");
 		if (useNMS) {
 			sender.sendMessage("Using NMS"); // TODO - message?
 		}
@@ -142,7 +144,11 @@ public class ScanSub extends SubCommand {
 		} else {
 			sender.sendMessage(br.getMessages().getScanChunkStart(world.getName(), x, z));
 		}
-		new LargeScanTaskStarter(br, world, sender, x, layer, z, region, debug, () -> taskDone(), useNMS);
+		if (!temp) {
+			new LargeScanTaskStarter(br, world, sender, x, layer, z, region, debug, () -> taskDone(), useNMS);
+		} else {
+			new LargeTempScanTaskStarter(br, world, sender, x, layer, z, region, debug, () -> taskDone());
+		}
 		scanning = true;
 		return true;
 	}
@@ -156,7 +162,7 @@ public class ScanSub extends SubCommand {
 			@Override
 			public void run() {
 				if (!scanning) {
-					newOpts.add(String.format("--layer%d", nr));
+					newOpts.add(String.format("--layer=%d", nr));
 					onCommand(sender, args, newOpts);
 					newOpts.remove(newOpts.size() - 1);
 					nr++;
