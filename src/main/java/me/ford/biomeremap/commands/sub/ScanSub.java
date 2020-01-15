@@ -24,8 +24,8 @@ public class ScanSub extends SubCommand {
 	private final BiomeRemap br;
 	private final List<String> worldNames = new ArrayList<>();
 	private boolean scanning = false;
-	private final Pattern layerPattern = Pattern.compile("--layer(\\d+)");
-	private final Pattern multiLayerPattern = Pattern.compile("--layers(\\d+)-(\\d+)");
+	private final Pattern layerPattern = Pattern.compile("--layer=(\\d+)");
+	private final Pattern multiLayerPattern = Pattern.compile("--layers=(\\d+)-(\\d+)");
 
 	public ScanSub(BiomeRemap plugin) {
 		super("scan");
