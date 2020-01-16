@@ -25,11 +25,17 @@ public class LargeTempScanTask extends LargeTask {
 
 
 	@Override
-	protected void doTaskForChunk(World world, int x, int z, boolean debug) {
-        double cTemp = world.getTemperature(x, yLayer, z);
-        Integer prev = temps.get(cTemp);
-        if (prev == null) prev = 0;
-        temps.put(cTemp, ++prev);
+	protected void doTaskForChunk(World world, int chunkX, int chunkZ, boolean debug) {
+        int x = chunkX << 4;
+        int z = chunkZ << 4;
+        for (int curX = x; curX < x + 16; curX++) {
+            for (int curZ = z; curZ < z + 16; curZ++) {
+                double cTemp = world.getTemperature(x, yLayer, z);
+                Integer prev = temps.get(cTemp);
+                if (prev == null) prev = 0;
+                temps.put(cTemp, ++prev);
+            }
+        }
     }
     
 	@Override
