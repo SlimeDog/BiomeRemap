@@ -120,6 +120,10 @@ public class ScanSub extends SubCommand {
 			world = loc.getWorld();
 			x = loc.getChunk().getX();
 			z = loc.getChunk().getZ();
+			if (region) {
+				x = x >> 5;
+				z = z >> 5;
+			}
 		} else {
 			world = br.getServer().getWorld(args[1]);
 			try {
