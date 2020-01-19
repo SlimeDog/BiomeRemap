@@ -31,7 +31,7 @@ public class LargeMappingWithScanTask extends LargeMappingTask {
 	protected void whenDone() {
 		super.whenDone();
 		// make sure the to show after scan is done
-		getPlugin().getServer().getScheduler().runTaskLater(getPlugin(), () -> biomeReport.accept(new BiomeReport(biomeMap)), 3L);
+		getPlugin().getServer().getScheduler().runTaskLater(getPlugin(), () -> biomeReport.accept(new BiomeReport(biomeMap)), 10L);
 	}
 
 }

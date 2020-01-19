@@ -86,7 +86,7 @@ public class BiomeRemapper {
 			changeBiomeInChunk(chunk, entry.getKey(), entry.getValue().choose());
 			br.getTeleportListener().sendUpdatesIfNeeded(chunk);
 		}
-		if (whenDone != null) whenDone.run();
+		if (whenDone != null) br.getServer().getScheduler().runTaskLater(br, whenDone, 5L);
 	}
 
 	private void changeBiomeInChunk(Chunk chunk, int nr, Biome biome) {
