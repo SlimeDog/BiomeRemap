@@ -34,6 +34,7 @@ public class BiomeRemap extends JavaPlugin {
 	private BiomeRemapper remapper;
 	private BiomeScanner scanner;
 	private TeleportListener teleListener;
+	private MappingPopulator populator;
 
 	// helpers 
 	private boolean existsDataFolder;
@@ -77,7 +78,7 @@ public class BiomeRemap extends JavaPlugin {
 		teleListener = new TeleportListener(this);
 		
 		// setup up populator
-		MappingPopulator populator = new MappingPopulator(remapper);
+		populator = new MappingPopulator(remapper);
 		for (World world : getServer().getWorlds()) {
 			world.getPopulators().add(populator);
 		}
@@ -105,6 +106,10 @@ public class BiomeRemap extends JavaPlugin {
 				}
 			}).check();
 		}
+	}
+
+	public MappingPopulator getPopulator() {
+		return populator;
 	}
 	
 	@Override

@@ -24,14 +24,14 @@ public class LargeMappingWithScanTask extends LargeMappingTask {
 
 	@Override
 	protected void doTaskForChunk(World world, int x, int z, boolean debug) {
-		super.doTaskForChunk(world, x, z, debug);
-		getPlugin().getScanner().addBiomesFor(biomeMap, world, x, z);
+		super.doTaskForChunk(world, x, z, debug, () -> getPlugin().getScanner().addBiomesFor(biomeMap, world, x, z));
 	}
 
 	@Override
 	protected void whenDone() {
 		super.whenDone();
-		biomeReport.accept(new BiomeReport(biomeMap));
+		// make sure the to show after scan is done
+		getPlugin().getServer().getScheduler().runTaskLater(getPlugin(), () -> biomeReport.accept(new BiomeReport(biomeMap)), 3L);
 	}
 
 }
