@@ -76,7 +76,7 @@ public class LargeScanTaskStarter extends LargeTaskStarter {
 		}
 		for (Entry<Biome, Integer> entry : sortedMap.entrySet()) {
 			String percentage = String.format("%3.0f%%", 100*((double) entry.getValue())/total);
-			String msg = br().getMessages().getScanListItem(percentage, entry.getKey().name());
+			String msg = br().getMessages().getScanListItem(percentage, entry.getKey().name(), entry.getValue());
 			sender.sendMessage(msg);
 			if (!(sender instanceof ConsoleCommandSender)) br().logMessage(msg);
 		}

@@ -69,7 +69,7 @@ public class LargeTempScanTaskStarter extends LargeTaskStarter {
 		}
 		for (Entry<Double, Integer> entry : sortedMap.entrySet()) {
 			String percentage = String.format("%3.0f%%", 100*((double) entry.getValue())/total);
-			String msg = br().getMessages().getScanListItem(percentage, String.format("%4.2f", entry.getKey()));
+			String msg = br().getMessages().getScanListItem(percentage, String.format("%4.2f", entry.getKey()), entry.getValue());
 			sender.sendMessage(msg);
 			if (!(sender instanceof ConsoleCommandSender)) br().logMessage(msg);
 		}

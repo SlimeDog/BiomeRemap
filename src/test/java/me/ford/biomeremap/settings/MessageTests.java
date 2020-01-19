@@ -56,7 +56,7 @@ public class MessageTests {
 		assertMessage(msg);
 		msg = plugin.getMessages().getScanRegionStart("starting a region", -11, 11);
 		assertMessage(msg);
-		msg = plugin.getMessages().getScanListItem("THEIS", "BIUUM");
+		msg = plugin.getMessages().getScanListItem("THEIS", "BIUUM", 2);
 		assertMessage(msg);
 		msg = plugin.getMessages().errorBiomeMapNotFound("I know you!");
 		assertMessage(msg);

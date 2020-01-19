@@ -111,9 +111,10 @@ public class Messages extends CustomConfigHandler {
 						.replace("{WORLD_NAME}", worldName).replace("{X}", String.valueOf(x)).replace("{Z}", String.valueOf(z));
 	}
 	
-	public String getScanListItem(String percentage, String biome) {
-		return getMessage("BIOMEREMAP_SCAN_LIST_ITEM", "{PERCENTAGE} {BIOME_ID}")
-						.replace("{PERCENTAGE}", percentage).replace("{BIOME_ID}", biome);
+	public String getScanListItem(String percentage, String biome, int amount) {//BIOMEREMAP_SCAN_LIST_ITEM: "{PERCENTAGE} ({AMOUNT}) {BIOME_ID}"
+		return getMessage("BIOMEREMAP_SCAN_LIST_ITEM", "{PERCENTAGE} ({AMOUNT}) {BIOME_ID}")
+						.replace("{PERCENTAGE}", percentage).replace("{BIOME_ID}", biome)
+						.replace("{AMOUNT}", String.valueOf(amount));
 	}
 	
 	public String warnConfigRecreated() {
