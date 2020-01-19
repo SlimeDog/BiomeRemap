@@ -28,11 +28,13 @@ public class MappingPopulator extends BlockPopulator {
 	}
 
 	private void afterRemap() {
+		final Runnable whenDone = this.whenDone;
 		if (whenDone != null) {
-			BiomeRemap br = JavaPlugin.getPlugin(BiomeRemap.class);
-			br.getServer().getScheduler().runTask(br, whenDone);
+			// BiomeRemap br = JavaPlugin.getPlugin(BiomeRemap.class);
+			// br.getServer().getScheduler().runTask(br, whenDone);
+			whenDone.run();
 		}
-		whenDone = null; // reset
+		this.whenDone = null; // reset
 	}
 
 }

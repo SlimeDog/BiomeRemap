@@ -75,6 +75,8 @@ public class BiomeRemapper {
 			if (!toChange.isEmpty()) {
 				if (debug) BiomeRemap.debug("Found:" + changes);
 				br.getServer().getScheduler().runTask(br, () -> doMapping(chunk, toChange, debug, whenDone));
+			} else if (whenDone != null) {
+				br.getServer().getScheduler().runTask(br, whenDone);
 			}
 		});
 		return System.currentTimeMillis() - start;
@@ -86,7 +88,7 @@ public class BiomeRemapper {
 			changeBiomeInChunk(chunk, entry.getKey(), entry.getValue().choose());
 			br.getTeleportListener().sendUpdatesIfNeeded(chunk);
 		}
-		if (whenDone != null) br.getServer().getScheduler().runTaskLater(br, whenDone, 5L);
+		if (whenDone != null) whenDone.run();
 	}
 
 	private void changeBiomeInChunk(Chunk chunk, int nr, Biome biome) {
