@@ -66,7 +66,7 @@ public class Messages extends CustomConfigHandler {
 	public String getBiomeRemapSummary(int chunks, long ms, int ticks) {
 		return getMessage("BIOMEREMAP_REMAP_SUMMARY", "Remapped {CHUNKS} chunks in {MILLISECONDS} ms in a total of {TICKS} ticks")
 						.replace("{CHUNKS}", String.valueOf(chunks))
-						.replace("{MILLISECONDS", String.valueOf(ms))
+						.replace("{MILLISECONDS}", String.valueOf(ms))
 						.replace("{TICKS}", String.valueOf(ticks));
 	}
 
