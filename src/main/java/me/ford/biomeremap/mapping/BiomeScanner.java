@@ -7,9 +7,6 @@ import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.v1_15_R1.CraftChunk;
 import org.bukkit.craftbukkit.v1_15_R1.block.CraftBlock;
-import org.bukkit.plugin.java.JavaPlugin;
-
-import me.ford.biomeremap.BiomeRemap;
 import net.minecraft.server.v1_15_R1.BiomeBase;
 import net.minecraft.server.v1_15_R1.BiomeStorage;
 import net.minecraft.server.v1_15_R1.Chunk;
@@ -36,9 +33,7 @@ public final class BiomeScanner {
 		int startX = chunkX * 16;
 		int startZ = chunkZ * 16;
 		if (!world.isChunkGenerated(chunkX, chunkZ)) {
-			BiomeRemap br = JavaPlugin.getPlugin(BiomeRemap.class);
-			br.getPopulator().setWhenDone(() -> addBiomesForInternal(world, chunkX, chunkZ, useNMS, startX, startZ, yLayer, map));
-			// allow populator to do its thing
+			// allow populator to do its thing -> OnMappingDone counts them
 			world.getChunkAt(chunkX, chunkZ);
 		} else {
 			addBiomesForInternal(world, chunkX, chunkZ, useNMS, startX, startZ, yLayer, map);

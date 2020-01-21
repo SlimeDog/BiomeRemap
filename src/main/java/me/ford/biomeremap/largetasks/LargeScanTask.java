@@ -14,6 +14,7 @@ public class LargeScanTask extends LargeTask {
 	private final Consumer<BiomeReport> biomes;
 	private final int yLayer;
 	private final boolean useNMS;
+	private final OnMappingDone onMappingDone;
 	
 	public LargeScanTask(BiomeRemap plugin, World world, int minX, int maxX, int minZ, int maxZ, boolean debug,
 			int progressStep, Consumer<String> progress, Consumer<TaskReport> ender, Consumer<BiomeReport> biomes,
@@ -22,6 +23,8 @@ public class LargeScanTask extends LargeTask {
 		this.biomes = biomes;
 		this.yLayer = yLayer;
 		this.useNMS = useNMS;
+		this.onMappingDone = new OnMappingDone((x, z) -> getPlugin().getScanner().addBiomesFor(biomeMap, world, x, z, yLayer, useNMS), minX, minZ, maxX, maxZ);
+		getPlugin().getRemapper().addDoneChecker(onMappingDone); // checks the newly generated ones
 	}
 
 	@Override
@@ -35,7 +38,10 @@ public class LargeScanTask extends LargeTask {
 
 	@Override
 	protected void whenDone() {
-		biomes.accept(new BiomeReport(biomeMap));
+		getPlugin().getServer().getScheduler().runTaskLater(getPlugin(), () -> {
+			biomes.accept(new BiomeReport(biomeMap));
+			getPlugin().getRemapper().removeDoneCheker(onMappingDone);
+		}, 10L); // make sure they all get remapped and scanned
 	}
 	
 	public static class BiomeReport {

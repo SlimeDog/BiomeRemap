@@ -47,19 +47,11 @@ public class BiomeRemapper {
 	}
 	
 	public long remapChunk(Chunk chunk, boolean debug) {
-		return remapChunk(chunk, debug, (Runnable) null);
-	}
-	
-	public long remapChunk(Chunk chunk, boolean debug, Runnable whenDone) {
 		BiomeMap map = br.getSettings().getApplicableBiomeMap(chunk.getWorld().getName());
-		return remapChunk(chunk, debug, map, whenDone);
+		return remapChunk(chunk, debug, map);
 	}
 
 	public long remapChunk(final Chunk chunk, boolean debug, final BiomeMap map) {
-		return remapChunk(chunk, debug, map, null);
-	}
-	
-	public long remapChunk(final Chunk chunk, boolean debug, final BiomeMap map, Runnable whenDone) {
 		long start = System.currentTimeMillis();
 		if (debug) BiomeRemap.debug("Looking for biomes to remap (SYNC) in chunk:" + chunk.getX() + "," + chunk.getZ() + "...");
 		if (map == null) return 0;
@@ -86,24 +78,22 @@ public class BiomeRemapper {
 			}
 			if (!toChange.isEmpty()) {
 				if (debug) BiomeRemap.debug("Found:" + changes);
-				br.getServer().getScheduler().runTask(br, () -> doMapping(chunk, toChange, debug, whenDone));
+				br.getServer().getScheduler().runTask(br, () -> doMapping(chunk, toChange, debug));
 			} else {
 				br.getServer().getScheduler().runTask(br, () -> {
 					runAfterRemaps(chunk);
-					if (whenDone != null) whenDone.run();
 				});
 			}
 		});
 		return System.currentTimeMillis() - start;
 	}
 	
-	private void doMapping(Chunk chunk, Map<Integer, BiomeChoice> toChange, boolean debug, Runnable whenDone) {
+	private void doMapping(Chunk chunk, Map<Integer, BiomeChoice> toChange, boolean debug) {
 		if (debug) BiomeRemap.debug("Remapping biomes");
 		for (Entry<Integer, BiomeChoice> entry : toChange.entrySet()) {
 			changeBiomeInChunk(chunk, entry.getKey(), entry.getValue().choose());
 			br.getTeleportListener().sendUpdatesIfNeeded(chunk);
 		}
-		if (whenDone != null) whenDone.run();
 		runAfterRemaps(chunk);
 	}
 
