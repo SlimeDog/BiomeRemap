@@ -15,14 +15,21 @@ public class LargeMappingWithScanTask extends LargeMappingTask {
 	private final Map<Biome, Integer> biomeMap = new HashMap<>();
 	private final Consumer<BiomeReport> biomeReport;
 	private final OnMappingDone onMappingDone;
+	private final boolean[][] checked = new boolean[32][32];
 
 	public LargeMappingWithScanTask(BiomeRemap plugin, World world, int minX, int maxX, int minZ, int maxZ,
 			boolean debug, int progressStep, Consumer<String> progress, Consumer<TaskReport> ender, BiomeMap map, 
 			Consumer<BiomeReport> biomeReport) {
 		super(plugin, world, minX, maxX, minZ, maxZ, debug, progressStep, progress, ender, map);
 		this.biomeReport = biomeReport;
-		this.onMappingDone = new OnMappingDone((x, z) -> getPlugin().getScanner().addBiomesFor(biomeMap, world, x, z), minX, minZ, maxX, maxZ);
+		this.onMappingDone = new OnMappingDone((x, z) -> addBiomes(world, x, z), minX, minZ, maxX, maxZ);
 		plugin.getRemapper().addDoneChecker(onMappingDone);
+	}
+
+	private void addBiomes(World world, int chunkX, int chunkZ) {
+		if (checked[chunkX - getMinX()][chunkZ - getMinZ()]) return;
+		checked[chunkX - getMinX()][chunkZ - getMinZ()] = true;
+		getPlugin().getScanner().addBiomesFor(biomeMap, world, chunkX, chunkZ);
 	}
 
 	@Override

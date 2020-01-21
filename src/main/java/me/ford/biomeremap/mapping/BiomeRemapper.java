@@ -18,6 +18,7 @@ public class BiomeRemapper {
 	private final Class<? extends net.minecraft.server.v1_15_R1.BiomeStorage> biomeStorageClass = net.minecraft.server.v1_15_R1.BiomeStorage.class;
 	private final java.lang.reflect.Field biomeBaseField;
 	private final Set<OnMappingDone> doneCheckers = new HashSet<>();
+	private long timeLastTick = 0L;
 	
 	public BiomeRemapper(BiomeRemap plugin) { 
 		br = plugin;
@@ -85,7 +86,9 @@ public class BiomeRemapper {
 				});
 			}
 		});
-		return System.currentTimeMillis() - start;
+		long timeSpent = System.currentTimeMillis() - start + timeLastTick;
+		timeLastTick = 0L;
+		return timeSpent;
 	}
 	
 	private void doMapping(Chunk chunk, Map<Integer, BiomeChoice> toChange, boolean debug) {
@@ -104,6 +107,7 @@ public class BiomeRemapper {
 	}
 
 	private void changeBiomeInChunk(Chunk chunk, int nr, Biome biome) {
+		long start = System.currentTimeMillis();
 		// TODO - this is VERSION SPECIFIC
 		if (nr < 0 || nr > 15) br.getLogger().info("NR:" + nr);
 		org.bukkit.craftbukkit.v1_15_R1.CraftChunk craftChunk = (org.bukkit.craftbukkit.v1_15_R1.CraftChunk) chunk;
@@ -118,6 +122,7 @@ public class BiomeRemapper {
 		}
 		net.minecraft.server.v1_15_R1.BiomeBase bb = org.bukkit.craftbukkit.v1_15_R1.block.CraftBlock.biomeToBiomeBase(biome);
 		bases[nr] = bb;
+		timeLastTick += (System.currentTimeMillis() - start);
 	}
 
 	private class BiomeChoice {

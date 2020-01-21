@@ -88,6 +88,22 @@ public abstract class LargeTask {
 	protected BiomeRemap getPlugin() {
 		return br;
 	}
+
+	public int getMinX() {
+		return minX;
+	}
+
+	public int getMaxX() {
+		return maxX;
+	}
+
+	public int getMinZ() {
+		return minZ;
+	}
+
+	public int getMaxZ() {
+		return maxZ;
+	}
 	
 	protected abstract void doTaskForChunk(World world, int x, int z, boolean debug);
 	

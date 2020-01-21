@@ -15,6 +15,7 @@ public class LargeScanTask extends LargeTask {
 	private final int yLayer;
 	private final boolean useNMS;
 	private final OnMappingDone onMappingDone;
+	private final boolean[][] checked = new boolean[32][32];
 	
 	public LargeScanTask(BiomeRemap plugin, World world, int minX, int maxX, int minZ, int maxZ, boolean debug,
 			int progressStep, Consumer<String> progress, Consumer<TaskReport> ender, Consumer<BiomeReport> biomes,
@@ -23,7 +24,7 @@ public class LargeScanTask extends LargeTask {
 		this.biomes = biomes;
 		this.yLayer = yLayer;
 		this.useNMS = useNMS;
-		this.onMappingDone = new OnMappingDone((x, z) -> getPlugin().getScanner().addBiomesFor(biomeMap, world, x, z, yLayer, useNMS), minX, minZ, maxX, maxZ);
+		this.onMappingDone = new OnMappingDone((x, z) -> findBiomes(world, x, z, debug), minX, minZ, maxX, maxZ);
 		getPlugin().getRemapper().addDoneChecker(onMappingDone); // checks the newly generated ones
 	}
 
@@ -33,7 +34,10 @@ public class LargeScanTask extends LargeTask {
 	}
 	
 	private void findBiomes(World world, int chunkX, int chunkZ, boolean debug) {
+		if (checked[chunkX - getMinX()][chunkZ - getMinZ()]) return; // already done
 		getPlugin().getScanner().addBiomesFor(biomeMap, world, chunkX, chunkZ, yLayer, useNMS);
+		checked[chunkX - getMinX()][chunkZ - getMinZ()] = true;
+		return;
 	}
 
 	@Override
@@ -41,6 +45,9 @@ public class LargeScanTask extends LargeTask {
 		getPlugin().getServer().getScheduler().runTaskLater(getPlugin(), () -> {
 			biomes.accept(new BiomeReport(biomeMap));
 			getPlugin().getRemapper().removeDoneCheker(onMappingDone);
+			int res = 0;
+			for (int value : biomeMap.values()) res += value;
+			getPlugin().getLogger().info("COUNT:" + onMappingDone.getCount() + "->" + res);
 		}, 10L); // make sure they all get remapped and scanned
 	}
 	
