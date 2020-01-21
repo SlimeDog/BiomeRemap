@@ -28,8 +28,9 @@ public class LargeMappingWithScanTask extends LargeMappingTask {
 
 	private void addBiomes(World world, int chunkX, int chunkZ) {
 		if (checked[chunkX - getMinX()][chunkZ - getMinZ()]) return;
-		checked[chunkX - getMinX()][chunkZ - getMinZ()] = true;
-		getPlugin().getScanner().addBiomesFor(biomeMap, world, chunkX, chunkZ);
+		if (getPlugin().getScanner().addBiomesFor(biomeMap, world, chunkX, chunkZ)) {
+			checked[chunkX - getMinX()][chunkZ - getMinZ()] = true;
+		} // else will be done later, after the remap
 	}
 
 	@Override

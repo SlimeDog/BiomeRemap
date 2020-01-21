@@ -35,9 +35,9 @@ public class LargeScanTask extends LargeTask {
 	
 	private void findBiomes(World world, int chunkX, int chunkZ, boolean debug) {
 		if (checked[chunkX - getMinX()][chunkZ - getMinZ()]) return; // already done
-		getPlugin().getScanner().addBiomesFor(biomeMap, world, chunkX, chunkZ, yLayer, useNMS);
-		checked[chunkX - getMinX()][chunkZ - getMinZ()] = true;
-		return;
+		if (getPlugin().getScanner().addBiomesFor(biomeMap, world, chunkX, chunkZ, yLayer, useNMS)) {
+			checked[chunkX - getMinX()][chunkZ - getMinZ()] = true;
+		} // else will be done later, after the remap
 	}
 
 	@Override

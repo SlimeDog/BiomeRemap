@@ -25,18 +25,20 @@ public final class BiomeScanner {
 		biomeBaseField.setAccessible(true);
 	}
 
-	public void addBiomesFor(Map<Biome, Integer> map, World world, int chunkX, int chunkZ) {
-		addBiomesFor(map, world, chunkX, chunkZ, 0, false);
+	public boolean addBiomesFor(Map<Biome, Integer> map, World world, int chunkX, int chunkZ) {
+		return addBiomesFor(map, world, chunkX, chunkZ, 0, false);
 	}
 
-	public void addBiomesFor(Map<Biome, Integer> map, World world, int chunkX, int chunkZ, int yLayer, boolean useNMS) {
+	public boolean addBiomesFor(Map<Biome, Integer> map, World world, int chunkX, int chunkZ, int yLayer, boolean useNMS) {
 		int startX = chunkX * 16;
 		int startZ = chunkZ * 16;
 		if (!world.isChunkGenerated(chunkX, chunkZ)) {
 			// allow populator to do its thing -> OnMappingDone counts them
 			world.getChunkAt(chunkX, chunkZ);
+			return false;
 		} else {
 			addBiomesForInternal(world, chunkX, chunkZ, useNMS, startX, startZ, yLayer, map);
+			return true;
 		}
 	}
 
