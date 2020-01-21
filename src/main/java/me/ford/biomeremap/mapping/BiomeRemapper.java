@@ -82,7 +82,9 @@ public class BiomeRemapper {
 				br.getServer().getScheduler().runTask(br, () -> doMapping(chunk, toChange, debug));
 			} else {
 				br.getServer().getScheduler().runTask(br, () -> {
+					long sstart = System.currentTimeMillis();
 					runAfterRemaps(chunk);
+					timeLastTick += (System.currentTimeMillis() - sstart);
 				});
 			}
 		});
@@ -92,12 +94,14 @@ public class BiomeRemapper {
 	}
 	
 	private void doMapping(Chunk chunk, Map<Integer, BiomeChoice> toChange, boolean debug) {
+		long start = System.currentTimeMillis();
 		if (debug) BiomeRemap.debug("Remapping biomes");
 		for (Entry<Integer, BiomeChoice> entry : toChange.entrySet()) {
 			changeBiomeInChunk(chunk, entry.getKey(), entry.getValue().choose());
 			br.getTeleportListener().sendUpdatesIfNeeded(chunk);
 		}
 		runAfterRemaps(chunk);
+		timeLastTick += (System.currentTimeMillis() - start);
 	}
 
 	private void runAfterRemaps(Chunk chunk) {
@@ -107,7 +111,6 @@ public class BiomeRemapper {
 	}
 
 	private void changeBiomeInChunk(Chunk chunk, int nr, Biome biome) {
-		long start = System.currentTimeMillis();
 		// TODO - this is VERSION SPECIFIC
 		if (nr < 0 || nr > 15) br.getLogger().info("NR:" + nr);
 		org.bukkit.craftbukkit.v1_15_R1.CraftChunk craftChunk = (org.bukkit.craftbukkit.v1_15_R1.CraftChunk) chunk;
@@ -122,7 +125,6 @@ public class BiomeRemapper {
 		}
 		net.minecraft.server.v1_15_R1.BiomeBase bb = org.bukkit.craftbukkit.v1_15_R1.block.CraftBlock.biomeToBiomeBase(biome);
 		bases[nr] = bb;
-		timeLastTick += (System.currentTimeMillis() - start);
 	}
 
 	private class BiomeChoice {
