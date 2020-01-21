@@ -14,24 +14,28 @@ import me.ford.biomeremap.mapping.BiomeMap;
 public class LargeMappingWithScanTask extends LargeMappingTask {
 	private final Map<Biome, Integer> biomeMap = new HashMap<>();
 	private final Consumer<BiomeReport> biomeReport;
+	private final OnMappingDone onMappingDone;
 
 	public LargeMappingWithScanTask(BiomeRemap plugin, World world, int minX, int maxX, int minZ, int maxZ,
 			boolean debug, int progressStep, Consumer<String> progress, Consumer<TaskReport> ender, BiomeMap map, 
 			Consumer<BiomeReport> biomeReport) {
 		super(plugin, world, minX, maxX, minZ, maxZ, debug, progressStep, progress, ender, map);
 		this.biomeReport = biomeReport;
-	}
-
-	@Override
-	protected void doTaskForChunk(World world, int x, int z, boolean debug) {
-		super.doTaskForChunk(world, x, z, debug, () -> getPlugin().getScanner().addBiomesFor(biomeMap, world, x, z));
+		this.onMappingDone = new OnMappingDone((x, z) -> getPlugin().getScanner().addBiomesFor(biomeMap, world, x, z), minX, minZ, maxX, maxZ);
+		plugin.getRemapper().addDoneChecker(onMappingDone);
 	}
 
 	@Override
 	protected void whenDone() {
 		super.whenDone();
 		// make sure the to show after scan is done
-		getPlugin().getServer().getScheduler().runTaskLater(getPlugin(), () -> biomeReport.accept(new BiomeReport(biomeMap)), 10L);
+		getPlugin().getServer().getScheduler().runTaskLater(getPlugin(), () -> {
+			getPlugin().getRemapper().removeDoneCheker(onMappingDone);
+			biomeReport.accept(new BiomeReport(biomeMap));
+			int res = 0;
+			for (int value : biomeMap.values()) res += value;
+			getPlugin().getLogger().info("COUNT:" + onMappingDone.getCount() + "->" + res);
+		}, 10L);
 	}
 
 }

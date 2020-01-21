@@ -1,7 +1,9 @@
 package me.ford.biomeremap.mapping;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import org.bukkit.Chunk;
@@ -9,11 +11,13 @@ import org.bukkit.ChunkSnapshot;
 import org.bukkit.block.Biome;
 
 import me.ford.biomeremap.BiomeRemap;
+import me.ford.biomeremap.largetasks.OnMappingDone;
 
 public class BiomeRemapper {
 	private final BiomeRemap br;
 	private final Class<? extends net.minecraft.server.v1_15_R1.BiomeStorage> biomeStorageClass = net.minecraft.server.v1_15_R1.BiomeStorage.class;
 	private final java.lang.reflect.Field biomeBaseField;
+	private final Set<OnMappingDone> doneCheckers = new HashSet<>();
 	
 	public BiomeRemapper(BiomeRemap plugin) { 
 		br = plugin;
@@ -24,6 +28,14 @@ public class BiomeRemapper {
 			throw new IllegalStateException("Error getting BiomeBase field!");
 		}
 		biomeBaseField.setAccessible(true);
+	}
+
+	public void addDoneChecker(OnMappingDone checker) {
+		doneCheckers.add(checker);
+	}
+
+	public void removeDoneCheker(OnMappingDone checker) {
+		doneCheckers.remove(checker);
 	}
 	
 	public long remapChunk(Chunk chunk) {
@@ -75,8 +87,11 @@ public class BiomeRemapper {
 			if (!toChange.isEmpty()) {
 				if (debug) BiomeRemap.debug("Found:" + changes);
 				br.getServer().getScheduler().runTask(br, () -> doMapping(chunk, toChange, debug, whenDone));
-			} else if (whenDone != null) {
-				br.getServer().getScheduler().runTask(br, whenDone);
+			} else {
+				br.getServer().getScheduler().runTask(br, () -> {
+					runAfterRemaps(chunk);
+					if (whenDone != null) whenDone.run();
+				});
 			}
 		});
 		return System.currentTimeMillis() - start;
@@ -89,6 +104,13 @@ public class BiomeRemapper {
 			br.getTeleportListener().sendUpdatesIfNeeded(chunk);
 		}
 		if (whenDone != null) whenDone.run();
+		runAfterRemaps(chunk);
+	}
+
+	private void runAfterRemaps(Chunk chunk) {
+		for (OnMappingDone checker : doneCheckers) {
+			checker.afterRemap(chunk);
+		}
 	}
 
 	private void changeBiomeInChunk(Chunk chunk, int nr, Biome biome) {

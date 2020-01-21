@@ -21,15 +21,10 @@ public class LargeMappingTask extends LargeTask {
 
 	@Override
 	protected void doTaskForChunk(World world, int x, int z, boolean debug) {
-		doTaskForChunk(world, x, z, debug, null);
-	}
-
-	protected void doTaskForChunk(World world, int x, int z, boolean debug, Runnable whenDone) {
 		if (!world.isChunkGenerated(x, z)) {
-			getPlugin().getPopulator().setWhenDone(whenDone); // to scan after if needed
 			world.getChunkAt(x, z); // populator takes care
 		} else {
-			getPlugin().getRemapper().remapChunk(world.getChunkAt(x, z), debug, map, whenDone);
+			getPlugin().getRemapper().remapChunk(world.getChunkAt(x, z), debug, map);
 		}
 	}
 
