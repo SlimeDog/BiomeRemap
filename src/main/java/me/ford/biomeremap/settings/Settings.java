@@ -22,7 +22,8 @@ public class Settings {
 		reload();
 	}
 	
-	public void reload() {
+	public ReloadIssues reload() {
+		ReloadIssues issues = new ReloadIssues();
 		maps.clear();
 		worldMap.clear();
 		ConfigurationSection mapsSection = br.getConfig().getConfigurationSection("biomemaps"); 
@@ -37,9 +38,11 @@ public class Settings {
 				map = new BiomeMap(br.getMessages(), curMapSection);
 			} catch (IncompleteBiomeMapException e) {
 				br.getLogger().severe(br.getMessages().errorBiomeMapIncomplete(key));
+				issues.addIssue(br.getMessages().errorBiomeMapIncomplete(key));
 				continue;
 			} catch (MappingException e) {
 				br.getLogger().severe(br.getMessages().errorNoBiomeMapAssigned(key));
+				issues.addIssue(br.getMessages().errorNoBiomeMapAssigned(key));
 				continue;
 			}
 			maps.put(key, map);
@@ -54,11 +57,13 @@ public class Settings {
 					prev.removeWorld(worldName);
 					map.removeWorld(worldName);
 					br.getLogger().severe(br.getMessages().errorDuplicateBiomeMapsForWorld(worldName));
+					issues.addIssue(br.getMessages().errorDuplicateBiomeMapsForWorld(worldName));
 				} else {
 					if (br.getServer().getWorld(worldName) != null) {
 						successes.add(worldName);
 					} else {
 						br.getLogger().severe(br.getMessages().errorWorldNotFound(worldName));
+						issues.addIssue(br.getMessages().errorWorldNotFound(worldName));
 						map.removeWorld(worldName);
 					}
 				}
@@ -71,6 +76,7 @@ public class Settings {
 		for (String worldName : duplicates) { //otherwise the third (or 5th, so on) duplicate would stay
 			worldMap.remove(worldName);
 		}
+		return issues;
 	}
 	
 	public String getVersion() {
@@ -111,6 +117,23 @@ public class Settings {
 
 	public long getTeleportCacheTime() {
 		return br.getConfig().getLong("teleport-cache-time-ticks", 20L); // TODO - add and/or change config path
+	}
+
+	public static class ReloadIssues {
+		private Set<String> errors = new HashSet<>();
+
+		public void addIssue(String name) {
+			errors.add(name);
+		}
+
+		public Set<String> getIssues() {
+			return new HashSet<>(errors);
+		}
+
+		public boolean hasIssues() {
+			return !errors.isEmpty();
+		}
+
 	}
 
 }

@@ -24,6 +24,7 @@ import me.ford.biomeremap.mapping.TeleportListener;
 import me.ford.biomeremap.populator.MappingPopulator;
 import me.ford.biomeremap.settings.Messages;
 import me.ford.biomeremap.settings.Settings;
+import me.ford.biomeremap.settings.Settings.ReloadIssues;
 import me.ford.biomeremap.updates.UpdateChecker;
 
 public class BiomeRemap extends JavaPlugin {
@@ -147,13 +148,14 @@ public class BiomeRemap extends JavaPlugin {
 		}
 	}
 	
-	public boolean reload() {
+	public ReloadIssues reload() {
+		ReloadIssues issues = null;
 		boolean success = true;
 		attemptConfigReloads();
 		if (canReadConfig) {
 			reloadConfig();
 			if (getConfig().getKeys(true).isEmpty()) success = false;
-			if (success) settings.reload();
+			if (success) issues = settings.reload();
 		}
 		if (canReadMessages) {
 			messages.reloadCustomConfig();
@@ -162,7 +164,7 @@ public class BiomeRemap extends JavaPlugin {
 		if (success) {
 			getLogger().info(getMessages().getInfoConfigLoaded());
 		}
-		return success;
+		return success ? issues : null;
 	}
 	
 	public Settings getSettings() {

@@ -8,6 +8,7 @@ import org.bukkit.command.ConsoleCommandSender;
 
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.commands.SubCommand;
+import me.ford.biomeremap.settings.Settings.ReloadIssues;
 
 public class ReloadSub extends SubCommand {
 	private static final String PERMS = "biomeremap.reload";
@@ -26,10 +27,12 @@ public class ReloadSub extends SubCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, String[] args, List<String> opts) {
-		if (br.reload()) {
+		ReloadIssues issues = br.reload();
+		if (issues != null && !issues.hasIssues()) {
 			sender.sendMessage(br.getMessages().getBiomeRemapReload());
 		} else {
 			sender.sendMessage(br.getMessages().errorConfigUnreadable());
+			if (issues != null) sender.sendMessage(issues.getIssues().toString());
 		}
 		return true;
 	}
