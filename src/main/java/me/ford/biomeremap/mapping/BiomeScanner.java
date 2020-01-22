@@ -7,6 +7,8 @@ import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.v1_15_R1.CraftChunk;
 import org.bukkit.craftbukkit.v1_15_R1.block.CraftBlock;
+
+import me.ford.biomeremap.BiomeRemap;
 import net.minecraft.server.v1_15_R1.BiomeBase;
 import net.minecraft.server.v1_15_R1.BiomeStorage;
 import net.minecraft.server.v1_15_R1.Chunk;
@@ -14,8 +16,9 @@ import net.minecraft.server.v1_15_R1.Chunk;
 public final class BiomeScanner {
 	private final Class<? extends BiomeStorage> biomeStorageClass = net.minecraft.server.v1_15_R1.BiomeStorage.class;
 	private final Field biomeBaseField;
+	private final BiomeRemap br;
 
-	public BiomeScanner() {
+	public BiomeScanner(BiomeRemap br) {
 		try {
 			biomeBaseField = biomeStorageClass.getDeclaredField("g");
 		} catch (NoSuchFieldException | SecurityException e) {
@@ -23,6 +26,7 @@ public final class BiomeScanner {
 			throw new IllegalStateException("Error getting BiomeBase field!");
 		}
 		biomeBaseField.setAccessible(true);
+		this.br = br;
 	}
 
 	public boolean addBiomesFor(Map<Biome, Integer> map, World world, int chunkX, int chunkZ) {
@@ -33,8 +37,12 @@ public final class BiomeScanner {
 		int startX = chunkX * 16;
 		int startZ = chunkZ * 16;
 		if (!world.isChunkGenerated(chunkX, chunkZ)) {
-			// allow populator to do its thing -> OnMappingDone counts them
 			world.getChunkAt(chunkX, chunkZ);
+			if (br.getSettings().getApplicableBiomeMap(world.getName()) == null) { // world not being remapped
+				addBiomesForInternal(world, chunkX, chunkZ, useNMS, startX, startZ, yLayer, map);
+				return true;
+			}
+			// allow populator to do its thing -> OnMappingDone counts them
 			return false;
 		} else {
 			addBiomesForInternal(world, chunkX, chunkZ, useNMS, startX, startZ, yLayer, map);

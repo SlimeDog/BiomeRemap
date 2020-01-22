@@ -75,7 +75,7 @@ public class BiomeRemap extends JavaPlugin {
 		
 		// remapper, scanner
 		remapper = new BiomeRemapper(this);
-		scanner = new BiomeScanner();
+		scanner = new BiomeScanner(this);
 		teleListener = new TeleportListener(this);
 		
 		// setup up populator
