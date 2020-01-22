@@ -24,7 +24,7 @@ public class LargeScanTask extends LargeTask {
 		this.biomes = biomes;
 		this.yLayer = yLayer;
 		this.useNMS = useNMS;
-		this.onMappingDone = new OnMappingDone((x, z) -> findBiomes(world, x, z, debug), minX, minZ, maxX, maxZ);
+		this.onMappingDone = new OnMappingDone((x, z) -> findBiomes(world, x, z, debug), world, minX, minZ, maxX, maxZ);
 		getPlugin().getRemapper().addDoneChecker(onMappingDone); // checks the newly generated ones
 	}
 
