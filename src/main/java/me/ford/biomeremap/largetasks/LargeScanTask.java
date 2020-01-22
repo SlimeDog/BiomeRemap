@@ -47,7 +47,7 @@ public class LargeScanTask extends LargeTask {
 			getPlugin().getRemapper().removeDoneCheker(onMappingDone);
 			int res = 0;
 			for (int value : biomeMap.values()) res += value;
-			getPlugin().getLogger().info("COUNT:" + onMappingDone.getCount() + "->" + res);
+			getPlugin().getLogger().info("TOTAL:" + onMappingDone.getCount() + "->" + res);
 		}, 10L); // make sure they all get remapped and scanned
 	}
 	
