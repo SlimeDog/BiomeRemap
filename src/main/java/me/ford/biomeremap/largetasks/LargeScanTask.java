@@ -45,6 +45,16 @@ public class LargeScanTask extends LargeTask {
 		getPlugin().getServer().getScheduler().runTaskLater(getPlugin(), () -> {
 			biomes.accept(new BiomeReport(biomeMap));
 			getPlugin().getRemapper().removeDoneCheker(onMappingDone);
+			// DEBUG
+			StringBuilder builder = new StringBuilder();
+			for (int x = 0; x < 32; x++) {
+				builder.append("\n");
+				for (int z = 0; z < 32; z++) {
+					builder.append(checked[x][z]?".":"*");
+				}
+			}
+			getPlugin().getLogger().info(". -> scanned, * -> unscanned:" + builder);
+			// DEBUG
 		}, 10L); // make sure they all get remapped and scanned
 	}
 	
