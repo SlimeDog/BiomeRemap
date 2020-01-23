@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bstats.bukkit.Metrics;
@@ -26,6 +27,8 @@ import me.ford.biomeremap.settings.Messages;
 import me.ford.biomeremap.settings.Settings;
 import me.ford.biomeremap.settings.Settings.ReloadIssues;
 import me.ford.biomeremap.updates.UpdateChecker;
+import me.ford.biomeremap.volotile.BiomeManager;
+import me.ford.biomeremap.volotile.VolotileBiomeManager;
 
 public class BiomeRemap extends JavaPlugin {
 	private static BiomeRemap staticInstance;
@@ -36,29 +39,29 @@ public class BiomeRemap extends JavaPlugin {
 	private BiomeScanner scanner;
 	private TeleportListener teleListener;
 	private MappingPopulator populator;
+	private BiomeManager biomeManager;
 
-	// helpers 
+	// helpers
 	private boolean existsDataFolder;
 	private boolean existsConfig;
 	private boolean existsMessages;
 	private boolean canReadDataFolder;
 	private boolean canReadConfig;
 	private boolean canReadMessages;
-	
+
 	public BiomeRemap() {
 		super();
 	}
-	
-	protected BiomeRemap(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
-        super(loader, description, dataFolder, file);
-        testing = true;
-    }
 
-	
+	protected BiomeRemap(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
+		super(loader, description, dataFolder, file);
+		testing = true;
+	}
+
 	@Override
 	public void onEnable() {
 		staticInstance = this;
-		
+
 		messages = new Messages(this);
 		attempConfigReloads(true);
 		settings = new Settings(this);
@@ -69,14 +72,25 @@ public class BiomeRemap extends JavaPlugin {
 
 		// commands
 		getCommand("biomeremap").setExecutor(new BiomeRemapCommand(this));
-		
+
 		// saving debug message periodically
 		this.getServer().getScheduler().runTaskTimer(this, () -> saveDebug(), 120 * 20L, 120 * 20L);
-		
+
 		// remapper, scanner
 		remapper = new BiomeRemapper(this);
 		scanner = new BiomeScanner(this);
 		teleListener = new TeleportListener(this);
+
+		// NMS biome manager
+		if (!testing) {
+			try {
+				biomeManager = new VolotileBiomeManager(this);
+			} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | NoSuchFieldException e) {
+				getLogger().log(Level.SEVERE, "Could not start volotile biome manager! Disabling plugin! ", e);
+				getServer().getPluginManager().disablePlugin(this);
+				return;
+			}
+		}
 		
 		// setup up populator
 		populator = new MappingPopulator(remapper);
@@ -111,6 +125,10 @@ public class BiomeRemap extends JavaPlugin {
 
 	public MappingPopulator getPopulator() {
 		return populator;
+	}
+
+	public BiomeManager getBiomeManager() {
+		return biomeManager;
 	}
 	
 	@Override
