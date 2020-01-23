@@ -11,7 +11,9 @@ import org.bukkit.block.Biome;
  */
 public interface BiomeManager {
 
-    public Biome getBiomeNMS(World world, int x, int z);
+    public Biome getBiomeNMS(World world, int x, int z) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException;
+
+    public Biome getBiomeNMS(Chunk chunk, int nr) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException;
 
     public void setBiomeNMS(World world, int x, int z, Biome biome) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException;
 

@@ -28,6 +28,7 @@ public class VolotileBiomeManager implements BiomeManager {
     private final Method getHandleMethod;
     private final Method getBiomeIndexMethod;
     private final Method biomeToBiomeBaseMethod;
+    private final Method biomeBasetoBiomeMethod;
     private final Field biomeBaseField;
 
     public VolotileBiomeManager(BiomeRemap br) throws ClassNotFoundException, NoSuchMethodException, SecurityException, NoSuchFieldException {
@@ -44,6 +45,7 @@ public class VolotileBiomeManager implements BiomeManager {
         getHandleMethod = craftChunkClass.getMethod("getHandle");
         getBiomeIndexMethod = nmsChunkClass.getMethod("getBiomeIndex");
         biomeToBiomeBaseMethod = craftBlockClass.getMethod("biomeToBiomeBase", Biome.class);
+        biomeBasetoBiomeMethod = craftBlockClass.getMethod("biomeBaseToBiome", biomeBaseClass);
         // get fields needed for biome getting and setting methods
         biomeBaseField = biomeStorageClass.getDeclaredField("g");
         biomeBaseField.setAccessible(true);
@@ -103,9 +105,21 @@ public class VolotileBiomeManager implements BiomeManager {
 	}
 
     @Override
-    public Biome getBiomeNMS(World world, int x, int z) {
-        // TODO Auto-generated method stub
-        return null;
+    public Biome getBiomeNMS(World world, int x, int z)
+            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        Chunk chunk = world.getChunkAt(new Location(world, x, 0, z));
+        int nr = x >> 2 << 2 | z >> 2;
+        return getBiomeNMS(chunk, nr);
+    }
+
+    @Override
+    public Biome getBiomeNMS(Chunk chunk, int nr)
+    throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        Object nmsChunk = getHandleMethod.invoke(chunk);
+        Object biomeStorage = getBiomeIndexMethod.invoke(nmsChunk);
+
+        Object[] bases = (Object[]) biomeBaseField.get(biomeStorage);
+        return (Biome) biomeBasetoBiomeMethod.invoke(null, bases[nr]);
     }
 
     @Override
@@ -125,7 +139,6 @@ public class VolotileBiomeManager implements BiomeManager {
     public void setBiomeNMS(Chunk chunk, int nr, Biome biome)
             throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         if (nr < 0 || nr > 15) br.getLogger().info("Trying to set biome at an incorrect number (NMS):" + nr);
-        // Object craftChunk = craftChunkClass.cast(chunk);
         Object nmsChunk = getHandleMethod.invoke(chunk);
         Object biomeStorage = getBiomeIndexMethod.invoke(nmsChunk);
 
@@ -133,6 +146,5 @@ public class VolotileBiomeManager implements BiomeManager {
         Object nmsBiomeBase = biomeToBiomeBaseMethod.invoke(null, biome);
 		bases[nr] = nmsBiomeBase;
     }
-
     
 }

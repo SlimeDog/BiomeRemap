@@ -1,31 +1,17 @@
 package me.ford.biomeremap.mapping;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 import org.bukkit.World;
 import org.bukkit.block.Biome;
-import org.bukkit.craftbukkit.v1_15_R1.CraftChunk;
-import org.bukkit.craftbukkit.v1_15_R1.block.CraftBlock;
 
 import me.ford.biomeremap.BiomeRemap;
-import net.minecraft.server.v1_15_R1.BiomeBase;
-import net.minecraft.server.v1_15_R1.BiomeStorage;
-import net.minecraft.server.v1_15_R1.Chunk;
 
 public final class BiomeScanner {
-	private final Class<? extends BiomeStorage> biomeStorageClass = net.minecraft.server.v1_15_R1.BiomeStorage.class;
-	private final Field biomeBaseField;
 	private final BiomeRemap br;
 
 	public BiomeScanner(BiomeRemap br) {
-		try {
-			biomeBaseField = biomeStorageClass.getDeclaredField("g");
-		} catch (NoSuchFieldException | SecurityException e) {
-			e.printStackTrace();
-			throw new IllegalStateException("Error getting BiomeBase field!");
-		}
-		biomeBaseField.setAccessible(true);
 		this.br = br;
 	}
 
@@ -33,7 +19,8 @@ public final class BiomeScanner {
 		return addBiomesFor(map, world, chunkX, chunkZ, 0, false);
 	}
 
-	public boolean addBiomesFor(Map<Biome, Integer> map, World world, int chunkX, int chunkZ, int yLayer, boolean useNMS) {
+	public boolean addBiomesFor(Map<Biome, Integer> map, World world, int chunkX, int chunkZ, int yLayer,
+			boolean useNMS) {
 		int startX = chunkX * 16;
 		int startZ = chunkZ * 16;
 		if (!world.isChunkGenerated(chunkX, chunkZ)) {
@@ -50,7 +37,8 @@ public final class BiomeScanner {
 		}
 	}
 
-	private void addBiomesForInternal(World world, int chunkX, int chunkZ, boolean useNMS, int startX, int startZ, int yLayer, Map<Biome, Integer> map) {
+	private void addBiomesForInternal(World world, int chunkX, int chunkZ, boolean useNMS, int startX, int startZ,
+			int yLayer, Map<Biome, Integer> map) {
 		world.getChunkAt(chunkX, chunkZ);
 		if (!useNMS) {
 			addBiomes(world, startX, startZ, yLayer, map);
@@ -71,22 +59,16 @@ public final class BiomeScanner {
 	}
 
 	private void addBiomesNMS(org.bukkit.Chunk chunk, Map<Biome, Integer> map, int yLayer) {
-		// TODO - this is version specific!
-		Chunk nmsChunk = ((CraftChunk) chunk).getHandle();
-		BiomeStorage storage = nmsChunk.getBiomeIndex();
-		BiomeBase[] bases;
-		try {
-			bases = (BiomeBase[]) biomeBaseField.get(storage);
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			e.printStackTrace();
-			org.bukkit.Bukkit.getLogger().warning("Error while checking NMS biomes!");
-			return;
-		}
-		// 16 per ylayer 
+		// 16 per ylayer
 		final int startNr = yLayer << 4;
 		for (int nr = startNr; nr < startNr + 16; nr++) {
-			BiomeBase bb = bases[nr];
-			addBiome(map, CraftBlock.biomeBaseToBiome(bb));
+			try {
+				addBiome(map, br.getBiomeManager().getBiomeNMS(chunk, nr));
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				br.getLogger().severe("Problem getting biome!");
+				e.printStackTrace();
+				continue;
+			}
 		}
 	}
 	
