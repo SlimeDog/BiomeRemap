@@ -73,6 +73,9 @@ public class LargeTempScanTaskStarter extends LargeTaskStarter {
 			sender.sendMessage(msg);
 			if (!(sender instanceof ConsoleCommandSender)) br().logMessage(msg);
 		}
+		String msg = br().getMessages().getScanListItem("100%", "TOTAL", (int) total);
+		sender.sendMessage(msg);
+		if (!(sender instanceof ConsoleCommandSender)) br().logMessage(msg);
 	}
     
 }
