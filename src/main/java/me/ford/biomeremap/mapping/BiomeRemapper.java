@@ -16,20 +16,11 @@ import me.ford.biomeremap.largetasks.OnMappingDone;
 
 public class BiomeRemapper {
 	private final BiomeRemap br;
-	private final Class<? extends net.minecraft.server.v1_15_R1.BiomeStorage> biomeStorageClass = net.minecraft.server.v1_15_R1.BiomeStorage.class;
-	private final java.lang.reflect.Field biomeBaseField;
 	private final Set<OnMappingDone> doneCheckers = new HashSet<>();
 	private long timeLastTick = 0L;
 
 	public BiomeRemapper(BiomeRemap plugin) {
 		br = plugin;
-		try {
-			biomeBaseField = biomeStorageClass.getDeclaredField("g");
-		} catch (NoSuchFieldException | SecurityException e) {
-			e.printStackTrace();
-			throw new IllegalStateException("Error getting BiomeBase field!");
-		}
-		biomeBaseField.setAccessible(true);
 	}
 
 	public void addDoneChecker(OnMappingDone checker) {
