@@ -28,7 +28,9 @@ import me.ford.biomeremap.settings.Settings;
 import me.ford.biomeremap.settings.Settings.ReloadIssues;
 import me.ford.biomeremap.updates.UpdateChecker;
 import me.ford.biomeremap.volotile.BiomeManager;
+import me.ford.biomeremap.volotile.ChunkUpdater;
 import me.ford.biomeremap.volotile.VolotileBiomeManager;
+import me.ford.biomeremap.volotile.VolotileChunkUpdater;
 
 public class BiomeRemap extends JavaPlugin {
 	private static BiomeRemap staticInstance;
@@ -40,6 +42,7 @@ public class BiomeRemap extends JavaPlugin {
 	private TeleportListener teleListener;
 	private MappingPopulator populator;
 	private BiomeManager biomeManager;
+	private ChunkUpdater chunkUpdater;
 
 	// helpers
 	private boolean existsDataFolder;
@@ -90,6 +93,13 @@ public class BiomeRemap extends JavaPlugin {
 				getServer().getPluginManager().disablePlugin(this);
 				return;
 			}
+			// NMS chunk updater
+			try {
+				chunkUpdater = new VolotileChunkUpdater(this);
+			} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | NoSuchFieldException e) {
+				getLogger().log(Level.SEVERE, "Could not start volotile chunk updater! Disabling plugin! ", e);
+				e.printStackTrace();
+			}
 		}
 		
 		// setup up populator
@@ -129,6 +139,10 @@ public class BiomeRemap extends JavaPlugin {
 
 	public BiomeManager getBiomeManager() {
 		return biomeManager;
+	}
+
+	public ChunkUpdater getChunkUpdater() {
+		return chunkUpdater;
 	}
 	
 	@Override

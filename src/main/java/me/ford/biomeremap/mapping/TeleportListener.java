@@ -1,13 +1,12 @@
 package me.ford.biomeremap.mapping;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Server;
-import org.bukkit.craftbukkit.v1_15_R1.CraftChunk;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -16,9 +15,6 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.settings.Settings;
-import net.minecraft.server.v1_15_R1.PacketPlayOutMapChunk;
-import net.minecraft.server.v1_15_R1.PacketPlayOutUnloadChunk;
-import net.minecraft.server.v1_15_R1.PlayerConnection;
 
 /**
  * TeleportListener
@@ -34,13 +30,15 @@ public class TeleportListener implements Listener {
         this.br.getServer().getPluginManager().registerEvents(this, br);
     }
 
-    @EventHandler(priority=EventPriority.MONITOR, ignoreCancelled=true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onTeleport(PlayerTeleportEvent event) {
         Location from = event.getFrom();
         Location to = event.getTo();
         Chunk chunkTo = to.getChunk();
-        if (from.getChunk() == chunkTo || chunkTo.getInhabitedTime() > 0) return;
-        TeleportChunkInfo info = new TeleportChunkInfo(event.getPlayer().getUniqueId(), chunkTo.getWorld(), chunkTo.getX(), chunkTo.getZ(), System.currentTimeMillis());
+        if (from.getChunk() == chunkTo || chunkTo.getInhabitedTime() > 0)
+            return;
+        TeleportChunkInfo info = new TeleportChunkInfo(event.getPlayer().getUniqueId(), chunkTo.getWorld(),
+                chunkTo.getX(), chunkTo.getZ(), System.currentTimeMillis());
         infos.add(info);
         br.getServer().getScheduler().runTaskLater(br, () -> remove(info), settings.getTeleportCacheTime());
     }
@@ -68,13 +66,13 @@ public class TeleportListener implements Listener {
     }
 
     private void sendUpdate(Player player, Chunk chunk) {
-        // TODO - this is version specific!
-        net.minecraft.server.v1_15_R1.Chunk nmsChunk = ((CraftChunk) chunk).getHandle();
-        PacketPlayOutUnloadChunk unload = new PacketPlayOutUnloadChunk(chunk.getX(), chunk.getZ());
-        PacketPlayOutMapChunk load = new PacketPlayOutMapChunk(nmsChunk, 65535);
-        PlayerConnection connection = ((CraftPlayer) player).getHandle().playerConnection;
-        connection.sendPacket(unload);
-        connection.sendPacket(load);
+        try {
+            br.getChunkUpdater().updateChunk(player, chunk);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+                | InstantiationException e) {
+            br.getLogger().severe("Problem updating chunk for player " + player.getName());
+            e.printStackTrace();
+        }
     }
     
 }
