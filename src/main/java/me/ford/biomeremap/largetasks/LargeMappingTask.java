@@ -20,7 +20,8 @@ public class LargeMappingTask extends LargeTask {
 	}
 
 	@Override
-	protected void doTaskForChunk(World world, int x, int z, boolean debug) {
+	protected void doTaskForChunk(int x, int z, boolean debug) {
+		World world = getWorld();
 		if (!world.isChunkGenerated(x, z)) {
 			world.getChunkAt(x, z); // populator takes care
 		} else {

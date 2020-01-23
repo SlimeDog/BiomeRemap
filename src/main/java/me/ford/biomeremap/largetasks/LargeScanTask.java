@@ -24,18 +24,18 @@ public class LargeScanTask extends LargeTask {
 		this.biomes = biomes;
 		this.yLayer = yLayer;
 		this.useNMS = useNMS;
-		this.onMappingDone = new OnMappingDone((x, z) -> findBiomes(world, x, z, debug), world, minX, minZ, maxX, maxZ);
+		this.onMappingDone = new OnMappingDone((x, z) -> findBiomes(x, z, debug), world, minX, minZ, maxX, maxZ);
 		getPlugin().getRemapper().addDoneChecker(onMappingDone); // checks the newly generated ones
 	}
 
 	@Override
-	protected void doTaskForChunk(World world, int x, int z, boolean debug) {
-		findBiomes(world, x, z, debug);
+	protected void doTaskForChunk(int x, int z, boolean debug) {
+		findBiomes(x, z, debug);
 	}
 	
-	private void findBiomes(World world, int chunkX, int chunkZ, boolean debug) {
+	private void findBiomes(int chunkX, int chunkZ, boolean debug) {
 		if (checked[chunkX - getMinX()][chunkZ - getMinZ()]) return; // already done
-		if (getPlugin().getScanner().addBiomesFor(biomeMap, world, chunkX, chunkZ, yLayer, useNMS)) {
+		if (getPlugin().getScanner().addBiomesFor(biomeMap, getWorld(), chunkX, chunkZ, yLayer, useNMS)) {
 			checked[chunkX - getMinX()][chunkZ - getMinZ()] = true;
 		} // else will be done later, after the remap
 	}

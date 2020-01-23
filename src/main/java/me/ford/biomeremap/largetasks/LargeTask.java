@@ -75,7 +75,7 @@ public abstract class LargeTask {
 	}
 	
 	private void doChunk() {
-		doTaskForChunk(world, x, z, debug);
+		doTaskForChunk(x, z, debug);
 		z++;
 		if (z >= maxZ) {
 			x++;
@@ -104,8 +104,12 @@ public abstract class LargeTask {
 	public int getMaxZ() {
 		return maxZ;
 	}
+
+	public World getWorld() {
+		return world;
+	}
 	
-	protected abstract void doTaskForChunk(World world, int x, int z, boolean debug);
+	protected abstract void doTaskForChunk(int x, int z, boolean debug);
 	
 	protected abstract void whenDone();
 	
