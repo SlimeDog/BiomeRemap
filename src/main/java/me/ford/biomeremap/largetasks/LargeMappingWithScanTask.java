@@ -40,9 +40,6 @@ public class LargeMappingWithScanTask extends LargeMappingTask {
 		getPlugin().getServer().getScheduler().runTaskLater(getPlugin(), () -> {
 			getPlugin().getRemapper().removeDoneCheker(onMappingDone);
 			biomeReport.accept(new BiomeReport(biomeMap));
-			int res = 0;
-			for (int value : biomeMap.values()) res += value;
-			getPlugin().getLogger().info("TOTAL:" + onMappingDone.getCount() + "->" + res);
 		}, 10L);
 	}
 
