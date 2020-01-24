@@ -143,6 +143,10 @@ public class ScanSub extends SubCommand {
 			sender.sendMessage(br.getMessages().errorWorldNotFound(args[1]));
 			return true;
 		}
+		if (br.getSettings().getApplicableBiomeMap(world.getName()) == null) {
+			sender.sendMessage(br.getMessages().getBiomeRemapNoMap(world.getName()));
+			return true;
+		}
 		if (region) {
 			sender.sendMessage(br.getMessages().getScanRegionStart(world.getName(), x, z));
 		} else {
