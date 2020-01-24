@@ -27,6 +27,7 @@ public abstract class LargeTask {
 	private long time = 0;
 	private boolean done = false;
 	private int nextProgress;
+	// private final boolean[][] checked = new boolean[32][32];
 	
 	public LargeTask(BiomeRemap plugin, World world, int minX, int maxX, int minZ, int maxZ, boolean debug, 
 					int progressStep, Consumer<String> progress, Consumer<TaskReport> ender) {
@@ -62,6 +63,16 @@ public abstract class LargeTask {
 			br.getServer().getScheduler().runTaskLater(br, () -> remapChunks(), curTime>40?2:1);
 		} else {
 			ender.accept(new TaskReport(chunks, ticks, time));
+		// DEBUG
+		// StringBuilder builder = new StringBuilder();
+		// for (int x = 0; x < 32; x++) {
+		// 	builder.append("\n");
+		// 	for (int z = 0; z < 32; z++) {
+		// 		builder.append(checked[x][z]?".":"*");
+		// 	}
+		// }
+		// getPlugin().getLogger().info("INTERNAL:" + builder);
+		// DEBUG
 			whenDone();
 			return;
 		}
@@ -75,6 +86,7 @@ public abstract class LargeTask {
 	}
 	
 	private void doChunk() {
+		// checked[x - minX][z - minZ] = true;
 		doTaskForChunk(x, z, debug);
 		z++;
 		if (z >= maxZ) {
