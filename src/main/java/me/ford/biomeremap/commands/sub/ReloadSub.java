@@ -31,7 +31,7 @@ public class ReloadSub extends SubCommand {
 		if (issues != null && !issues.hasIssues()) {
 			sender.sendMessage(br.getMessages().getBiomeRemapReload());
 		} else if (issues != null) {
-			sender.sendMessage(issues.getIssues().toString());
+			sender.sendMessage(String.join("\n", issues.getIssues()));
 		} else { // issues == null
 			sender.sendMessage(br.getMessages().errorConfigUnreadable());
 		}
