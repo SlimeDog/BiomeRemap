@@ -182,16 +182,16 @@ public class BiomeRemap extends JavaPlugin {
 	
 	public ReloadIssues reload() {
 		ReloadIssues issues = null;
-		boolean success = true;
+		boolean success = false;
 		attemptConfigReloads();
 		if (canReadConfig) {
 			reloadConfig();
-			if (getConfig().getKeys(true).isEmpty()) success = false;
+			success = !getConfig().getKeys(true).isEmpty();
 			if (success) issues = settings.reload();
 		}
 		if (canReadMessages) {
 			messages.reloadCustomConfig();
-			if (messages.getCustomConfig().getKeys(true).isEmpty()) success = false;
+			success = !messages.getCustomConfig().getKeys(true).isEmpty();
 		}
 		if (success) {
 			getLogger().info(getMessages().getInfoConfigLoaded());
