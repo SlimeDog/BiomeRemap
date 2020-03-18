@@ -21,7 +21,7 @@ If applicable, add screenshots to help explain your problem
 **Server Environment**
  - OS [Linux, MacOS, Windows] version:
  - Spigot version [/version]:
- - BiomeRemapper version [/version BiomeRemapper]:
+ - BiomeRemap version [/version BiomeRemap]:
 
 **Additional context**
  Link to your configuration:
