@@ -14,6 +14,7 @@ import me.ford.biomeremap.BiomeRemap;
  * VolotileChunkUpdated
  */
 public class VolotileChunkUpdater implements ChunkUpdater {
+    private final boolean after116;
     private final BiomeRemap br;
     private final Class<?> craftChunkClass;
     private final Class<?> nmsChunkClass;
@@ -33,6 +34,7 @@ public class VolotileChunkUpdater implements ChunkUpdater {
     public VolotileChunkUpdater(BiomeRemap br) throws ClassNotFoundException, NoSuchMethodException, SecurityException, NoSuchFieldException {
         this.br = br;
         String version = this.br.getServer().getClass().getPackage().getName().split("\\.")[3];
+        after116 = version.contains("v1_16") || version.contains("v1_17") || version.contains("v1_18")  || version.contains("v1_19");
 
         // classes
         craftChunkClass = Class.forName("org.bukkit.craftbukkit." + version + ".CraftChunk");
@@ -51,7 +53,11 @@ public class VolotileChunkUpdater implements ChunkUpdater {
 
         // constructors
         packetPlayOutUnloadChunkConstructor = packetPlayOutUnloadChunkClass.getConstructor(int.class, int.class);
-        packetPlayOutMapChunkConstructor = packetPlayOutMapChunkClass.getConstructor(nmsChunkClass, int.class);
+        if (after116) {
+            packetPlayOutMapChunkConstructor = packetPlayOutMapChunkClass.getConstructor(nmsChunkClass, int.class, boolean.class);
+        } else {
+            packetPlayOutMapChunkConstructor = packetPlayOutMapChunkClass.getConstructor(nmsChunkClass, int.class);
+        }
 
         // field
         playerConnectionField = entityPlayerClass.getDeclaredField("playerConnection");
@@ -62,7 +68,12 @@ public class VolotileChunkUpdater implements ChunkUpdater {
             throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
         Object nmsChunk = getHandleMethod.invoke(chunk);
         Object unload = packetPlayOutUnloadChunkConstructor.newInstance(chunk.getX(), chunk.getZ());
-        Object load = packetPlayOutMapChunkConstructor.newInstance(nmsChunk, 65535);
+        Object load;
+        if (after116) {
+            load = packetPlayOutMapChunkConstructor.newInstance(nmsChunk, 65535, true);
+        } else {
+            load = packetPlayOutMapChunkConstructor.newInstance(nmsChunk, 65535);
+        }
         Object entityPlayer = getHandleMethod2.invoke(player);
         Object playerConnection = playerConnectionField.get(entityPlayer);
         sendPacketMethod.invoke(playerConnection, unload);
