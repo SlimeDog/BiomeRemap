@@ -8,7 +8,7 @@
 # Testing: SlimeDog
 #
 # Spigot version support: 1.14.4     Use BiomeRemap-1.0.1
-# Spigot version support: 1.15.x     Use BiomeRemap-2.0.x
+# Spigot version support: 1.15.x     Use BiomeRemap-2.0.3
 #
 # ========== CAVEATS AND WARNINGS ==================================================================
 # BiomeRemap is provided for your enjoyment and entertainment. We cannot guarantee that the results
@@ -28,9 +28,9 @@
 # remap the chunks initially-generated on world creation. These chunks must be remapped manually.
 # Commands to do so are described in the wiki.
 #
-# Note that all 1.14/1.15 biomes are included in the configured biomemaps. Biomes that do not exist
-# in your Spigot version will generate warnings in the console/log on server start-up; these may be
-# safely ignored.
+# Note that all 1.14/1.15/1.16 biomes are included in the configured biomemaps. Biomes that do not
+# exist in your Spigot version will generate warnings in the console/log on server start-up; these
+# may be safely ignored.
 #
 # Changes of this magnitude should always be performed first on a test server, in order to verify
 # that the configuration and results meet expectations. We strongly recommend making a server backup
@@ -39,7 +39,7 @@
 # ========== CONFIGURATION FILE VERSION ============================================================
 # Do not edit the version string unless you know what you are dolng.
 file: config.yml
-version: 2
+version: 3
 
 # ========== CHECK FOR UPDATES =====================================================================
 # If you do not want available updates announced in the console log, you may disable it here.
@@ -386,6 +386,27 @@ biomemaps:
         replacement-biome: WOODED_HILLS
       WOODED_MOUNTAINS:
         replacement-biome: WOODED_MOUNTAINS
+
+  # ======== BiomeRemap example: hell ================================================================
+  # There will be hell to pay.
+  # It is unclear what you might want to do, but MC 1.16 nether biomes are listed here for reference.
+  #
+  # enabled-worlds must be changed to reflect your target worlds.
+  #
+  hell:
+    description: "There will be hell to pay."
+    enabled-worlds: []
+    biomes:
+      BASALT_DELTAS:
+        replacement-biome: BASALT_DELTAS
+      CRIMSON_FOREST:
+        replacement-biome: CRIMSON_FOREST
+      SOUL_SAND_VALLEY:
+        replacement-biome: SOUL_SAND_VALLEY
+      WARPED_FOREST:
+        replacement-biome: WARPED_FOREST
+      NETHER_WASTES:
+        replacement-biome: NETHER_WASTES
 
 # ========== REPORT REMAP PROGRESS =================================================================
 # How often region commands should report progress, as a percentage of completion.
