@@ -20,7 +20,7 @@ public class ListSub extends SubCommand {
 	private final Settings settings;
 	private final Messages messages;
 	private final List<String> worldNames = new ArrayList<>();
-	
+
 	public ListSub(BiomeRemap plugin) {
 		super("list");
 		this.settings = plugin.getSettings();
@@ -29,8 +29,7 @@ public class ListSub extends SubCommand {
 			worldNames.add(world.getName());
 		}
 	}
-	
-	
+
 	@Override
 	public List<String> onTabComplete(CommandSender sender, String[] args, List<String> opts) {
 		List<String> list = new ArrayList<>();
@@ -60,7 +59,8 @@ public class ListSub extends SubCommand {
 				return true;
 			}
 			BiomeMap map = settings.getApplicableBiomeMap(worldName);
-			if (map != null) list.add(map);
+			if (map != null)
+				list.add(map);
 		}
 		if (list.isEmpty() && worldName != null) {
 			sender.sendMessage(messages.getBiomeRemapNoMap(worldName));

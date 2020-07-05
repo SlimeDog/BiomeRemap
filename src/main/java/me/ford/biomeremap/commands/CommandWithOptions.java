@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 public interface CommandWithOptions {
 
 	public List<String> onTabComplete(CommandSender sender, String[] args, List<String> opts);
-	
+
 	public boolean onCommand(CommandSender sender, String[] args, List<String> opts);
 
 }

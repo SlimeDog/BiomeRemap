@@ -8,7 +8,7 @@ import me.ford.biomeremap.BiomeRemap;
 
 public class PlaceholderAPIHook extends PlaceholderExpansion {
 	private final BiomeRemap br;
-	
+
 	public PlaceholderAPIHook(BiomeRemap plugin) {
 		br = plugin;
 		register();
@@ -18,11 +18,11 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
 	public String getAuthor() {
 		return String.join(", ", br.getDescription().getAuthors());
 	}
-	
+
 	@Override
-    public boolean persist(){
-        return true;
-    }
+	public boolean persist() {
+		return true;
+	}
 
 	@Override
 	public String getIdentifier() {
@@ -34,25 +34,25 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
 		return br.getDescription().getVersion();
 	}
 
-    @Override
-    public String onPlaceholderRequest(Player player, String identifier){
-    	
-    	if (player == null){
-            return "";
-        }
+	@Override
+	public String onPlaceholderRequest(Player player, String identifier) {
+
+		if (player == null) {
+			return "";
+		}
 
 		Location loc = player.getLocation();
 		loc.setY(0.0D);
-        if (identifier.equals("biome_name")){
-        	return loc.getBlock().getBiome().name();
-        }
+		if (identifier.equals("biome_name")) {
+			return loc.getBlock().getBiome().name();
+		}
 
-        if (identifier.equals("biome_id")){
-			return String.valueOf(br.getBiomeManager().getBiomeIndex(loc.getBlock().getBiome()));		
-        }
-        
-        return null;
-        
-    }
+		if (identifier.equals("biome_id")) {
+			return String.valueOf(br.getBiomeManager().getBiomeIndex(loc.getBlock().getBiome()));
+		}
+
+		return null;
+
+	}
 
 }

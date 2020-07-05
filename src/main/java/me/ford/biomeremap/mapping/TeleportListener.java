@@ -20,59 +20,59 @@ import me.ford.biomeremap.settings.Settings;
  * TeleportListener
  */
 public class TeleportListener implements Listener {
-    private final BiomeRemap br;
-    private final Settings settings;
-    private final Set<TeleportChunkInfo> infos = new HashSet<>();
+	private final BiomeRemap br;
+	private final Settings settings;
+	private final Set<TeleportChunkInfo> infos = new HashSet<>();
 
-    public TeleportListener(BiomeRemap br) {
-        this.br = br;
-        this.settings = br.getSettings();
-        this.br.getServer().getPluginManager().registerEvents(this, br);
-    }
+	public TeleportListener(BiomeRemap br) {
+		this.br = br;
+		this.settings = br.getSettings();
+		this.br.getServer().getPluginManager().registerEvents(this, br);
+	}
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onTeleport(PlayerTeleportEvent event) {
-        Location from = event.getFrom();
-        Location to = event.getTo();
-        Chunk chunkTo = to.getChunk();
-        if (from.getChunk() == chunkTo || chunkTo.getInhabitedTime() > 0)
-            return;
-        TeleportChunkInfo info = new TeleportChunkInfo(event.getPlayer().getUniqueId(), chunkTo.getWorld(),
-                chunkTo.getX(), chunkTo.getZ(), System.currentTimeMillis());
-        infos.add(info);
-        br.getServer().getScheduler().runTaskLater(br, () -> remove(info), settings.getTeleportCacheTime());
-    }
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onTeleport(PlayerTeleportEvent event) {
+		Location from = event.getFrom();
+		Location to = event.getTo();
+		Chunk chunkTo = to.getChunk();
+		if (from.getChunk() == chunkTo || chunkTo.getInhabitedTime() > 0)
+			return;
+		TeleportChunkInfo info = new TeleportChunkInfo(event.getPlayer().getUniqueId(), chunkTo.getWorld(),
+				chunkTo.getX(), chunkTo.getZ(), System.currentTimeMillis());
+		infos.add(info);
+		br.getServer().getScheduler().runTaskLater(br, () -> remove(info), settings.getTeleportCacheTime());
+	}
 
-    private void remove(TeleportChunkInfo info) {
-        infos.remove(info);
-    }
+	private void remove(TeleportChunkInfo info) {
+		infos.remove(info);
+	}
 
-    public void sendUpdatesIfNeeded(Chunk chunk) {
-        int range = br.getServer().getViewDistance();
-        for (TeleportChunkInfo info : infos) {
-            Player player = getPlayerInRange(info, chunk, range);
-            if (player != null) {
-                sendUpdate(player, chunk);
-            }
-        }
-    }
+	public void sendUpdatesIfNeeded(Chunk chunk) {
+		int range = br.getServer().getViewDistance();
+		for (TeleportChunkInfo info : infos) {
+			Player player = getPlayerInRange(info, chunk, range);
+			if (player != null) {
+				sendUpdate(player, chunk);
+			}
+		}
+	}
 
-    private Player getPlayerInRange(TeleportChunkInfo info, Chunk chunk, int range) {
-        Server server = br.getServer();
-        if (info.chunkInRange(chunk, range)) {
-            return server.getPlayer(info.getId());
-        }
-        return null;
-    }
+	private Player getPlayerInRange(TeleportChunkInfo info, Chunk chunk, int range) {
+		Server server = br.getServer();
+		if (info.chunkInRange(chunk, range)) {
+			return server.getPlayer(info.getId());
+		}
+		return null;
+	}
 
-    private void sendUpdate(Player player, Chunk chunk) {
-        try {
-            br.getChunkUpdater().updateChunk(player, chunk);
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
-                | InstantiationException e) {
-            br.getLogger().severe("Problem updating chunk for player " + player.getName());
-            e.printStackTrace();
-        }
-    }
-    
+	private void sendUpdate(Player player, Chunk chunk) {
+		try {
+			br.getChunkUpdater().updateChunk(player, chunk);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| InstantiationException e) {
+			br.getLogger().severe("Problem updating chunk for player " + player.getName());
+			e.printStackTrace();
+		}
+	}
+
 }

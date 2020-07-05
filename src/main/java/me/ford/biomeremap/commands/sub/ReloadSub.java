@@ -14,7 +14,7 @@ public class ReloadSub extends SubCommand {
 	private static final String PERMS = "biomeremap.reload";
 	private static final String USAGE = "/biomeremap reload";
 	private final BiomeRemap br;
-	
+
 	public ReloadSub(BiomeRemap plugin) {
 		super("reload");
 		br = plugin;

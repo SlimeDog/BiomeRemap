@@ -18,51 +18,54 @@ import me.ford.biomeremap.BiomeRemap;
  * VolotileBiomeManager
  */
 public class VolotileBiomeManager implements BiomeManager {
-    private final BiomeRemap br;
-    private final Map<Biome, Integer> byBiome = new HashMap<>();
-    private final Class<?> biomeStorageClass;
-    private final Class<?> biomeBaseClass;
-    private final Class<?> craftChunkClass;
-    private final Class<?> nmsChunkClass;
-    private final Class<?> craftBlockClass;
-    private final Method getHandleMethod;
-    private final Method getBiomeIndexMethod;
-    private final Method biomeToBiomeBaseMethod;
-    private final Method biomeBasetoBiomeMethod;
-    private final Field biomeBaseField;
+	private final BiomeRemap br;
+	private final Map<Biome, Integer> byBiome = new HashMap<>();
+	private final Class<?> biomeStorageClass;
+	private final Class<?> biomeBaseClass;
+	private final Class<?> craftChunkClass;
+	private final Class<?> nmsChunkClass;
+	private final Class<?> craftBlockClass;
+	private final Method getHandleMethod;
+	private final Method getBiomeIndexMethod;
+	private final Method biomeToBiomeBaseMethod;
+	private final Method biomeBasetoBiomeMethod;
+	private final Field biomeBaseField;
 
-    public VolotileBiomeManager(BiomeRemap br) throws ClassNotFoundException, NoSuchMethodException, SecurityException, NoSuchFieldException {
-        this.br = br;
+	public VolotileBiomeManager(BiomeRemap br)
+			throws ClassNotFoundException, NoSuchMethodException, SecurityException, NoSuchFieldException {
+		this.br = br;
 		String version = this.br.getServer().getClass().getPackage().getName().split("\\.")[3];
 
-        // get classes needed for biome getting and biome setting methods
-        biomeStorageClass = Class.forName("net.minecraft.server." + version + ".BiomeStorage");
-        biomeBaseClass = Class.forName("net.minecraft.server." + version + ".BiomeBase");
-        craftChunkClass = Class.forName("org.bukkit.craftbukkit." + version + ".CraftChunk");
-        nmsChunkClass = Class.forName("net.minecraft.server." + version + ".Chunk");
-        craftBlockClass = Class.forName("org.bukkit.craftbukkit." + version + ".block.CraftBlock");
-        // get methods needed for biome getting and setting methods
-        getHandleMethod = craftChunkClass.getMethod("getHandle");
-        getBiomeIndexMethod = nmsChunkClass.getMethod("getBiomeIndex");
-        biomeToBiomeBaseMethod = craftBlockClass.getMethod("biomeToBiomeBase", Biome.class);
-        biomeBasetoBiomeMethod = craftBlockClass.getMethod("biomeBaseToBiome", biomeBaseClass);
-        // get fields needed for biome getting and setting methods
-        biomeBaseField = biomeStorageClass.getDeclaredField("g");
-        biomeBaseField.setAccessible(true);
+		// get classes needed for biome getting and biome setting methods
+		biomeStorageClass = Class.forName("net.minecraft.server." + version + ".BiomeStorage");
+		biomeBaseClass = Class.forName("net.minecraft.server." + version + ".BiomeBase");
+		craftChunkClass = Class.forName("org.bukkit.craftbukkit." + version + ".CraftChunk");
+		nmsChunkClass = Class.forName("net.minecraft.server." + version + ".Chunk");
+		craftBlockClass = Class.forName("org.bukkit.craftbukkit." + version + ".block.CraftBlock");
+		// get methods needed for biome getting and setting methods
+		getHandleMethod = craftChunkClass.getMethod("getHandle");
+		getBiomeIndexMethod = nmsChunkClass.getMethod("getBiomeIndex");
+		biomeToBiomeBaseMethod = craftBlockClass.getMethod("biomeToBiomeBase", Biome.class);
+		biomeBasetoBiomeMethod = craftBlockClass.getMethod("biomeBaseToBiome", biomeBaseClass);
+		// get fields needed for biome getting and setting methods
+		biomeBaseField = biomeStorageClass.getDeclaredField("g");
+		biomeBaseField.setAccessible(true);
 
-        // map biomes with reflection
-        
-        Class<?> biomesClass = Class.forName("net.minecraft.server." + version + ".Biomes");
-        
+		// map biomes with reflection
+
+		Class<?> biomesClass = Class.forName("net.minecraft.server." + version + ".Biomes");
+
 		Class<?> iRegistryClass = Class.forName("net.minecraft.server." + version + ".IRegistry");
 		Class<?> registryMaterialsClass = Class.forName("net.minecraft.server." + version + ".RegistryMaterials");
 		Method biomeBaseToBiomeField = craftBlockClass.getDeclaredMethod("biomeBaseToBiome", biomeBaseClass);
 		Field biomeField = iRegistryClass.getDeclaredField("BIOME");
 		Method getIdMethod = null;
 		for (Method method : registryMaterialsClass.getMethods()) {
-			if (!method.getName().equals("a")) continue;
+			if (!method.getName().equals("a"))
+				continue;
 			Class<?>[] types = method.getParameterTypes();
-			if (method.getReturnType() != int.class || types.length != 1 || types[0] != Object.class) continue;
+			if (method.getReturnType() != int.class || types.length != 1 || types[0] != Object.class)
+				continue;
 			getIdMethod = method;
 		}
 		if (getIdMethod == null) {
@@ -104,47 +107,48 @@ public class VolotileBiomeManager implements BiomeManager {
 		}
 	}
 
-    @Override
-    public Biome getBiomeNMS(World world, int x, int z)
-            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        Chunk chunk = world.getChunkAt(new Location(world, x, 0, z));
-        int nr = x >> 2 << 2 | z >> 2;
-        return getBiomeNMS(chunk, nr);
-    }
+	@Override
+	public Biome getBiomeNMS(World world, int x, int z)
+			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		Chunk chunk = world.getChunkAt(new Location(world, x, 0, z));
+		int nr = x >> 2 << 2 | z >> 2;
+		return getBiomeNMS(chunk, nr);
+	}
 
-    @Override
-    public Biome getBiomeNMS(Chunk chunk, int nr)
-    throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        Object nmsChunk = getHandleMethod.invoke(chunk);
-        Object biomeStorage = getBiomeIndexMethod.invoke(nmsChunk);
+	@Override
+	public Biome getBiomeNMS(Chunk chunk, int nr)
+			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		Object nmsChunk = getHandleMethod.invoke(chunk);
+		Object biomeStorage = getBiomeIndexMethod.invoke(nmsChunk);
 
-        Object[] bases = (Object[]) biomeBaseField.get(biomeStorage);
-        return (Biome) biomeBasetoBiomeMethod.invoke(null, bases[nr]);
-    }
+		Object[] bases = (Object[]) biomeBaseField.get(biomeStorage);
+		return (Biome) biomeBasetoBiomeMethod.invoke(null, bases[nr]);
+	}
 
-    @Override
-    public int getBiomeIndex(Biome biome) {
-        return byBiome.get(biome);
-    }
+	@Override
+	public int getBiomeIndex(Biome biome) {
+		return byBiome.get(biome);
+	}
 
-    @Override
-    public void setBiomeNMS(World world, int x, int z, Biome biome)
-            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        Chunk chunk = world.getChunkAt(new Location(world, x, 0, z));
-        int nr = x >> 2 << 2 | z >> 2;
-        setBiomeNMS(chunk, nr, biome);
-    }
+	@Override
+	public void setBiomeNMS(World world, int x, int z, Biome biome)
+			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		Chunk chunk = world.getChunkAt(new Location(world, x, 0, z));
+		int nr = x >> 2 << 2 | z >> 2;
+		setBiomeNMS(chunk, nr, biome);
+	}
 
-    @Override
-    public void setBiomeNMS(Chunk chunk, int nr, Biome biome)
-            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        if (nr < 0 || nr > 15) br.getLogger().info("Trying to set biome at an incorrect number (NMS):" + nr);
-        Object nmsChunk = getHandleMethod.invoke(chunk);
-        Object biomeStorage = getBiomeIndexMethod.invoke(nmsChunk);
+	@Override
+	public void setBiomeNMS(Chunk chunk, int nr, Biome biome)
+			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		if (nr < 0 || nr > 15)
+			br.getLogger().info("Trying to set biome at an incorrect number (NMS):" + nr);
+		Object nmsChunk = getHandleMethod.invoke(chunk);
+		Object biomeStorage = getBiomeIndexMethod.invoke(nmsChunk);
 
-        Object[] bases = (Object[]) biomeBaseField.get(biomeStorage);
-        Object nmsBiomeBase = biomeToBiomeBaseMethod.invoke(null, biome);
+		Object[] bases = (Object[]) biomeBaseField.get(biomeStorage);
+		Object nmsBiomeBase = biomeToBiomeBaseMethod.invoke(null, biome);
 		bases[nr] = nmsBiomeBase;
-    }
-    
+	}
+
 }

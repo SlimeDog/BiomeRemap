@@ -101,13 +101,13 @@ public class BiomeRemap extends JavaPlugin {
 				e.printStackTrace();
 			}
 		}
-		
+
 		// setup up populator
 		populator = new MappingPopulator(remapper);
 		for (World world : getServer().getWorlds()) {
 			world.getPopulators().add(populator);
 		}
-		
+
 		// hooks
 		if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
 			new PlaceholderAPIHook(this);
@@ -118,7 +118,7 @@ public class BiomeRemap extends JavaPlugin {
 		// update
 		if (settings.checkForUpdates()) {
 			new UpdateChecker(this, (response, version) -> {
-				switch(response) {
+				switch (response) {
 					case LATEST:
 						logMessage(messages.updateCurrentVersion());
 						break;
@@ -144,7 +144,7 @@ public class BiomeRemap extends JavaPlugin {
 	public ChunkUpdater getChunkUpdater() {
 		return chunkUpdater;
 	}
-	
+
 	@Override
 	public void onDisable() {
 		saveDebug();
@@ -163,12 +163,15 @@ public class BiomeRemap extends JavaPlugin {
 		canReadDataFolder = getDataFolder().canRead();
 		canReadConfig = config.canRead();
 		canReadMessages = msgs.canRead();
-		if ((!canReadDataFolder && existsDataFolder) || (!canReadConfig && existsConfig) || (!canReadMessages && existsMessages)) {
+		if ((!canReadDataFolder && existsDataFolder) || (!canReadConfig && existsConfig)
+				|| (!canReadMessages && existsMessages)) {
 			getLogger().severe(getMessages().errorConfigUnreadable());
-			if (!canReadConfig && !canReadMessages)	return;
+			if (!canReadConfig && !canReadMessages)
+				return;
 		}
 		if (!existsDataFolder || !existsConfig || !existsMessages) {
-			if (!first) getLogger().warning(getMessages().warnConfigRecreated());
+			if (!first)
+				getLogger().warning(getMessages().warnConfigRecreated());
 			if (!existsConfig) {
 				saveDefaultConfig();
 				canReadConfig = config.canRead();
@@ -179,7 +182,7 @@ public class BiomeRemap extends JavaPlugin {
 			}
 		}
 	}
-	
+
 	public ReloadIssues reload() {
 		ReloadIssues issues = null;
 		boolean success = false;
@@ -187,7 +190,8 @@ public class BiomeRemap extends JavaPlugin {
 		if (canReadConfig) {
 			reloadConfig();
 			success = !getConfig().getKeys(true).isEmpty();
-			if (success) issues = settings.reload();
+			if (success)
+				issues = settings.reload();
 		}
 		if (canReadMessages) {
 			messages.reloadCustomConfig();
@@ -198,19 +202,19 @@ public class BiomeRemap extends JavaPlugin {
 		}
 		return success ? issues : null;
 	}
-	
+
 	public Settings getSettings() {
 		return settings;
 	}
-	
+
 	public Messages getMessages() {
 		return messages;
 	}
-	
+
 	public BiomeRemapper getRemapper() {
 		return remapper;
 	}
-	
+
 	public BiomeScanner getScanner() {
 		return scanner;
 	}
@@ -218,18 +222,18 @@ public class BiomeRemap extends JavaPlugin {
 	public TeleportListener getTeleportListener() {
 		return teleListener;
 	}
-	
+
 	public void logMessage(String msg) {
 		getServer().getConsoleSender().sendMessage(getMessages().getPrefix() + msg);
 	}
-	
+
 	public static Logger logger() {
 		return staticInstance.getLogger();
 	}
-	
+
 	private static List<String> debugBuffer = new ArrayList<>();
 	private static boolean debugIsSaving = false;
-	
+
 	public static void debug(String msg) {
 		String debugMsg = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()) + ": " + msg;
 		if (debugIsSaving) {
@@ -238,25 +242,30 @@ public class BiomeRemap extends JavaPlugin {
 		}
 		debugMessage(debugMsg);
 	}
-	
+
 	private static void debugMessage(String msg) {
 		debugBuffer.add(msg);
 		if (debugBuffer.size() > 20) {
 			saveDebug();
 		}
 	}
-	
+
 	private static void saveDebug() {
-		if (debugBuffer.isEmpty()) return;
+		if (debugBuffer.isEmpty())
+			return;
 		debugIsSaving = true;
-	    BufferedWriter writer;
+		BufferedWriter writer;
 		try {
-			writer = new BufferedWriter(
-			                            new FileWriter(staticInstance.getDataFolder().getAbsolutePath() + File.separatorChar + "debug.log", true)  //Set true for append mode
-			                        );
-			writer.newLine();   //Add new line
-		    writer.write(String.join("\n", debugBuffer));
-		    writer.close();
+			writer = new BufferedWriter(new FileWriter(
+					staticInstance.getDataFolder().getAbsolutePath() + File.separatorChar + "debug.log", true) // Set
+																												// true
+																												// for
+																												// append
+																												// mode
+			);
+			writer.newLine(); // Add new line
+			writer.write(String.join("\n", debugBuffer));
+			writer.close();
 		} catch (IOException e) {
 			logger().warning("Unable to save debug logging data!");
 		}

@@ -71,7 +71,7 @@ public final class BiomeScanner {
 			}
 		}
 	}
-	
+
 	private void addBiome(Map<Biome, Integer> map, Biome biome) {
 		Integer cur = map.get(biome);
 		if (cur == null) {

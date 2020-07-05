@@ -22,9 +22,9 @@ public class BiomeRemapCommand extends ArgSplittingCommand {
 	private final List<SubCommand> subCommands = new ArrayList<>();
 	private final List<String> subCommandNames = new ArrayList<>();
 	private final BiomeRemap br;
-	
+
 	public BiomeRemapCommand(BiomeRemap plugin) {
-		br = plugin;//help|info|list|chunk|region|scan|reload
+		br = plugin;// help|info|list|chunk|region|scan|reload
 		subCommands.add(new HelpSub(this));
 		subCommands.add(new InfoSub(br.getSettings(), br.getMessages()));
 		subCommands.add(new ListSub(br));
@@ -36,7 +36,7 @@ public class BiomeRemapCommand extends ArgSplittingCommand {
 			subCommandNames.add(cmd.getName());
 		}
 	}
-	
+
 	public List<SubCommand> getSubCommands() {
 		return new ArrayList<>(subCommands);
 	}
@@ -44,11 +44,13 @@ public class BiomeRemapCommand extends ArgSplittingCommand {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, String[] args, List<String> opts) {
 		List<String> list = new ArrayList<>();
-		if (!hasPermission(sender)) return list;
+		if (!hasPermission(sender))
+			return list;
 		if (args.length == 1) {
 			List<String> cmds = new ArrayList<>();
 			for (SubCommand cmd : subCommands) {
-				if (cmd.hasPermission(sender)) cmds.add(cmd.getName());
+				if (cmd.hasPermission(sender))
+					cmds.add(cmd.getName());
 			}
 			return StringUtil.copyPartialMatches(args[0], cmds, list);
 		} else if (args.length > 1) {
@@ -66,7 +68,7 @@ public class BiomeRemapCommand extends ArgSplittingCommand {
 			return null; // shouldn't really happen
 		}
 	}
-	
+
 	private SubCommand getSuitableSubCommand(String name) {
 		SubCommand cmd = null;
 		for (SubCommand sub : subCommands) {
@@ -108,11 +110,11 @@ public class BiomeRemapCommand extends ArgSplittingCommand {
 			return true;
 		}
 	}
-	
+
 	private boolean hasPermission(CommandSender sender) {
 		return sender.hasPermission(PERMS) || sender instanceof ConsoleCommandSender;
 	}
-	
+
 	private String getUsage(CommandSender sender) {
 		StringBuilder msg = new StringBuilder();
 		for (SubCommand cmd : subCommands) {

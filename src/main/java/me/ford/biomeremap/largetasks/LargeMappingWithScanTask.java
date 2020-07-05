@@ -18,7 +18,7 @@ public class LargeMappingWithScanTask extends LargeMappingTask {
 	private final boolean[][] checked = new boolean[32][32];
 
 	public LargeMappingWithScanTask(BiomeRemap plugin, World world, int minX, int maxX, int minZ, int maxZ,
-			boolean debug, int progressStep, Consumer<String> progress, Consumer<TaskReport> ender, BiomeMap map, 
+			boolean debug, int progressStep, Consumer<String> progress, Consumer<TaskReport> ender, BiomeMap map,
 			Consumer<BiomeReport> biomeReport) {
 		super(plugin, world, minX, maxX, minZ, maxZ, debug, progressStep, progress, ender, map);
 		this.biomeReport = biomeReport;
@@ -27,7 +27,8 @@ public class LargeMappingWithScanTask extends LargeMappingTask {
 	}
 
 	private void addBiomes(World world, int chunkX, int chunkZ) {
-		if (checked[chunkX - getMinX()][chunkZ - getMinZ()]) return;
+		if (checked[chunkX - getMinX()][chunkZ - getMinZ()])
+			return;
 		if (getPlugin().getScanner().addBiomesFor(biomeMap, world, chunkX, chunkZ)) {
 			checked[chunkX - getMinX()][chunkZ - getMinZ()] = true;
 		} // else will be done later, after the remap

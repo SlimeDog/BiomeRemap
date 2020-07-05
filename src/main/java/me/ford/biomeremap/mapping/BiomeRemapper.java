@@ -126,7 +126,8 @@ public class BiomeRemapper {
 			}
 		}
 
-		private Biome choose() { // arbitraily, the first with the max value is used (which could lead to the same biome being prioritized)
+		private Biome choose() { // arbitraily, the first with the max value is used (which could lead to the
+									// same biome being prioritized)
 			int maxi = 0;
 			Biome biome = null;
 			for (Entry<Biome, Integer> entry : choices.entrySet()) {

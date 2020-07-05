@@ -13,7 +13,7 @@ public class HelpSub extends SubCommand {
 	private static final String PERMS = "biomeremap.use";
 	private static final String USAGE = "/biomeremap help";
 	private final BiomeRemapCommand base;
-	
+
 	public HelpSub(BiomeRemapCommand base) {
 		super("help");
 		this.base = base;
@@ -29,7 +29,7 @@ public class HelpSub extends SubCommand {
 		sender.sendMessage(String.format("/biomeremap <%s>", String.join("|", getAllowedSubCommands(sender))));
 		return true;
 	}
-	
+
 	private List<String> getAllowedSubCommands(CommandSender sender) {
 		List<String> cmds = new ArrayList<>();
 		for (SubCommand cmd : base.getSubCommands()) {

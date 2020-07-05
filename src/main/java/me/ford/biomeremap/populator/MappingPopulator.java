@@ -12,7 +12,7 @@ import me.ford.biomeremap.mapping.BiomeRemapper;
 
 public class MappingPopulator extends BlockPopulator {
 	private final BiomeRemapper mapper;
-	
+
 	public MappingPopulator(BiomeRemapper mapper) {
 		this.mapper = mapper;
 	}

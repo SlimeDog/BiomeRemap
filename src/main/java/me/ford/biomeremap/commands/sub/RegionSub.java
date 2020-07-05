@@ -45,7 +45,8 @@ public class RegionSub extends SubCommand {
 			return true;
 		}
 		boolean debug = opts.contains("--debug");
-		boolean scanAfter = opts.contains("--scan") && (sender.hasPermission("biomeremap.scan") || sender instanceof ConsoleCommandSender);
+		boolean scanAfter = opts.contains("--scan")
+				&& (sender.hasPermission("biomeremap.scan") || sender instanceof ConsoleCommandSender);
 		boolean ingame = sender instanceof Player;
 		if (!ingame && args.length < 3) {
 			return false;
@@ -91,12 +92,14 @@ public class RegionSub extends SubCommand {
 		}
 		String startedMsg = br.getMessages().getRegionRemapStarted(world.getName(), regionX, regionZ);
 		sender.sendMessage(startedMsg);
-		if (ingame) br.logMessage(startedMsg);
+		if (ingame)
+			br.logMessage(startedMsg);
 		remapping = true;
-		new LargeMappingTaskStarter(br, world, sender, regionX, regionZ, true, debug, () -> remapEnded(), scanAfter, null);
+		new LargeMappingTaskStarter(br, world, sender, regionX, regionZ, true, debug, () -> remapEnded(), scanAfter,
+				null);
 		return true;
 	}
-	
+
 	private void remapEnded() {
 		remapping = false;
 	}

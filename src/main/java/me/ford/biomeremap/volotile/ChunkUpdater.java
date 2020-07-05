@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
  */
 public interface ChunkUpdater {
 
-    public void updateChunk(Player player, Chunk chunk) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException;
-    
+	public void updateChunk(Player player, Chunk chunk)
+			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException;
+
 }

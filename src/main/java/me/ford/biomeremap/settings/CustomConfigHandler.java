@@ -67,7 +67,7 @@ public class CustomConfigHandler {
 		if (customConfigFile == null) {
 			customConfigFile = new File(plugin.getDataFolder(), fileName);
 		}
-		if (!customConfigFile.exists()) {            
+		if (!customConfigFile.exists()) {
 			plugin.saveResource(fileName, false);
 		}
 	}

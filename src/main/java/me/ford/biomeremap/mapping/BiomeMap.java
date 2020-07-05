@@ -16,12 +16,12 @@ public class BiomeMap {
 	private final String description;
 	private final List<String> worldNames;
 	private final Map<Biome, Biome> biomeMap = new HashMap<>();
-	
+
 	public BiomeMap(Messages messages, ConfigurationSection section) {
 		name = section.getName();
 		description = section.getString("description", "");
 		worldNames = section.getStringList("enabled-worlds");
-		
+
 		// setup biome mapping
 		ConfigurationSection mapSection = section.getConfigurationSection("biomes");
 		if (mapSection == null || mapSection.getKeys(false).isEmpty()) {
@@ -55,7 +55,7 @@ public class BiomeMap {
 	public String getName() {
 		return name;
 	}
-	
+
 	public String getDescription() {
 		return description;
 	}
@@ -63,15 +63,15 @@ public class BiomeMap {
 	public boolean removeWorld(String worldName) {
 		return worldNames.remove(worldName);
 	}
-	
+
 	public List<String> getApplicableWorldNames() {
 		return new ArrayList<>(worldNames);
 	}
-	
+
 	public Map<Biome, Biome> getMapping() {
 		return new HashMap<>(biomeMap);
 	}
-	
+
 	public Biome getBiomeFor(Biome biome) {
 		return biomeMap.get(biome);
 	}
@@ -93,7 +93,7 @@ public class BiomeMap {
 		public MappingException() {
 			super("Problem mapping biomes");
 		}
-		
+
 	}
 
 }

@@ -40,7 +40,7 @@ public class ScanSub extends SubCommand {
 	public List<String> onTabComplete(CommandSender sender, String[] args, List<String> opts) {
 		List<String> list = new ArrayList<>();
 		if (args.length == 1) {
-			return StringUtil.copyPartialMatches(args[0], Arrays.asList(new String[] {"chunk", "region"}), list);
+			return StringUtil.copyPartialMatches(args[0], Arrays.asList(new String[] { "chunk", "region" }), list);
 		} else if (args.length == 2) {
 			return StringUtil.copyPartialMatches(args[1], worldNames, list);
 		}
@@ -75,7 +75,8 @@ public class ScanSub extends SubCommand {
 				try {
 					layer = Integer.parseInt(matcher.group(1));
 				} catch (NumberFormatException e) {
-					sender.sendMessage("Could not parse number for layer from option: " + opt); // shouldn't happen because of the regex
+					sender.sendMessage("Could not parse number for layer from option: " + opt); // shouldn't happen
+																								// because of the regex
 					return true;
 				}
 				sender.sendMessage("Scanning at layer " + layer + " instead of 0"); // TODO - message?
@@ -87,14 +88,18 @@ public class ScanSub extends SubCommand {
 				try {
 					start = Integer.parseInt(matcher.group(1));
 				} catch (NumberFormatException e) {
-					sender.sendMessage("Could not parse number for layers from option(1): " + opt); // shouldn't happen because of the regex
+					sender.sendMessage("Could not parse number for layers from option(1): " + opt); // shouldn't happen
+																									// because of the
+																									// regex
 					return true;
 				}
 				int stop;
-				try { 
+				try {
 					stop = Integer.parseInt(matcher.group(2));
 				} catch (NumberFormatException e) {
-					sender.sendMessage("Could not parse number for layers from option(2): " + opt); // shouldn't happen because of the regex
+					sender.sendMessage("Could not parse number for layers from option(2): " + opt); // shouldn't happen
+																									// because of the
+																									// regex
 					return true;
 				}
 				sender.sendMessage("Running for multiple layers"); // TODO - message?
@@ -164,9 +169,9 @@ public class ScanSub extends SubCommand {
 	private void runLayers(CommandSender sender, String[] args, List<String> opts, String curOpt, int start, int stop) {
 		List<String> newOpts = new ArrayList<>(opts);
 		newOpts.remove(curOpt);
-		new BukkitRunnable(){
+		new BukkitRunnable() {
 			private int nr = start;
-		
+
 			@Override
 			public void run() {
 				if (!scanning) {
@@ -181,7 +186,7 @@ public class ScanSub extends SubCommand {
 			}
 		}.runTaskTimer(br, 4L, 4L);
 	}
-	
+
 	public void taskDone() {
 		scanning = false;
 	}

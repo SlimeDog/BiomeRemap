@@ -17,7 +17,7 @@ public class InfoSub extends SubCommand {
 	private static final String USAGE = "/biomeremap info <biomemap-id>";
 	private final Settings settings;
 	private final Messages messages;
-	
+
 	public InfoSub(Settings settings, Messages messages) {
 		super("info");
 		this.settings = settings;

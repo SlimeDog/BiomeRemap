@@ -40,7 +40,8 @@ public class ChunkSub extends SubCommand {
 	@Override
 	public boolean onCommand(CommandSender sender, String[] args, List<String> opts) {
 		boolean debug = opts.contains("--debug");
-		boolean scanAfter = opts.contains("--scan") && (sender.hasPermission("biomeremap.scan") || sender instanceof ConsoleCommandSender);
+		boolean scanAfter = opts.contains("--scan")
+				&& (sender.hasPermission("biomeremap.scan") || sender instanceof ConsoleCommandSender);
 		boolean ingame = sender instanceof Player;
 		if (!ingame && args.length < 3) {
 			return false;
@@ -84,13 +85,16 @@ public class ChunkSub extends SubCommand {
 		}
 		String startMsg = br.getMessages().getChunkRemapStarted(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
 		sender.sendMessage(startMsg);
-		if (ingame) br.logMessage(startMsg);
+		if (ingame)
+			br.logMessage(startMsg);
 		br.getRemapper().remapChunk(chunk, debug);
 		String completeMsg = br.getMessages().getBiomeRemapComplete();
 		sender.sendMessage(completeMsg);
-		if (ingame) br.logMessage(completeMsg);
-		if (scanAfter) { 
-			new LargeScanTaskStarter(br, chunk.getWorld(), sender, chunk.getX(), 0, chunk.getZ(), false, debug, null, false);
+		if (ingame)
+			br.logMessage(completeMsg);
+		if (scanAfter) {
+			new LargeScanTaskStarter(br, chunk.getWorld(), sender, chunk.getX(), 0, chunk.getZ(), false, debug, null,
+					false);
 		}
 		return true;
 	}

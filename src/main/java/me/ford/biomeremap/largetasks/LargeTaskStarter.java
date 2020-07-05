@@ -16,17 +16,18 @@ public abstract class LargeTaskStarter {
 	private final int stopZ;
 	private final boolean region;
 	private final boolean debug;
-	
-	public LargeTaskStarter(BiomeRemap plugin, World world, CommandSender owner, int x, int z, boolean region, boolean debug) {
+
+	public LargeTaskStarter(BiomeRemap plugin, World world, CommandSender owner, int x, int z, boolean region,
+			boolean debug) {
 		this.br = plugin;
 		this.world = world;
 		this.owner = owner;
-		
+
 		this.x = x;
 		this.z = z;
 		if (region) {
-			x*=32;
-			z*=32;
+			x *= 32;
+			z *= 32;
 		}
 		this.chunkX = x;
 		this.chunkZ = z;
@@ -41,49 +42,49 @@ public abstract class LargeTaskStarter {
 		}
 		br.getServer().getScheduler().runTask(br, () -> startTask());
 	}
-	
+
 	protected abstract void startTask();
-	
+
 	protected BiomeRemap br() {
 		return br;
 	}
-	
+
 	protected World world() {
 		return world;
 	}
-	
+
 	protected CommandSender owner() {
 		return owner;
 	}
-	
+
 	protected int x() {
 		return x;
 	}
-	
+
 	protected int z() {
 		return z;
 	}
-	
+
 	protected int chunkX() {
 		return chunkX;
 	}
-	
+
 	protected int chunkZ() {
 		return chunkZ;
 	}
-	
+
 	protected int stopX() {
 		return stopX;
 	}
-	
+
 	protected int stopZ() {
 		return stopZ;
 	}
-	
+
 	protected boolean region() {
 		return region;
 	}
-	
+
 	protected boolean debug() {
 		return debug;
 	}

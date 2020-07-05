@@ -20,7 +20,7 @@ public abstract class ArgSplittingCommand implements TabExecutor, CommandWithOpt
 		Pair<String, List<String>> pair = splitArgsToArgsAndOptions(args);
 		return onCommand(sender, pair.getFirst(), pair.getSecond());
 	}
-	
+
 	protected Pair<String, List<String>> splitArgsToArgsAndOptions(String[] args) {
 		List<String> arguments = new ArrayList<>();
 		List<String> options = new ArrayList<>();
@@ -33,20 +33,20 @@ public abstract class ArgSplittingCommand implements TabExecutor, CommandWithOpt
 		}
 		return new Pair<String, List<String>>(arguments.toArray(new String[0]), options);
 	}
-	
+
 	private static class Pair<T, U> {
 		private final T[] t;
 		private final U u;
-		
+
 		private Pair(T[] t, U u) {
 			this.t = t;
 			this.u = u;
 		}
-		
+
 		private T[] getFirst() {
 			return t;
 		}
-		
+
 		private U getSecond() {
 			return u;
 		}
