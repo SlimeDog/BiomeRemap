@@ -1,5 +1,6 @@
 package me.ford.biomeremap.hooks;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
@@ -40,12 +41,14 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
             return "";
         }
 
+		Location loc = player.getLocation();
+		loc.setY(0.0D);
         if (identifier.equals("biome_name")){
-        	return player.getLocation().getBlock().getBiome().name();
+        	return loc.getBlock().getBiome().name();
         }
 
         if (identifier.equals("biome_id")){
-			return String.valueOf(br.getBiomeManager().getBiomeIndex(player.getLocation().getBlock().getBiome()));		
+			return String.valueOf(br.getBiomeManager().getBiomeIndex(loc.getBlock().getBiome()));		
         }
         
         return null;
