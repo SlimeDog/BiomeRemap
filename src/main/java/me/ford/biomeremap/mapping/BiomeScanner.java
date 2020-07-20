@@ -10,6 +10,7 @@ import me.ford.biomeremap.BiomeRemap;
 
 public final class BiomeScanner {
 	private final BiomeRemap br;
+	private PopulatorQueue forPopulator;
 
 	public BiomeScanner(BiomeRemap br) {
 		this.br = br;
@@ -24,6 +25,7 @@ public final class BiomeScanner {
 		int startX = chunkX * 16;
 		int startZ = chunkZ * 16;
 		if (!world.isChunkGenerated(chunkX, chunkZ)) {
+			if (forPopulator != null) forPopulator.add(chunkX, chunkZ);
 			world.getChunkAt(chunkX, chunkZ);
 			if (br.getSettings().getApplicableBiomeMap(world.getName()) == null) { // world not being remapped
 				addBiomesForInternal(world, chunkX, chunkZ, useNMS, startX, startZ, yLayer, map);
@@ -39,6 +41,7 @@ public final class BiomeScanner {
 
 	private void addBiomesForInternal(World world, int chunkX, int chunkZ, boolean useNMS, int startX, int startZ,
 			int yLayer, Map<Biome, Integer> map) {
+		if (forPopulator != null) forPopulator.remove(chunkX, chunkZ); // if present
 		world.getChunkAt(chunkX, chunkZ);
 		if (!useNMS) {
 			addBiomes(world, startX, startZ, yLayer, map);
@@ -79,6 +82,34 @@ public final class BiomeScanner {
 		}
 		cur++;
 		map.put(biome, cur);
+	}
+
+	public void setPopulatorQueue(PopulatorQueue queue) {
+		this.forPopulator = queue;
+	}
+
+	public void tickPopulatorQueue() {
+		if (forPopulator != null) {
+			forPopulator.tick();
+		}
+	}
+
+	private void addBiomesForInternal(ChunkLoc loc, PopulatorQueue queue) {
+		int chunkX = loc.getX();
+		int chunkZ = loc.getZ();
+		int startX = chunkX * 16;
+		int startZ = chunkZ * 16;
+		addBiomesForInternal(queue.getWorld(), chunkX, chunkZ, queue.useNMS(), startX, startZ, queue.getYLayer(),
+				queue.getMap());
+	}
+
+	public void finalizePopulatorQueue() {
+		if (forPopulator != null) {
+			for (ChunkLoc loc: forPopulator.doAll()) {
+				addBiomesForInternal(loc, forPopulator);
+			}
+		}
+		forPopulator = null;
 	}
 
 }

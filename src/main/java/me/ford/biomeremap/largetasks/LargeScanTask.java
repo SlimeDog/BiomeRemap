@@ -8,6 +8,7 @@ import org.bukkit.World;
 import org.bukkit.block.Biome;
 
 import me.ford.biomeremap.BiomeRemap;
+import me.ford.biomeremap.mapping.PopulatorQueue;
 
 public class LargeScanTask extends LargeTask {
 	private final Map<Biome, Integer> biomeMap = new HashMap<>();
@@ -15,6 +16,7 @@ public class LargeScanTask extends LargeTask {
 	private final int yLayer;
 	private final boolean useNMS;
 	private final OnMappingDone onMappingDone;
+	private final PopulatorQueue queue;
 	private final boolean[][] checked = new boolean[32][32];
 	// private final boolean[][] doubled = new boolean[32][32];
 	// private final boolean[][] noDice = new boolean[32][32];
@@ -29,6 +31,14 @@ public class LargeScanTask extends LargeTask {
 		this.useNMS = useNMS;
 		this.onMappingDone = new OnMappingDone((x, z) -> findBiomes(x, z, debug), world, minX, minZ, maxX, maxZ);
 		getPlugin().getRemapper().addDoneChecker(onMappingDone); // checks the newly generated ones
+		queue = new PopulatorQueue(biomeMap, world, getPlugin().getScanner(), yLayer, useNMS);
+		getPlugin().getScanner().setPopulatorQueue(queue);
+	}
+
+	@Override
+	protected void remapChunks() {
+		super.remapChunks();
+		queue.tick();
 	}
 
 	@Override
@@ -52,6 +62,7 @@ public class LargeScanTask extends LargeTask {
 
 	@Override
 	protected void whenDone() {
+		getPlugin().getScanner().finalizePopulatorQueue();
 		getPlugin().getServer().getScheduler().runTaskLater(getPlugin(), () -> {
 			biomes.accept(new BiomeReport(biomeMap));
 			getPlugin().getRemapper().removeDoneCheker(onMappingDone);

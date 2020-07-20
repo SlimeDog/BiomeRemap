@@ -10,11 +10,13 @@ import org.bukkit.block.Biome;
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.largetasks.LargeScanTask.BiomeReport;
 import me.ford.biomeremap.mapping.BiomeMap;
+import me.ford.biomeremap.mapping.PopulatorQueue;
 
 public class LargeMappingWithScanTask extends LargeMappingTask {
 	private final Map<Biome, Integer> biomeMap = new HashMap<>();
 	private final Consumer<BiomeReport> biomeReport;
 	private final OnMappingDone onMappingDone;
+	private final PopulatorQueue queue;
 	private final boolean[][] checked = new boolean[32][32];
 
 	public LargeMappingWithScanTask(BiomeRemap plugin, World world, int minX, int maxX, int minZ, int maxZ,
@@ -24,6 +26,15 @@ public class LargeMappingWithScanTask extends LargeMappingTask {
 		this.biomeReport = biomeReport;
 		this.onMappingDone = new OnMappingDone((x, z) -> addBiomes(world, x, z), world, minX, minZ, maxX, maxZ);
 		plugin.getRemapper().addDoneChecker(onMappingDone);
+		queue = new PopulatorQueue(biomeMap, world, getPlugin().getScanner());
+		getPlugin().getScanner().setPopulatorQueue(queue);
+		setPopulatorQueue(queue);
+	}
+
+	@Override
+	protected void remapChunks() {
+		super.remapChunks();
+		queue.tick();
 	}
 
 	private void addBiomes(World world, int chunkX, int chunkZ) {
@@ -36,6 +47,8 @@ public class LargeMappingWithScanTask extends LargeMappingTask {
 
 	@Override
 	protected void whenDone() {
+		getPlugin().getScanner().finalizePopulatorQueue();
+		removeQueue();
 		super.whenDone();
 		// make sure the to show after scan is done
 		getPlugin().getServer().getScheduler().runTaskLater(getPlugin(), () -> {

@@ -50,7 +50,7 @@ public abstract class LargeTask {
 		br.getServer().getScheduler().runTask(br, () -> remapChunks());
 	}
 
-	private void remapChunks() {
+	protected void remapChunks() {
 		long start = System.currentTimeMillis();
 		try {
 			while (System.currentTimeMillis() - start < 20 && !done)
