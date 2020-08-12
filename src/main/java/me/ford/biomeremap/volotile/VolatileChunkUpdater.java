@@ -13,7 +13,7 @@ import me.ford.biomeremap.BiomeRemap;
 /**
  * VolotileChunkUpdated
  */
-public class VolotileChunkUpdater implements ChunkUpdater {
+public class VolatileChunkUpdater implements ChunkUpdater {
 	private final boolean after116;
 	private final BiomeRemap br;
 	private final Class<?> craftChunkClass;
@@ -31,7 +31,7 @@ public class VolotileChunkUpdater implements ChunkUpdater {
 	private final Method sendPacketMethod;
 	private final Field playerConnectionField;
 
-	public VolotileChunkUpdater(BiomeRemap br)
+	public VolatileChunkUpdater(BiomeRemap br)
 			throws ClassNotFoundException, NoSuchMethodException, SecurityException, NoSuchFieldException {
 		this.br = br;
 		String version = this.br.getServer().getClass().getPackage().getName().split("\\.")[3];

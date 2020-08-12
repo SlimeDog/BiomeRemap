@@ -29,8 +29,8 @@ import me.ford.biomeremap.settings.Settings.ReloadIssues;
 import me.ford.biomeremap.updates.UpdateChecker;
 import me.ford.biomeremap.volotile.BiomeManager;
 import me.ford.biomeremap.volotile.ChunkUpdater;
-import me.ford.biomeremap.volotile.VolotileBiomeManager;
-import me.ford.biomeremap.volotile.VolotileChunkUpdater;
+import me.ford.biomeremap.volotile.VolatileBiomeManager;
+import me.ford.biomeremap.volotile.VolatileChunkUpdater;
 
 public class BiomeRemap extends JavaPlugin {
 	private static BiomeRemap staticInstance;
@@ -87,7 +87,7 @@ public class BiomeRemap extends JavaPlugin {
 		// NMS biome manager
 		if (!testing) {
 			try {
-				biomeManager = new VolotileBiomeManager(this);
+				biomeManager = new VolatileBiomeManager(this);
 			} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | NoSuchFieldException e) {
 				getLogger().log(Level.SEVERE, "Could not start volotile biome manager! Disabling plugin! ", e);
 				getServer().getPluginManager().disablePlugin(this);
@@ -95,7 +95,7 @@ public class BiomeRemap extends JavaPlugin {
 			}
 			// NMS chunk updater
 			try {
-				chunkUpdater = new VolotileChunkUpdater(this);
+				chunkUpdater = new VolatileChunkUpdater(this);
 			} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | NoSuchFieldException e) {
 				getLogger().log(Level.SEVERE, "Could not start volotile chunk updater! Disabling plugin! ", e);
 				e.printStackTrace();

@@ -17,7 +17,7 @@ import me.ford.biomeremap.BiomeRemap;
 /**
  * VolotileBiomeManager
  */
-public class VolotileBiomeManager implements BiomeManager {
+public class VolatileBiomeManager implements BiomeManager {
 	private final BiomeRemap br;
 	private final Map<Biome, Integer> byBiome = new HashMap<>();
 	private final Class<?> biomeStorageClass;
@@ -31,7 +31,7 @@ public class VolotileBiomeManager implements BiomeManager {
 	private final Method biomeBasetoBiomeMethod;
 	private final Field biomeBaseField;
 
-	public VolotileBiomeManager(BiomeRemap br)
+	public VolatileBiomeManager(BiomeRemap br)
 			throws ClassNotFoundException, NoSuchMethodException, SecurityException, NoSuchFieldException {
 		this.br = br;
 		String version = this.br.getServer().getClass().getPackage().getName().split("\\.")[3];
