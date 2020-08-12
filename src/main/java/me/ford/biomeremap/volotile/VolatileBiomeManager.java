@@ -57,7 +57,6 @@ public class VolatileBiomeManager implements BiomeManager {
 
 		Class<?> iRegistryClass = Class.forName("net.minecraft.server." + version + ".IRegistry");
 		Class<?> registryMaterialsClass = Class.forName("net.minecraft.server." + version + ".RegistryMaterials");
-		Method biomeBaseToBiomeField = craftBlockClass.getDeclaredMethod("biomeBaseToBiome", biomeBaseClass);
 		Field biomeField = iRegistryClass.getDeclaredField("BIOME");
 		Method getIdMethod = null;
 		for (Method method : registryMaterialsClass.getMethods()) {
@@ -90,7 +89,7 @@ public class VolatileBiomeManager implements BiomeManager {
 				}
 				Biome biome;
 				try {
-					biome = (Biome) biomeBaseToBiomeField.invoke(null, base);
+					biome = (Biome) biomeBasetoBiomeMethod.invoke(null, base);
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 					br.getLogger().log(Level.SEVERE, "Issue while invoking CraftBlock#biomeBaseToBiome method:", e);
 					continue;
