@@ -14,7 +14,7 @@ import me.ford.biomeremap.BiomeRemap;
  * VolotileChunkUpdated
  */
 public class VolatileChunkUpdater implements ChunkUpdater {
-	private final boolean after116;
+	private final boolean one16point1;
 	private final BiomeRemap br;
 	private final Class<?> craftChunkClass;
 	private final Class<?> nmsChunkClass;
@@ -35,8 +35,7 @@ public class VolatileChunkUpdater implements ChunkUpdater {
 			throws ClassNotFoundException, NoSuchMethodException, SecurityException, NoSuchFieldException {
 		this.br = br;
 		String version = this.br.getServer().getClass().getPackage().getName().split("\\.")[3];
-		after116 = version.contains("v1_16") || version.contains("v1_17") || version.contains("v1_18")
-				|| version.contains("v1_19");
+		one16point1 = version.contains("v1_16_R1");
 
 		// classes
 		craftChunkClass = Class.forName("org.bukkit.craftbukkit." + version + ".CraftChunk");
@@ -55,7 +54,7 @@ public class VolatileChunkUpdater implements ChunkUpdater {
 
 		// constructors
 		packetPlayOutUnloadChunkConstructor = packetPlayOutUnloadChunkClass.getConstructor(int.class, int.class);
-		if (after116) {
+		if (one16point1) {
 			packetPlayOutMapChunkConstructor = packetPlayOutMapChunkClass.getConstructor(nmsChunkClass, int.class,
 					boolean.class);
 		} else {
@@ -72,7 +71,7 @@ public class VolatileChunkUpdater implements ChunkUpdater {
 		Object nmsChunk = getHandleMethod.invoke(chunk);
 		Object unload = packetPlayOutUnloadChunkConstructor.newInstance(chunk.getX(), chunk.getZ());
 		Object load;
-		if (after116) {
+		if (one16point1) {
 			load = packetPlayOutMapChunkConstructor.newInstance(nmsChunk, 65535, true);
 		} else {
 			load = packetPlayOutMapChunkConstructor.newInstance(nmsChunk, 65535);

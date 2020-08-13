@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,6 +30,7 @@ import me.ford.biomeremap.settings.Settings.ReloadIssues;
 import me.ford.biomeremap.updates.UpdateChecker;
 import me.ford.biomeremap.volotile.BiomeManager;
 import me.ford.biomeremap.volotile.ChunkUpdater;
+import me.ford.biomeremap.volotile.Post1dot16dot2BiomeManager;
 import me.ford.biomeremap.volotile.VolatileBiomeManager;
 import me.ford.biomeremap.volotile.VolatileChunkUpdater;
 
@@ -87,8 +89,14 @@ public class BiomeRemap extends JavaPlugin {
 		// NMS biome manager
 		if (!testing) {
 			try {
-				biomeManager = new VolatileBiomeManager(this);
-			} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | NoSuchFieldException e) {
+				String version = getServer().getClass().getPackage().getName().split("\\.")[3];
+				if (version.equals("v1_16_R2") || version.contains("v1_17") || version.contains("v1_18")) {
+					biomeManager = new Post1dot16dot2BiomeManager(this);
+				} else {
+					biomeManager = new VolatileBiomeManager(this);
+				}
+			} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | NoSuchFieldException
+					| IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 				getLogger().log(Level.SEVERE, "Could not start volotile biome manager! Disabling plugin! ", e);
 				getServer().getPluginManager().disablePlugin(this);
 				return;
