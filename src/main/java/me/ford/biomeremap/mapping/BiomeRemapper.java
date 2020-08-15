@@ -65,12 +65,12 @@ public class BiomeRemapper {
 															// at other y values, but for now only y=0 has an effect
 					} catch (NullPointerException e) {
 						br.getLogger().warning("Problem geting biome in snapshot " + snapshot + " at " + x + "," + z);
-						org.bukkit.craftbukkit.v1_16_R2.CraftChunkSnapshot css = (org.bukkit.craftbukkit.v1_16_R2.CraftChunkSnapshot) snapshot;
 						try {
-							java.lang.reflect.Field field = css.getClass().getField("biome");
+							java.lang.reflect.Field field = snapshot.getClass().getDeclaredField("biome");
 							field.setAccessible(true);
-							net.minecraft.server.v1_16_R2.BiomeStorage bs = (net.minecraft.server.v1_16_R2.BiomeStorage) field.get(css);
-							Object bb = bs.getBiome(x >> 2, 0 >> 2, z >> 2);
+							Object bs = field.get(snapshot);
+							java.lang.reflect.Method getBiomeMethod = bs.getClass().getMethod("getBiome", int.class, int.class, int.class);
+							Object bb = getBiomeMethod.invoke(bs, x >> 2, 0 >> 2, z >> 2);
 							br.getLogger().warning("Found base:" + bb);
 						} catch (Exception e2) {
 							e2.printStackTrace();
