@@ -29,6 +29,7 @@ public class Post1dot16dot2BiomeManager implements BiomeManager {
 	private final Method getBiomeIndexMethod;
 	private final Method biomeToBiomeBaseMethod;
 	private final Method biomeBaseToBiomeMethod;
+	private final Field storageRegistryField;
 	private final Field biomeBaseField;
 
 	public Post1dot16dot2BiomeManager(BiomeRemap br)
@@ -50,7 +51,9 @@ public class Post1dot16dot2BiomeManager implements BiomeManager {
         biomeToBiomeBaseMethod = craftBlockClass.getMethod("biomeToBiomeBase", iRegistryClass, Biome.class);
         biomeBaseToBiomeMethod = craftBlockClass.getMethod("biomeBaseToBiome", iRegistryClass, biomeBaseClass);
 		// get fields needed for biome getting and setting methods
-		biomeBaseField = biomeStorageClass.getDeclaredField("g");
+		storageRegistryField = biomeStorageClass.getDeclaredField("g");
+		storageRegistryField.setAccessible(true);
+		biomeBaseField = biomeStorageClass.getDeclaredField("h");
 		biomeBaseField.setAccessible(true);
 
 		// map biomes with reflection
@@ -118,7 +121,11 @@ public class Post1dot16dot2BiomeManager implements BiomeManager {
                     } catch (IllegalArgumentException e) {
                         br.getLogger().log(Level.SEVERE, "Issue while invoking CraftBlock#biomeBaseToBiome method:", e);
                         throw e;
-                    }
+					}
+					if (bb == null) {
+						br.getLogger().warning("BiomeBase is null:" + base + "->" + bb + " ... " + biome);
+						continue;
+					}
                     int nr;
                     try {
                         nr = (int) getIdMethod.invoke(biomeRegistry, bb);
@@ -186,7 +193,8 @@ public class Post1dot16dot2BiomeManager implements BiomeManager {
 		Object biomeStorage = getBiomeIndexMethod.invoke(nmsChunk);
 
 		Object[] bases = (Object[]) biomeBaseField.get(biomeStorage);
-		Object nmsBiomeBase = biomeToBiomeBaseMethod.invoke(null, biome);
+		Object registry = storageRegistryField.get(biomeStorage);
+		Object nmsBiomeBase = biomeToBiomeBaseMethod.invoke(null, registry, biome);
 		bases[nr] = nmsBiomeBase;
 	}
 
