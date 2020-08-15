@@ -59,8 +59,24 @@ public class BiomeRemapper {
 		br.getServer().getScheduler().runTaskAsynchronously(br, () -> {
 			for (int x = 0; x < 16; x++) { // the grid only has 4 sections per horizontal axis
 				for (int z = 0; z < 16; z++) { // the grid only has 4 sections per horizontal axis
-					Biome cur = snapshot.getBiome(x, 0, z); // TODO - in the future, we might need to change/get biomes
+					Biome cur;
+					try {
+						cur = snapshot.getBiome(x, 0, z); // TODO - in the future, we might need to change/get biomes
 															// at other y values, but for now only y=0 has an effect
+					} catch (NullPointerException e) {
+						br.getLogger().warning("Problem geting biome in snapshot " + snapshot + " at " + x + "," + z);
+						org.bukkit.craftbukkit.v1_16_R2.CraftChunkSnapshot css = (org.bukkit.craftbukkit.v1_16_R2.CraftChunkSnapshot) snapshot;
+						try {
+							java.lang.reflect.Field field = css.getClass().getField("biome");
+							field.setAccessible(true);
+							net.minecraft.server.v1_16_R2.BiomeStorage bs = (net.minecraft.server.v1_16_R2.BiomeStorage) field.get(css);
+							Object bb = bs.getBiome(x >> 2, 0 >> 2, z >> 2);
+							br.getLogger().warning("Found base:" + bb);
+						} catch (Exception e2) {
+							e2.printStackTrace();
+						}
+						continue;
+					}
 					Biome req = map.getBiomeFor(cur);
 					if (req != null) {
 						int key = x >> 2 << 2 | z >> 2;
