@@ -6,6 +6,8 @@ import java.lang.reflect.Method;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.Optional;
 
 import org.bukkit.Bukkit;
@@ -31,12 +33,21 @@ public class Post1dot16dot2BiomeManager implements BiomeManager {
 	private final Method biomeBaseToBiomeMethod;
 	private final Field storageRegistryField;
 	private final Field biomeBaseField;
+	private final boolean post1dot16dot3;
 
 	public Post1dot16dot2BiomeManager(BiomeRemap br)
 			throws ClassNotFoundException, NoSuchMethodException, SecurityException, NoSuchFieldException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		this.br = br;
 		String version = this.br.getServer().getClass().getPackage().getName().split("\\.")[3];
+		Pattern pattern = Pattern.compile(Pattern.quote("MC: ") + "(\\d)\\.(\\d\\d)\\.(\\d)");
+		Matcher matcher = pattern.matcher(this.br.getServer().getVersion());
+		matcher.find();
+		String minor = matcher.group(2);
+		String revision = matcher.group(3);
+		int min = Integer.parseInt(minor);
+		int rev = Integer.parseInt(revision);
+		post1dot16dot3 = min > 16 || (min == 16 && rev > 2);
 
 		// get classes needed for biome getting and biome setting methods
 		biomeStorageClass = Class.forName("net.minecraft.server." + version + ".BiomeStorage");
@@ -86,7 +97,12 @@ public class Post1dot16dot2BiomeManager implements BiomeManager {
             Object handle = getHandleMethod.invoke(world);
             Method getMinecraftServer = handle.getClass().getMethod("getMinecraftServer");
             Object mcServer = getMinecraftServer.invoke(handle);
-            Method aXMethod = mcServer.getClass().getMethod("aX");
+			Method aXMethod;
+			if (post1dot16dot3) {
+				aXMethod = mcServer.getClass().getMethod("getCustomRegistry");
+			} else {
+				aXMethod = mcServer.getClass().getMethod("aX");
+			}
             Object iRegistryCustomDimension = aXMethod.invoke(mcServer);
 			Method dimensionAMethod = null;
 			for (Method method : iRegistryCustomDimension.getClass().getMethods()) {
