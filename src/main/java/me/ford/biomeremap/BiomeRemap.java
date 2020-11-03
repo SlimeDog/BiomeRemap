@@ -90,7 +90,8 @@ public class BiomeRemap extends JavaPlugin {
 		if (!testing) {
 			try {
 				String version = getServer().getClass().getPackage().getName().split("\\.")[3];
-				if (version.equals("v1_16_R2") || version.contains("v1_17") || version.contains("v1_18")) {
+				if (version.equals("v1_16_R2") || version.equals("v1_16_R3") || version.contains("v1_17")
+						|| version.contains("v1_18")) {
 					biomeManager = new Post1dot16dot2BiomeManager(this);
 				} else {
 					biomeManager = new VolatileBiomeManager(this);
