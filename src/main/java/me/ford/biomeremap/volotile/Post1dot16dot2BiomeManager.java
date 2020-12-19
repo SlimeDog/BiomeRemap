@@ -201,7 +201,7 @@ public class Post1dot16dot2BiomeManager implements BiomeManager {
 	}
 
 	@Override
-	public void setBiomeNMS(Chunk chunk, int nr, Biome biome)
+	public void setBiomeNMS(Chunk chunk, final int nr, Biome biome)
 			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		if (nr < 0 || nr > 15)
 			br.getLogger().info("Trying to set biome at an incorrect number (NMS):" + nr);
@@ -212,6 +212,11 @@ public class Post1dot16dot2BiomeManager implements BiomeManager {
 		Object registry = storageRegistryField.get(biomeStorage);
 		Object nmsBiomeBase = biomeToBiomeBaseMethod.invoke(null, registry, biome);
 		bases[nr] = nmsBiomeBase;
+		int yNr = nr;
+		for (int y = 0; y < 63; y++) {
+			yNr += 16;
+			bases[yNr] = nmsBiomeBase;
+		}
 	}
 
 }
