@@ -16,6 +16,7 @@ public class BiomeMap {
 	private final String description;
 	private final List<String> worldNames;
 	private final Map<Biome, Biome> biomeMap = new HashMap<>();
+	private final boolean remapEntireChunk;
 
 	public BiomeMap(Messages messages, ConfigurationSection section) {
 		name = section.getName();
@@ -50,6 +51,11 @@ public class BiomeMap {
 			}
 			biomeMap.put(from, to);
 		}
+		remapEntireChunk = section.getBoolean("full-chunk-remap", false);
+	}
+
+	public boolean remapEntireChunk() {
+		return remapEntireChunk;
 	}
 
 	public String getName() {

@@ -212,6 +212,9 @@ public class Post1dot16dot2BiomeManager implements BiomeManager {
 		Object registry = storageRegistryField.get(biomeStorage);
 		Object nmsBiomeBase = biomeToBiomeBaseMethod.invoke(null, registry, biome);
 		bases[nr] = nmsBiomeBase;
+		if (br.getSettings().getBiomeMap(chunk.getWorld().getName()).remapEntireChunk()) {
+			return;
+		}
 		int yNr = nr;
 		for (int y = 0; y < 63; y++) {
 			yNr += 16;
