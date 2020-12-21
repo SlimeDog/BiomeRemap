@@ -78,9 +78,9 @@ enable-metrics: true
 #   * may be the empty set [] if no worlds are assigned
 #   * overlapping combinations of worlds and biomes will generate non-fatal warnings in the console/log
 # biomeremap.NAME.full-chunk-remap
-#   * Prior to MC 1.16.2, "chunk" referred to a 16x16 column, across all Y values; the biome of the 
+#   * Prior to MC 1.16.2, "chunk" referred to a 16x16 column, across all Y values; the biome of the
 #     entire column was specified by a single BIOME_ENUM value in the base chunk (Y=0).
-#   * Starting with MC 1.16.2, "chunk" refers to a 16x16x16 cube; the biome of each cubic chunk may 
+#   * Starting with MC 1.16.2, "chunk" refers to a 16x16x16 cube; the biome of each cubic chunk may
 #     be specified independently. BiomeRemap addresses this change in the following way:
 #        * biomeremap.NAME.full-chunk-remap: false (default)
 #          Only the base chunk (Y=0) will be remapped. This changes weather (for example, rain vs.
