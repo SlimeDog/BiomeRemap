@@ -18,6 +18,7 @@ import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
 
 import me.ford.biomeremap.BiomeRemap;
+import me.ford.biomeremap.mapping.BiomeMap;
 
 public class Post1dot16dot2BiomeManager implements BiomeManager {
 	private final BiomeRemap br;
@@ -212,7 +213,8 @@ public class Post1dot16dot2BiomeManager implements BiomeManager {
 		Object registry = storageRegistryField.get(biomeStorage);
 		Object nmsBiomeBase = biomeToBiomeBaseMethod.invoke(null, registry, biome);
 		bases[nr] = nmsBiomeBase;
-		if (br.getSettings().getBiomeMap(chunk.getWorld().getName()).remapEntireChunk()) {
+		BiomeMap map = br.getSettings().getApplicableBiomeMap(chunk.getWorld().getName());
+		if (map.remapEntireChunk()) {
 			return;
 		}
 		int yNr = nr;
