@@ -79,6 +79,12 @@ public class Messages extends CustomConfigHandler {
 						.replace("{BIOMEMAP}", biomemap);
 	}
 
+	public String getInfoFullChunkInfo(boolean fullChunk, String worldName) {
+		return getMessage("INFO_FULL_CHUNK_REMAP", "Full chunk remap is {VALUE} in world {WORLD_NAME}")
+				.replace("{VALUE}", String.valueOf(fullChunk))
+				.replace("{WORLD_NAME}", worldName);
+	}
+
 	public String getScanInProgress() {
 		return getMessage("BIOMEREMAP_SCAN_IN_PROGRESS",
 				"A biome scan is already in progress; please try again in a few minutes");
