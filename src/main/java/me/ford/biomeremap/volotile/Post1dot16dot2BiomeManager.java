@@ -214,7 +214,7 @@ public class Post1dot16dot2BiomeManager implements BiomeManager {
 		Object nmsBiomeBase = biomeToBiomeBaseMethod.invoke(null, registry, biome);
 		bases[nr] = nmsBiomeBase;
 		BiomeMap map = br.getSettings().getApplicableBiomeMap(chunk.getWorld().getName());
-		if (map.remapEntireChunk()) {
+		if (!map.remapEntireChunk()) {
 			return;
 		}
 		int yNr = nr;
