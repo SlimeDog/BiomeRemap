@@ -35,6 +35,7 @@ public class Post1dot16dot2BiomeManager implements BiomeManager {
 	private final Field storageRegistryField;
 	private final Field biomeBaseField;
 	private final boolean post1dot16dot3;
+	private final boolean post1dot16dot5;
 
 	public Post1dot16dot2BiomeManager(BiomeRemap br)
 			throws ClassNotFoundException, NoSuchMethodException, SecurityException, NoSuchFieldException,
@@ -48,7 +49,8 @@ public class Post1dot16dot2BiomeManager implements BiomeManager {
 		String revision = matcher.group(3);
 		int min = Integer.parseInt(minor);
 		int rev = Integer.parseInt(revision);
-		post1dot16dot3 = min > 16 || (min == 16 && rev > 2);
+		post1dot16dot3 = min > 16 || (min == 16 && rev >= 3);
+		post1dot16dot5 = min > 16 || (min == 16 && rev >= 5);
 
 		// get classes needed for biome getting and biome setting methods
 		biomeStorageClass = Class.forName("net.minecraft.server." + version + ".BiomeStorage");
@@ -63,7 +65,7 @@ public class Post1dot16dot2BiomeManager implements BiomeManager {
         biomeToBiomeBaseMethod = craftBlockClass.getMethod("biomeToBiomeBase", iRegistryClass, Biome.class);
         biomeBaseToBiomeMethod = craftBlockClass.getMethod("biomeBaseToBiome", iRegistryClass, biomeBaseClass);
 		// get fields needed for biome getting and setting methods
-		storageRegistryField = biomeStorageClass.getDeclaredField("g");
+		storageRegistryField = biomeStorageClass.getDeclaredField(post1dot16dot5 ? "registry" : "g");
 		storageRegistryField.setAccessible(true);
 		biomeBaseField = biomeStorageClass.getDeclaredField("h");
 		biomeBaseField.setAccessible(true);
