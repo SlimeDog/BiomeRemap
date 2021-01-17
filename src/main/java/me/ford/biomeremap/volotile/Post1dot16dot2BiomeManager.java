@@ -217,9 +217,12 @@ public class Post1dot16dot2BiomeManager implements BiomeManager {
 		Object nmsBiomeBase = biomeToBiomeBaseMethod.invoke(null, registry, biome);
 		bases[nr] = nmsBiomeBase;
 		BiomeMap map = br.getSettings().getApplicableBiomeMap(chunk.getWorld().getName());
-		if (!map.remapEntireChunk()) {
-			return;
+		if (map.remapEntireChunk()) {
+			remapHigherBiomes(bases, nmsBiomeBase, nr);
 		}
+	}
+
+	public void remapHigherBiomes(Object[] bases, Object nmsBiomeBase, int nr) {
 		int yNr = nr;
 		for (int y = 0; y < 63; y++) {
 			yNr += 16;
