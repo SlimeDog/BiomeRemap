@@ -120,8 +120,8 @@ public class BiomeRemapper {
 				e.printStackTrace();
 				continue;
 			}
-			br.getTeleportListener().sendUpdatesIfNeeded(chunk);
 		}
+		br.getTeleportListener().sendUpdatesIfNeeded(chunk);
 		runAfterRemaps(chunk);
 		timeLastTick += (System.currentTimeMillis() - start);
 	}
