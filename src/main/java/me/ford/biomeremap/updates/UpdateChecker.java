@@ -15,7 +15,7 @@ import me.ford.biomeremap.BiomeRemap;
 
 public class UpdateChecker {
 	private static final String SPIGOT_URL = "https://api.spigotmc.org/legacy/update.php?resource=70973"; // TODO - ID
-																										  // (and use)
+																											// (and use)
 
 	private final BiomeRemap br;
 

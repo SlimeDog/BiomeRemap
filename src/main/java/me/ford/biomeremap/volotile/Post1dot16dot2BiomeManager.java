@@ -22,7 +22,8 @@ import me.ford.biomeremap.mapping.BiomeMap;
 
 public class Post1dot16dot2BiomeManager implements BiomeManager {
 	private final BiomeRemap br;
-	private final Map<Environment, Map<Biome, Integer>> perEnvByBiome = new EnumMap<Environment, Map<Biome, Integer>>(Environment.class);
+	private final Map<Environment, Map<Biome, Integer>> perEnvByBiome = new EnumMap<Environment, Map<Biome, Integer>>(
+			Environment.class);
 	private final Class<?> biomeStorageClass;
 	private final Class<?> biomeBaseClass;
 	private final Class<?> craftChunkClass;
@@ -62,8 +63,8 @@ public class Post1dot16dot2BiomeManager implements BiomeManager {
 		getHandleMethod = craftChunkClass.getMethod("getHandle");
 		getBiomeIndexMethod = nmsChunkClass.getMethod("getBiomeIndex");
 		Class<?> iRegistryClass = Class.forName("net.minecraft.server." + version + ".IRegistry");
-        biomeToBiomeBaseMethod = craftBlockClass.getMethod("biomeToBiomeBase", iRegistryClass, Biome.class);
-        biomeBaseToBiomeMethod = craftBlockClass.getMethod("biomeBaseToBiome", iRegistryClass, biomeBaseClass);
+		biomeToBiomeBaseMethod = craftBlockClass.getMethod("biomeToBiomeBase", iRegistryClass, Biome.class);
+		biomeBaseToBiomeMethod = craftBlockClass.getMethod("biomeBaseToBiome", iRegistryClass, biomeBaseClass);
 		// get fields needed for biome getting and setting methods
 		storageRegistryField = biomeStorageClass.getDeclaredField(post1dot16dot5 ? "registry" : "g");
 		storageRegistryField.setAccessible(true);
@@ -74,8 +75,7 @@ public class Post1dot16dot2BiomeManager implements BiomeManager {
 
 		Class<?> biomesClass = Class.forName("net.minecraft.server." + version + ".Biomes");
 
-        Class<?> registryMaterialsClass = Class.forName("net.minecraft.server." + version + ".RegistryMaterials");
-        
+		Class<?> registryMaterialsClass = Class.forName("net.minecraft.server." + version + ".RegistryMaterials");
 
 		Method getIdMethod = null;
 		for (Method method : registryMaterialsClass.getMethods()) {
@@ -84,8 +84,8 @@ public class Post1dot16dot2BiomeManager implements BiomeManager {
 			Class<?>[] types = method.getParameterTypes();
 			if (method.getReturnType() != int.class || types.length != 1 || types[0] != Object.class)
 				continue;
-            getIdMethod = method;
-            break;
+			getIdMethod = method;
+			break;
 		}
 		if (getIdMethod == null) {
 			br.getLogger().log(Level.SEVERE, "Issue while getting NMS BiomeBase#a method");
@@ -95,18 +95,18 @@ public class Post1dot16dot2BiomeManager implements BiomeManager {
 		Field resourceKeyField = iRegistryClass.getDeclaredField("ay");
 		Object resourceKey = resourceKeyField.get(null);
 		Method getHandleMethod = Bukkit.getServer().getWorlds().get(0).getClass().getMethod("getHandle");
-        for (World world : Bukkit.getWorlds()) {
-            Map<Biome, Integer> curMap = new EnumMap<>(Biome.class);
-            Object handle = getHandleMethod.invoke(world);
-            Method getMinecraftServer = handle.getClass().getMethod("getMinecraftServer");
-            Object mcServer = getMinecraftServer.invoke(handle);
+		for (World world : Bukkit.getWorlds()) {
+			Map<Biome, Integer> curMap = new EnumMap<>(Biome.class);
+			Object handle = getHandleMethod.invoke(world);
+			Method getMinecraftServer = handle.getClass().getMethod("getMinecraftServer");
+			Object mcServer = getMinecraftServer.invoke(handle);
 			Method aXMethod;
 			if (post1dot16dot3) {
 				aXMethod = mcServer.getClass().getMethod("getCustomRegistry");
 			} else {
 				aXMethod = mcServer.getClass().getMethod("aX");
 			}
-            Object iRegistryCustomDimension = aXMethod.invoke(mcServer);
+			Object iRegistryCustomDimension = aXMethod.invoke(mcServer);
 			Method dimensionAMethod = null;
 			for (Method method : iRegistryCustomDimension.getClass().getMethods()) {
 				if (!method.getName().equals("a")) {
@@ -115,7 +115,8 @@ public class Post1dot16dot2BiomeManager implements BiomeManager {
 				if (!Optional.class.equals(method.getReturnType())) {
 					continue;
 				}
-				if (method.getParameterTypes().length != 1 || method.getParameterTypes()[0].isAssignableFrom(iRegistryCustomDimension.getClass())) {
+				if (method.getParameterTypes().length != 1
+						|| method.getParameterTypes()[0].isAssignableFrom(iRegistryCustomDimension.getClass())) {
 					continue;
 				}
 				dimensionAMethod = method;
@@ -124,44 +125,44 @@ public class Post1dot16dot2BiomeManager implements BiomeManager {
 			Object optionalBiomeRegistry = dimensionAMethod.invoke(iRegistryCustomDimension, resourceKey);
 			Object biomeRegistry = ((Optional<?>) optionalBiomeRegistry).get();
 			Method customRegistryAMethod = biomeRegistry.getClass().getMethod("a", resourceKey.getClass());
-            for (Field f : biomesClass.getDeclaredFields()) {
-                if (f.getName().length() > 1) { // ignore the OCEAN duplicate Biomes.b
-                    Object base;
-                    try {
-                        base = f.get(null);
-                    } catch (IllegalArgumentException | IllegalAccessException e) {
-                        br.getLogger().log(Level.SEVERE, "Issue while getting field of NMS Biomes class:", e);
-                        throw e;
-                    }
+			for (Field f : biomesClass.getDeclaredFields()) {
+				if (f.getName().length() > 1) { // ignore the OCEAN duplicate Biomes.b
+					Object base;
+					try {
+						base = f.get(null);
+					} catch (IllegalArgumentException | IllegalAccessException e) {
+						br.getLogger().log(Level.SEVERE, "Issue while getting field of NMS Biomes class:", e);
+						throw e;
+					}
 					Biome biome;
 					Object bb = customRegistryAMethod.invoke(biomeRegistry, base);
-                    try {
-                        biome = (Biome) biomeBaseToBiomeMethod.invoke(null, biomeRegistry, bb);
-                    } catch (IllegalArgumentException e) {
-                        br.getLogger().log(Level.SEVERE, "Issue while invoking CraftBlock#biomeBaseToBiome method:", e);
-                        throw e;
+					try {
+						biome = (Biome) biomeBaseToBiomeMethod.invoke(null, biomeRegistry, bb);
+					} catch (IllegalArgumentException e) {
+						br.getLogger().log(Level.SEVERE, "Issue while invoking CraftBlock#biomeBaseToBiome method:", e);
+						throw e;
 					}
 					if (bb == null) {
 						br.getLogger().warning("BiomeBase is null:" + base + "->" + bb + " ... " + biome);
 						continue;
 					}
-                    int nr;
-                    try {
-                        nr = (int) getIdMethod.invoke(biomeRegistry, bb);
-                    } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                        br.getLogger().log(Level.SEVERE, "Issue while getting invoking RegistryMaterials#a method:", e);
-                        throw e;
-                    }
-                    curMap.put(biome, nr);
-                }
-            }
-            Map<Biome, Integer> prev = perEnvByBiome.get(world.getEnvironment());
-            if (prev == null) {
-                prev = new EnumMap<>(Biome.class);
+					int nr;
+					try {
+						nr = (int) getIdMethod.invoke(biomeRegistry, bb);
+					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+						br.getLogger().log(Level.SEVERE, "Issue while getting invoking RegistryMaterials#a method:", e);
+						throw e;
+					}
+					curMap.put(biome, nr);
+				}
 			}
-            prev.putAll(curMap);
-            perEnvByBiome.put(world.getEnvironment(), prev);
-        }
+			Map<Biome, Integer> prev = perEnvByBiome.get(world.getEnvironment());
+			if (prev == null) {
+				prev = new EnumMap<>(Biome.class);
+			}
+			prev.putAll(curMap);
+			perEnvByBiome.put(world.getEnvironment(), prev);
+		}
 	}
 
 	@Override
@@ -184,14 +185,14 @@ public class Post1dot16dot2BiomeManager implements BiomeManager {
 
 	@Override
 	public int getBiomeIndex(Biome biome) {
-        for (Map<Biome, Integer> map : perEnvByBiome.values()) {
-            Integer val = map.get(biome);
-            if (val == null) {
-                continue;
-            } else {
-                return val;
-            }
-        }
+		for (Map<Biome, Integer> map : perEnvByBiome.values()) {
+			Integer val = map.get(biome);
+			if (val == null) {
+				continue;
+			} else {
+				return val;
+			}
+		}
 		throw new IllegalArgumentException("Could not find biome:" + biome);
 	}
 

@@ -25,7 +25,8 @@ public final class BiomeScanner {
 		int startX = chunkX * 16;
 		int startZ = chunkZ * 16;
 		if (!world.isChunkGenerated(chunkX, chunkZ)) {
-			if (forPopulator != null) forPopulator.add(chunkX, chunkZ);
+			if (forPopulator != null)
+				forPopulator.add(chunkX, chunkZ);
 			world.getChunkAt(chunkX, chunkZ);
 			if (br.getSettings().getApplicableBiomeMap(world.getName()) == null) { // world not being remapped
 				addBiomesForInternal(world, chunkX, chunkZ, useNMS, startX, startZ, yLayer, map);
@@ -41,7 +42,8 @@ public final class BiomeScanner {
 
 	private void addBiomesForInternal(World world, int chunkX, int chunkZ, boolean useNMS, int startX, int startZ,
 			int yLayer, Map<Biome, Integer> map) {
-		if (forPopulator != null) forPopulator.remove(chunkX, chunkZ); // if present
+		if (forPopulator != null)
+			forPopulator.remove(chunkX, chunkZ); // if present
 		world.getChunkAt(chunkX, chunkZ);
 		if (!useNMS) {
 			addBiomes(world, startX, startZ, yLayer, map);
@@ -105,7 +107,7 @@ public final class BiomeScanner {
 
 	public void finalizePopulatorQueue() {
 		if (forPopulator != null) {
-			for (ChunkLoc loc: forPopulator.doAll()) {
+			for (ChunkLoc loc : forPopulator.doAll()) {
 				addBiomesForInternal(loc, forPopulator);
 			}
 		}

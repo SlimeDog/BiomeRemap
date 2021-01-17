@@ -69,7 +69,8 @@ public class BiomeRemapper {
 							java.lang.reflect.Field field = snapshot.getClass().getDeclaredField("biome");
 							field.setAccessible(true);
 							Object bs = field.get(snapshot);
-							java.lang.reflect.Method getBiomeMethod = bs.getClass().getMethod("getBiome", int.class, int.class, int.class);
+							java.lang.reflect.Method getBiomeMethod = bs.getClass().getMethod("getBiome", int.class,
+									int.class, int.class);
 							Object bb = getBiomeMethod.invoke(bs, x >> 2, 0 >> 2, z >> 2);
 							br.getLogger().warning("Found base:" + bb);
 						} catch (Exception e2) {

@@ -33,7 +33,8 @@ public class LargeMappingTask extends LargeTask {
 	protected void doTaskForChunk(int x, int z, boolean debug) {
 		World world = getWorld();
 		if (!world.isChunkGenerated(x, z)) {
-			if (queue != null) queue.add(x, z);
+			if (queue != null)
+				queue.add(x, z);
 			world.getChunkAt(x, z); // populator takes care
 		} else {
 			getPlugin().getRemapper().remapChunk(world.getChunkAt(x, z), debug, map);

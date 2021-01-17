@@ -81,8 +81,7 @@ public class Messages extends CustomConfigHandler {
 
 	public String getInfoFullChunkInfo(boolean fullChunk, String worldName) {
 		return getMessage("INFO_FULL_CHUNK_REMAP", "Full chunk remap is {VALUE} in world {WORLD_NAME}")
-				.replace("{VALUE}", String.valueOf(fullChunk))
-				.replace("{WORLD_NAME}", worldName);
+				.replace("{VALUE}", String.valueOf(fullChunk)).replace("{WORLD_NAME}", worldName);
 	}
 
 	public String getScanInProgress() {

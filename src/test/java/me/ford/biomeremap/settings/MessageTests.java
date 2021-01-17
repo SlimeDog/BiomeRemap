@@ -12,25 +12,25 @@ import me.ford.biomeremap.BiomeRemap;
 
 public class MessageTests {
 	private BiomeRemap plugin;
-	
+
 	@Before
 	public void setUp() {
-	    MockBukkit.mock();
-	    plugin = MockBukkit.load(BiomeRemap.class);
+		MockBukkit.mock();
+		plugin = MockBukkit.load(BiomeRemap.class);
 	}
 
 	@After
 	public void tearDown() {
-	    MockBukkit.unload();
+		MockBukkit.unload();
 	}
-	
+
 	public void assertMessage(String msg) {
 		Assert.assertFalse(msg.contains("{") && msg.contains("}"));
 	}
-	
+
 	@Test
 	public void test_messages_swap_curly_brackets() {
-		String msg = plugin.getMessages().getBiomeRemapInfo("desc", Arrays.asList("A","B"));
+		String msg = plugin.getMessages().getBiomeRemapInfo("desc", Arrays.asList("A", "B"));
 		assertMessage(msg);
 		msg = plugin.getMessages().getBiomeRemapListItem("ABC");
 		assertMessage(msg);
