@@ -178,9 +178,10 @@ public class Post1dot16dot2BiomeManager implements BiomeManager {
 			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		Object nmsChunk = getHandleMethod.invoke(chunk);
 		Object biomeStorage = getBiomeIndexMethod.invoke(nmsChunk);
+		Object registry = storageRegistryField.get(biomeStorage);
 
 		Object[] bases = (Object[]) biomeBaseField.get(biomeStorage);
-		return (Biome) biomeBaseToBiomeMethod.invoke(null, bases[nr]);
+		return (Biome) biomeBaseToBiomeMethod.invoke(null, registry, bases[nr]);
 	}
 
 	@Override
