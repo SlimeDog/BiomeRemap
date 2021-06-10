@@ -7,9 +7,10 @@
 # Implementation: drives_a_ford
 # Testing: SlimeDog
 #
-# Spigot version support: 1.14.4     Use BiomeRemap-1.0.1
-# Spigot version support: 1.15.x     Use BiomeRemap-2.0.3
-# Spigot version support: 1.16.x     Use BiomeRemap-2.1.x
+# Minecraft version support: 1.14.4     Use BiomeRemap-1.0.1
+# Minecraft version support: 1.15.x     Use BiomeRemap-2.0.3
+# Minecraft version support: 1.16.x     Use BiomeRemap-2.2.1
+# Minecraft version support: 1.17.x     Use BiomeRemap-3.0.x
 #
 # ========== CAVEATS AND WARNINGS ==================================================================
 # BiomeRemap is provided for your enjoyment and entertainment. We cannot guarantee that the results
@@ -25,13 +26,15 @@
 # automatically, even if the configuration is changed. They can be remapped manually, if desired.
 # Commands to do so are described in the wiki.
 #
-# Due to the way Spigot world creation and chunk generation work, BiomeRemap cannot automatically
+# Due to the way Minecraft world creation and chunk generation work, BiomeRemap cannot automatically
 # remap the chunks initially-generated on world creation. These chunks must be remapped manually.
 # Commands to do so are described in the wiki.
 #
-# Note that all 1.14/1.15/1.16 biomes are included in the configured biomemaps. Biomes that do not
-# exist in your Spigot version will generate warnings in the console/log on server start-up; these
-# may be safely ignored.
+# Note that all 1.14/1.15/1.16/1.17 biomes are included in the configured biomemaps. These include
+# dripstone_caves and lush_caves, which cannot be created on vanilla servers, but are included for
+# completeness, since they are found in the 1.17 locatebiome list. We do not recommend that other
+# biomes be remapped to them until 1.18. Biomes that do not exist in your Minecraft version will
+# generate warnings in the console/log on plugin enable; these may be safely ignored.
 #
 # Changes of this magnitude should always be performed first on a test server, in order to verify
 # that the configuration and results meet expectations. We strongly recommend making a server backup
@@ -40,14 +43,14 @@
 # ========== CONFIGURATION FILE VERSION ============================================================
 # Do not edit the version string unless you know what you are dolng.
 file: config.yml
-version: 3
+version: 4
 
 # ========== CHECK FOR UPDATES =====================================================================
-# If you do not want available updates announced in the console log, you may disable it here.
+# If you do not want notification of available updates in the console log, you may disable it here.
 check-for-updates: true
 
 # ========== BSTATS METRICS ========================================================================
-# By default, the plugins collects and transmits anonymous statistics to bstats.org.
+# By default, the plugin collects and transmits anonymous statistics to bstats.org.
 # Data collection may be disabled here, or generally in the bStats/config.yml.
 #
 enable-metrics: true
@@ -96,17 +99,18 @@ enable-metrics: true
 #     consequences of TRUE cannot be reversed, except by regenerating chunks after reverting to FALSE.
 
 # biomes.BIOME_ENUM
-#   * required, unique per biomemap
-#   * identifies the vanilla biome that will be replaced
-#   * an invalid biome ENUM will generate a non-fatal warning in the console/log
-#   * valid biome ENUMs may be found at https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/block/Biome.html
-#   * biome descriptions may be found at https://minecraft.gamepedia.com/Biome
-#   * additional information may be found at https://github.com/SlimeDog/BiomeRemap/wiki/
+#   * Required, unique per biomemap
+#   * Identifies the vanilla biome that will be replaced
+#   * An invalid biome ENUM will generate a non-fatal warning in the console/log
+#   * Valid biome ENUMs may be found at https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/block/Biome.html
+#     but we use lowercase, which may be found at https://minecraft.gamepedia.com/Biome
+#   * Biome descriptions may be found at https://minecraft.gamepedia.com/Biome
+#   * Additional information may be found at https://github.com/SlimeDog/BiomeRemap/wiki/
 # biomes.BIOME_ENUM.replacement-biome
-#   * optional
-#   * if present, defines the replacement biome
-#   * if replacement is not defined for any biome, the biome will not be replaced
-#   * an invalid biome ENUM will generate a non-fatal warning in the console/log, and revert to the named biome
+#   * Optional
+#   * If present, defines the replacement biome
+#   * If replacement is not defined for any biome, the biome will not be replaced
+#   * An invalid biome ENUM will generate a non-fatal warning in the console/log, and revert to the named biome
 #
 # Other configuration nodes may be added, as usage warrants.
 
@@ -123,142 +127,146 @@ biomemaps:
       - world_name_goes_here
     full-chunk-remap: false
     biomes:
-      BADLANDS:
-        replacement-biome: SNOWY_TUNDRA
-      BADLANDS_PLATEAU:
-        replacement-biome: SNOWY_TUNDRA
-      BAMBOO_JUNGLE:
-        replacement-biome: SNOWY_TAIGA
-      BAMBOO_JUNGLE_HILLS:
-        replacement-biome: SNOWY_TAIGA_HILLS
-      BEACH:
-        replacement-biome: SNOWY_BEACH
-      BIRCH_FOREST:
-        replacement-biome: SNOWY_TUNDRA
-      BIRCH_FOREST_HILLS:
-        replacement-biome: SNOWY_TAIGA_HILLS
-      COLD_OCEAN:
-        replacement-biome: FROZEN_RIVER
-      DARK_FOREST:
-        replacement-biome: SNOWY_TUNDRA
-      DARK_FOREST_HILLS:
-        replacement-biome: SNOWY_TAIGA_HILLS
-      DEEP_COLD_OCEAN:
-        replacement-biome: FROZEN_RIVER
-      DEEP_FROZEN_OCEAN:
-        replacement-biome: FROZEN_RIVER
-      DEEP_LUKEWARM_OCEAN:
-        replacement-biome: FROZEN_RIVER
-      DEEP_OCEAN:
-        replacement-biome: FROZEN_RIVER
-      DEEP_WARM_OCEAN:
-        replacement-biome: FROZEN_RIVER
-      DESERT:
-        replacement-biome: SNOWY_TUNDRA
-      DESERT_HILLS:
-        replacement-biome: SNOWY_TAIGA_HILLS
-      DESERT_LAKES:
-        replacement-biome: SNOWY_TUNDRA
-      ERODED_BADLANDS:
-        replacement-biome: SNOWY_TUNDRA
-      FLOWER_FOREST:
-        replacement-biome: SNOWY_TUNDRA
-      FOREST:
-        replacement-biome: SNOWY_TUNDRA
-      FROZEN_OCEAN:
-        replacement-biome: FROZEN_RIVER
-      FROZEN_RIVER:
-        replacement-biome: FROZEN_RIVER
-      GIANT_SPRUCE_TAIGA:
-        replacement-biome: SNOWY_TAIGA
-      GIANT_SPRUCE_TAIGA_HILLS:
-        replacement-biome: SNOWY_TAIGA_HILLS
-      GIANT_TREE_TAIGA:
-        replacement-biome: SNOWY_TAIGA
-      GIANT_TREE_TAIGA_HILLS:
-        replacement-biome: SNOWY_TAIGA_HILLS
-      GRAVELLY_MOUNTAINS:
-        replacement-biome: SNOWY_TAIGA_MOUNTAINS
-      ICE_SPIKES:
-        replacement-biome: ICE_SPIKES
-      JUNGLE:
-        replacement-biome: SNOWY_TUNDRA
-      JUNGLE_EDGE:
-        replacement-biome: SNOWY_TUNDRA
-      JUNGLE_HILLS:
-        replacement-biome: SNOWY_TAIGA_HILLS
-      LUKEWARM_OCEAN:
-        replacement-biome: FROZEN_RIVER
-      MODIFIED_BADLANDS_PLATEAU:
-        replacement-biome: SNOWY_TUNDRA
-      MODIFIED_GRAVELLY_MOUNTAINS:
-        replacement-biome: SNOWY_TAIGA_MOUNTAINS
-      MODIFIED_JUNGLE:
-        replacement-biome: SNOWY_TUNDRA
-      MODIFIED_JUNGLE_EDGE:
-        replacement-biome: SNOWY_TUNDRA
-      MODIFIED_WOODED_BADLANDS_PLATEAU:
-        replacement-biome: SNOWY_TUNDRA
-      MOUNTAIN_EDGE:
-        replacement-biome: SNOWY_TUNDRA
-      MOUNTAINS:
-        replacement-biome: SNOWY_TAIGA_MOUNTAINS
-      MUSHROOM_FIELD_SHORE:
-        replacement-biome: SNOWY_BEACH
-      MUSHROOM_FIELDS:
-        replacement-biome: SNOWY_TUNDRA
-      OCEAN:
-        replacement-biome: FROZEN_RIVER
-      PLAINS:
-        replacement-biome: SNOWY_TUNDRA
-      RIVER:
-        replacement-biome: FROZEN_RIVER
-      SAVANNA:
-        replacement-biome: SNOWY_TUNDRA
-      SAVANNA_PLATEAU:
-        replacement-biome: SNOWY_TUNDRA
-      SHATTERED_SAVANNA:
-        replacement-biome: SNOWY_TUNDRA
-      SHATTERED_SAVANNA_PLATEAU:
-        replacement-biome: SNOWY_TUNDRA
-      SNOWY_BEACH:
-        replacement-biome: SNOWY_BEACH
-      SNOWY_MOUNTAINS:
-        replacement-biome: SNOWY_TAIGA_MOUNTAINS
-      SNOWY_TAIGA:
-        replacement-biome: SNOWY_TAIGA
-      SNOWY_TAIGA_HILLS:
-        replacement-biome: SNOWY_TAIGA_HILLS
-      SNOWY_TAIGA_MOUNTAINS:
-        replacement-biome: SNOWY_TAIGA_MOUNTAINS
-      SNOWY_TUNDRA:
-        replacement-biome: SNOWY_TUNDRA
-      STONE_SHORE:
-        replacement-biome: SNOWY_BEACH
-      SUNFLOWER_PLAINS:
-        replacement-biome: SNOWY_TUNDRA
-      SWAMP:
-        replacement-biome: SNOWY_TUNDRA
-      SWAMP_HILLS:
-        replacement-biome: SNOWY_TAIGA_HILLS
-      TAIGA:
-        replacement-biome: SNOWY_TUNDRA
-      TAIGA_HILLS:
-        replacement-biome: SNOWY_TAIGA_HILLS
-      TAIGA_MOUNTAINS:
-        replacement-biome: SNOWY_TAIGA_MOUNTAINS
-      TALL_BIRCH_FOREST:
-        replacement-biome: SNOWY_TUNDRA
-      TALL_BIRCH_HILLS:
-        replacement-biome: SNOWY_TAIGA_HILLS
-      WARM_OCEAN:
-        replacement-biome: FROZEN_RIVER
-      WOODED_BADLANDS_PLATEAU:
-        replacement-biome: SNOWY_TUNDRA
-      WOODED_HILLS:
-        replacement-biome: SNOWY_TAIGA_HILLS
-      WOODED_MOUNTAINS:
-        replacement-biome: SNOWY_TAIGA_MOUNTAINS
+      badlands:
+        replacement-biome: snowy_tundra
+      badlands_plateau:
+        replacement-biome: snowy_tundra
+      bamboo_jungle:
+        replacement-biome: snowy_taiga
+      bamboo_jungle_hills:
+        replacement-biome: snowy_taiga_hills
+      beach:
+        replacement-biome: snowy_beach
+      birch_forest:
+        replacement-biome: snowy_tundra
+      birch_forest_hills:
+        replacement-biome: snowy_taiga_hills
+      cold_ocean:
+        replacement-biome: frozen_river
+      dark_forest:
+        replacement-biome: snowy_tundra
+      dark_forest_hills:
+        replacement-biome: snowy_taiga_hills
+      deep_cold_ocean:
+        replacement-biome: frozen_river
+      deep_frozen_ocean:
+        replacement-biome: frozen_river
+      deep_lukewarm_ocean:
+        replacement-biome: frozen_river
+      deep_ocean:
+        replacement-biome: frozen_river
+      deep_warm_ocean:
+        replacement-biome: frozen_river
+      desert:
+        replacement-biome: snowy_tundra
+      desert_hills:
+        replacement-biome: snowy_taiga_hills
+      desert_lakes:
+        replacement-biome: snowy_tundra
+      dripstone_caves:
+        replacement-biome: snowy_tundra
+      eroded_badlands:
+        replacement-biome: snowy_tundra
+      flower_forest:
+        replacement-biome: snowy_tundra
+      forest:
+        replacement-biome: snowy_tundra
+      frozen_ocean:
+        replacement-biome: frozen_river
+      frozen_river:
+        replacement-biome: frozen_river
+      giant_spruce_taiga:
+        replacement-biome: snowy_taiga
+      giant_spruce_taiga_hills:
+        replacement-biome: snowy_taiga_hills
+      giant_tree_taiga:
+        replacement-biome: snowy_taiga
+      giant_tree_taiga_hills:
+        replacement-biome: snowy_taiga_hills
+      gravelly_mountains:
+        replacement-biome: snowy_taiga_mountains
+      ice_spikes:
+        replacement-biome: ice_spikes
+      jungle:
+        replacement-biome: snowy_tundra
+      jungle_edge:
+        replacement-biome: snowy_tundra
+      jungle_hills:
+        replacement-biome: snowy_taiga_hills
+      lukewarm_ocean:
+        replacement-biome: frozen_river
+      lush_caves:
+        replacement-biome: snowy_tundra
+      modified_badlands_plateau:
+        replacement-biome: snowy_tundra
+      modified_gravelly_mountains:
+        replacement-biome: snowy_taiga_mountains
+      modified_jungle:
+        replacement-biome: snowy_tundra
+      modified_jungle_edge:
+        replacement-biome: snowy_tundra
+      modified_wooded_badlands_plateau:
+        replacement-biome: snowy_tundra
+      mountain_edge:
+        replacement-biome: snowy_tundra
+      mountains:
+        replacement-biome: snowy_taiga_mountains
+      mushroom_field_shore:
+        replacement-biome: snowy_beach
+      mushroom_fields:
+        replacement-biome: snowy_tundra
+      ocean:
+        replacement-biome: frozen_river
+      plains:
+        replacement-biome: snowy_tundra
+      river:
+        replacement-biome: frozen_river
+      savanna:
+        replacement-biome: snowy_tundra
+      savanna_plateau:
+        replacement-biome: snowy_tundra
+      shattered_savanna:
+        replacement-biome: snowy_tundra
+      shattered_savanna_plateau:
+        replacement-biome: snowy_tundra
+      snowy_beach:
+        replacement-biome: snowy_beach
+      snowy_mountains:
+        replacement-biome: snowy_taiga_mountains
+      snowy_taiga:
+        replacement-biome: snowy_taiga
+      snowy_taiga_hills:
+        replacement-biome: snowy_taiga_hills
+      snowy_taiga_mountains:
+        replacement-biome: snowy_taiga_mountains
+      snowy_tundra:
+        replacement-biome: snowy_tundra
+      stone_shore:
+        replacement-biome: snowy_beach
+      sunflower_plains:
+        replacement-biome: snowy_tundra
+      swamp:
+        replacement-biome: snowy_tundra
+      swamp_hills:
+        replacement-biome: snowy_taiga_hills
+      taiga:
+        replacement-biome: snowy_tundra
+      taiga_hills:
+        replacement-biome: snowy_taiga_hills
+      taiga_mountains:
+        replacement-biome: snowy_taiga_mountains
+      tall_birch_forest:
+        replacement-biome: snowy_tundra
+      tall_birch_hills:
+        replacement-biome: snowy_taiga_hills
+      warm_ocean:
+        replacement-biome: frozen_river
+      wooded_badlands_plateau:
+        replacement-biome: snowy_tundra
+      wooded_hills:
+        replacement-biome: snowy_taiga_hills
+      wooded_mountains:
+        replacement-biome: snowy_taiga_mountains
 
   # ======== BiomeRemap example: boilerroom ==========================================================
   # Climate change is real. The entire world is warm, warmer, hot, hotter.
@@ -271,142 +279,146 @@ biomemaps:
     enabled-worlds: []
     full-chunk-remap: false
     biomes:
-      BADLANDS:
-        replacement-biome: BADLANDS
-      BADLANDS_PLATEAU:
-        replacement-biome: BADLANDS_PLATEAU
-      BAMBOO_JUNGLE:
-        replacement-biome: BAMBOO_JUNGLE
-      BAMBOO_JUNGLE_HILLS:
-        replacement-biome: BAMBOO_JUNGLE_HILLS
-      BEACH:
-        replacement-biome: DESERT
-      BIRCH_FOREST:
-        replacement-biome: BIRCH_FOREST
-      BIRCH_FOREST_HILLS:
-        replacement-biome: BIRCH_FOREST_HILLS
-      COLD_OCEAN:
-        replacement-biome: WARM_OCEAN
-      DARK_FOREST:
-        replacement-biome: DARK_FOREST
-      DARK_FOREST_HILLS:
-        replacement-biome: DARK_FOREST_HILLS
-      DEEP_COLD_OCEAN:
-        replacement-biome: DEEP_LUKEWARM_OCEAN
-      DEEP_FROZEN_OCEAN:
-        replacement-biome: DEEP_LUKEWARM_OCEAN
-      DEEP_LUKEWARM_OCEAN:
-        replacement-biome: DEEP_LUKEWARM_OCEAN
-      DEEP_OCEAN:
-        replacement-biome: DEEP_LUKEWARM_OCEAN
-      DEEP_WARM_OCEAN:
-        replacement-biome: DEEP_WARM_OCEAN
-      DESERT:
-        replacement-biome: DESERT
-      DESERT_HILLS:
-        replacement-biome: DESERT_HILLS
-      DESERT_LAKES:
-        replacement-biome: DESERT_LAKES
-      ERODED_BADLANDS:
-        replacement-biome: ERODED_BADLANDS
-      FLOWER_FOREST:
-        replacement-biome: FLOWER_FOREST
-      FOREST:
-        replacement-biome: FOREST
-      FROZEN_OCEAN:
-        replacement-biome: WARM_OCEAN
-      FROZEN_RIVER:
-        replacement-biome: RIVER
-      GIANT_SPRUCE_TAIGA:
-        replacement-biome: GIANT_SPRUCE_TAIGA
-      GIANT_SPRUCE_TAIGA_HILLS:
-        replacement-biome: GIANT_SPRUCE_TAIGA_HILLS
-      GIANT_TREE_TAIGA:
-        replacement-biome: GIANT_TREE_TAIGA
-      GIANT_TREE_TAIGA_HILLS:
-        replacement-biome: GIANT_TREE_TAIGA_HILLS
-      GRAVELLY_MOUNTAINS:
-        replacement-biome: GRAVELLY_MOUNTAINS
-      ICE_SPIKES:
-        replacement-biome: ICE_SPIKES
-      JUNGLE:
-        replacement-biome: JUNGLE
-      JUNGLE_EDGE:
-        replacement-biome: JUNGLE_EDGE
-      JUNGLE_HILLS:
-        replacement-biome: JUNGLE_HILLS
-      LUKEWARM_OCEAN:
-        replacement-biome: WARM_OCEAN
-      MODIFIED_BADLANDS_PLATEAU:
-        replacement-biome: MODIFIED_BADLANDS_PLATEAU
-      MODIFIED_GRAVELLY_MOUNTAINS:
-        replacement-biome: MODIFIED_GRAVELLY_MOUNTAINS
-      MODIFIED_JUNGLE:
-        replacement-biome: MODIFIED_JUNGLE
-      MODIFIED_JUNGLE_EDGE:
-        replacement-biome: MODIFIED_JUNGLE_EDGE
-      MODIFIED_WOODED_BADLANDS_PLATEAU:
-        replacement-biome: MODIFIED_WOODED_BADLANDS_PLATEAU
-      MOUNTAIN_EDGE:
-        replacement-biome: MOUNTAIN_EDGE
-      MOUNTAINS:
-        replacement-biome: MOUNTAINS
-      MUSHROOM_FIELD_SHORE:
-        replacement-biome: DESERT
-      MUSHROOM_FIELDS:
-        replacement-biome: DESERT
-      OCEAN:
-        replacement-biome: WARM_OCEAN
-      PLAINS:
-        replacement-biome: PLAINS
-      RIVER:
-        replacement-biome: RIVER
-      SAVANNA:
-        replacement-biome: SAVANNA
-      SAVANNA_PLATEAU:
-        replacement-biome: SAVANNA_PLATEAU
-      SHATTERED_SAVANNA:
-        replacement-biome: SHATTERED_SAVANNA
-      SHATTERED_SAVANNA_PLATEAU:
-        replacement-biome: SHATTERED_SAVANNA_PLATEAU
-      SNOWY_BEACH:
-        replacement-biome: DESERT
-      SNOWY_MOUNTAINS:
-        replacement-biome: MOUNTAINS
-      SNOWY_TAIGA:
-        replacement-biome: TAIGA
-      SNOWY_TAIGA_HILLS:
-        replacement-biome: TAIGA_HILLS
-      SNOWY_TAIGA_MOUNTAINS:
-        replacement-biome: TAIGA_MOUNTAINS
-      SNOWY_TUNDRA:
-        replacement-biome: PLAINS
-      STONE_SHORE:
-        replacement-biome: DESERT
-      SUNFLOWER_PLAINS:
-        replacement-biome: SUNFLOWER_PLAINS
-      SWAMP:
-        replacement-biome: SWAMP
-      SWAMP_HILLS:
-        replacement-biome: SWAMP_HILLS
-      TAIGA:
-        replacement-biome: TAIGA
-      TAIGA_HILLS:
-        replacement-biome: TAIGA_HILLS
-      TAIGA_MOUNTAINS:
-        replacement-biome: TAIGA_MOUNTAINS
-      TALL_BIRCH_FOREST:
-        replacement-biome: TALL_BIRCH_FOREST
-      TALL_BIRCH_HILLS:
-        replacement-biome: TALL_BIRCH_HILLS
-      WARM_OCEAN:
-        replacement-biome: WARM_OCEAN
-      WOODED_BADLANDS_PLATEAU:
-        replacement-biome: WOODED_BADLANDS_PLATEAU
-      WOODED_HILLS:
-        replacement-biome: WOODED_HILLS
-      WOODED_MOUNTAINS:
-        replacement-biome: WOODED_MOUNTAINS
+      badlands:
+        replacement-biome: badlands
+      badlands_plateau:
+        replacement-biome: badlands_plateau
+      bamboo_jungle:
+        replacement-biome: bamboo_jungle
+      bamboo_jungle_hills:
+        replacement-biome: bamboo_jungle_hills
+      beach:
+        replacement-biome: desert
+      birch_forest:
+        replacement-biome: birch_forest
+      birch_forest_hills:
+        replacement-biome: birch_forest_hills
+      cold_ocean:
+        replacement-biome: warm_ocean
+      dark_forest:
+        replacement-biome: dark_forest
+      dark_forest_hills:
+        replacement-biome: dark_forest_hills
+      deep_cold_ocean:
+        replacement-biome: deep_lukewarm_ocean
+      deep_frozen_ocean:
+        replacement-biome: deep_lukewarm_ocean
+      deep_lukewarm_ocean:
+        replacement-biome: deep_lukewarm_ocean
+      deep_ocean:
+        replacement-biome: deep_lukewarm_ocean
+      deep_warm_ocean:
+        replacement-biome: deep_warm_ocean
+      desert:
+        replacement-biome: desert
+      desert_hills:
+        replacement-biome: desert_hills
+      desert_lakes:
+        replacement-biome: desert_lakes
+      dripstone_caves:
+        replacement-biome: dripstone_caves
+      eroded_badlands:
+        replacement-biome: eroded_badlands
+      flower_forest:
+        replacement-biome: flower_forest
+      forest:
+        replacement-biome: forest
+      frozen_ocean:
+        replacement-biome: warm_ocean
+      frozen_river:
+        replacement-biome: river
+      giant_spruce_taiga:
+        replacement-biome: giant_spruce_taiga
+      giant_spruce_taiga_hills:
+        replacement-biome: giant_spruce_taiga_hills
+      giant_tree_taiga:
+        replacement-biome: giant_tree_taiga
+      giant_tree_taiga_hills:
+        replacement-biome: giant_tree_taiga_hills
+      gravelly_mountains:
+        replacement-biome: gravelly_mountains
+      ice_spikes:
+        replacement-biome: ice_spikes
+      jungle:
+        replacement-biome: jungle
+      jungle_edge:
+        replacement-biome: jungle_edge
+      jungle_hills:
+        replacement-biome: jungle_hills
+      lukewarm_ocean:
+        replacement-biome: warm_ocean
+      lush_caves:
+        replacement-biome: lush_caves
+      modified_badlands_plateau:
+        replacement-biome: modified_badlands_plateau
+      modified_gravelly_mountains:
+        replacement-biome: modified_gravelly_mountains
+      modified_jungle:
+        replacement-biome: modified_jungle
+      modified_jungle_edge:
+        replacement-biome: modified_jungle_edge
+      modified_wooded_badlands_plateau:
+        replacement-biome: modified_wooded_badlands_plateau
+      mountain_edge:
+        replacement-biome: mountain_edge
+      mountains:
+        replacement-biome: mountains
+      mushroom_field_shore:
+        replacement-biome: desert
+      mushroom_fields:
+        replacement-biome: desert
+      ocean:
+        replacement-biome: warm_ocean
+      plains:
+        replacement-biome: plains
+      river:
+        replacement-biome: river
+      savanna:
+        replacement-biome: savanna
+      savanna_plateau:
+        replacement-biome: savanna_plateau
+      shattered_savanna:
+        replacement-biome: shattered_savanna
+      shattered_savanna_plateau:
+        replacement-biome: shattered_savanna_plateau
+      snowy_beach:
+        replacement-biome: desert
+      snowy_mountains:
+        replacement-biome: mountains
+      snowy_taiga:
+        replacement-biome: taiga
+      snowy_taiga_hills:
+        replacement-biome: taiga_hills
+      snowy_taiga_mountains:
+        replacement-biome: taiga_mountains
+      snowy_tundra:
+        replacement-biome: plains
+      stone_shore:
+        replacement-biome: desert
+      sunflower_plains:
+        replacement-biome: sunflower_plains
+      swamp:
+        replacement-biome: swamp
+      swamp_hills:
+        replacement-biome: swamp_hills
+      taiga:
+        replacement-biome: taiga
+      taiga_hills:
+        replacement-biome: taiga_hills
+      taiga_mountains:
+        replacement-biome: taiga_mountains
+      tall_birch_forest:
+        replacement-biome: tall_birch_forest
+      tall_birch_hills:
+        replacement-biome: tall_birch_hills
+      warm_ocean:
+        replacement-biome: warm_ocean
+      wooded_badlands_plateau:
+        replacement-biome: wooded_badlands_plateau
+      wooded_hills:
+        replacement-biome: wooded_hills
+      wooded_mountains:
+        replacement-biome: wooded_mountains
 
   # ======== BiomeRemap example: hell ================================================================
   # There will be hell to pay.
@@ -419,16 +431,16 @@ biomemaps:
     enabled-worlds: []
     full-chunk-remap: false
     biomes:
-      BASALT_DELTAS:
-        replacement-biome: BASALT_DELTAS
-      CRIMSON_FOREST:
-        replacement-biome: CRIMSON_FOREST
-      SOUL_SAND_VALLEY:
-        replacement-biome: SOUL_SAND_VALLEY
-      WARPED_FOREST:
-        replacement-biome: WARPED_FOREST
-      NETHER_WASTES:
-        replacement-biome: NETHER_WASTES
+      basalt_deltas:
+        replacement-biome: basalt_deltas
+      crimson_forest:
+        replacement-biome: crimson_forest
+      nether_wastes:
+        replacement-biome: nether_wastes
+      soul_sand_valley:
+        replacement-biome: soul_sand_valley
+      warped_forest:
+        replacement-biome: warped_forest
 
 # ========== REPORT REMAP PROGRESS =================================================================
 # How often region commands should report progress, as a percentage of completion.
