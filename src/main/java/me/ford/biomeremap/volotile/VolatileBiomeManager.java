@@ -35,12 +35,13 @@ public class VolatileBiomeManager implements BiomeManager {
 			throws ClassNotFoundException, NoSuchMethodException, SecurityException, NoSuchFieldException {
 		this.br = br;
 		String version = this.br.getServer().getClass().getPackage().getName().split("\\.")[3];
+		// assume post 1.17
 
 		// get classes needed for biome getting and biome setting methods
-		biomeStorageClass = Class.forName("net.minecraft.server." + version + ".BiomeStorage");
-		biomeBaseClass = Class.forName("net.minecraft.server." + version + ".BiomeBase");
+		biomeStorageClass = Class.forName("net.minecraft.world.level.chunk.BiomeStorage");
+		biomeBaseClass = Class.forName("net.minecraft.world.level.biome.BiomeBase");
 		craftChunkClass = Class.forName("org.bukkit.craftbukkit." + version + ".CraftChunk");
-		nmsChunkClass = Class.forName("net.minecraft.server." + version + ".Chunk");
+		nmsChunkClass = Class.forName("net.minecraft.world.level.chunk.Chunk");
 		craftBlockClass = Class.forName("org.bukkit.craftbukkit." + version + ".block.CraftBlock");
 		// get methods needed for biome getting and setting methods
 		getHandleMethod = craftChunkClass.getMethod("getHandle");

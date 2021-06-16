@@ -15,6 +15,7 @@ import me.ford.biomeremap.BiomeRemap;
  */
 public class VolatileChunkUpdater implements ChunkUpdater {
 	private final boolean one16point1;
+	private final boolean one17;
 	private final BiomeRemap br;
 	private final Class<?> craftChunkClass;
 	private final Class<?> nmsChunkClass;
@@ -36,16 +37,18 @@ public class VolatileChunkUpdater implements ChunkUpdater {
 		this.br = br;
 		String version = this.br.getServer().getClass().getPackage().getName().split("\\.")[3];
 		one16point1 = version.contains("v1_16_R1");
+		one17 = version.contains("v1_17");
+		// assume post 1.17
 
 		// classes
 		craftChunkClass = Class.forName("org.bukkit.craftbukkit." + version + ".CraftChunk");
-		nmsChunkClass = Class.forName("net.minecraft.server." + version + ".Chunk");
-		packetClass = Class.forName("net.minecraft.server." + version + ".Packet");
-		packetPlayOutUnloadChunkClass = Class.forName("net.minecraft.server." + version + ".PacketPlayOutUnloadChunk");
-		packetPlayOutMapChunkClass = Class.forName("net.minecraft.server." + version + ".PacketPlayOutMapChunk");
 		craftPlayerClass = Class.forName("org.bukkit.craftbukkit." + version + ".entity.CraftPlayer");
-		playerConnectionClass = Class.forName("net.minecraft.server." + version + ".PlayerConnection");
-		entityPlayerClass = Class.forName("net.minecraft.server." + version + ".EntityPlayer");
+		nmsChunkClass = Class.forName("net.minecraft.world.level.chunk.Chunk");
+		packetClass = Class.forName("net.minecraft.network.protocol.Packet");
+		packetPlayOutUnloadChunkClass = Class.forName("net.minecraft.network.protocol.game.PacketPlayOutUnloadChunk");
+		packetPlayOutMapChunkClass = Class.forName("net.minecraft.network.protocol.game.PacketPlayOutMapChunk");
+		playerConnectionClass = Class.forName("net.minecraft.server.network.PlayerConnection");
+		entityPlayerClass = Class.forName("net.minecraft.server.level.EntityPlayer");
 
 		// methods
 		getHandleMethod = craftChunkClass.getMethod("getHandle");
@@ -57,12 +60,14 @@ public class VolatileChunkUpdater implements ChunkUpdater {
 		if (one16point1) {
 			packetPlayOutMapChunkConstructor = packetPlayOutMapChunkClass.getConstructor(nmsChunkClass, int.class,
 					boolean.class);
+		} else if (one17) {
+			packetPlayOutMapChunkConstructor = packetPlayOutMapChunkClass.getConstructor(nmsChunkClass);
 		} else {
 			packetPlayOutMapChunkConstructor = packetPlayOutMapChunkClass.getConstructor(nmsChunkClass, int.class);
 		}
 
 		// field
-		playerConnectionField = entityPlayerClass.getDeclaredField("playerConnection");
+		playerConnectionField = entityPlayerClass.getDeclaredField(one17 ? "b" : "playerConnection");
 	}
 
 	@Override

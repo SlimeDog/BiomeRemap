@@ -37,45 +37,60 @@ public class Post1dot16dot2BiomeManager implements BiomeManager {
 	private final Field biomeBaseField;
 	private final boolean post1dot16dot3;
 	private final boolean post1dot16dot5;
+	private final boolean post1dot17;
 
 	public Post1dot16dot2BiomeManager(BiomeRemap br)
 			throws ClassNotFoundException, NoSuchMethodException, SecurityException, NoSuchFieldException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		this.br = br;
 		String version = this.br.getServer().getClass().getPackage().getName().split("\\.")[3];
-		Pattern pattern = Pattern.compile(Pattern.quote("MC: ") + "(\\d)\\.(\\d\\d)\\.(\\d)");
+		Pattern pattern = Pattern.compile(Pattern.quote("MC: ") + "(\\d)\\.(\\d\\d)(\\.(\\d))?");
 		Matcher matcher = pattern.matcher(this.br.getServer().getVersion());
 		matcher.find();
 		String minor = matcher.group(2);
-		String revision = matcher.group(3);
+		String revision = matcher.group(4); // optional
 		int min = Integer.parseInt(minor);
-		int rev = Integer.parseInt(revision);
+		int rev;
+		if (revision != null && !revision.isEmpty()) {
+			rev = Integer.parseInt(revision);
+		} else {
+			rev = 0;
+		}
 		post1dot16dot3 = min > 16 || (min == 16 && rev >= 3);
 		post1dot16dot5 = min > 16 || (min == 16 && rev >= 5);
+		post1dot17 = min > 16 || (min == 16 && rev >= 0);
 
-		// get classes needed for biome getting and biome setting methods
-		biomeStorageClass = Class.forName("net.minecraft.server." + version + ".BiomeStorage");
-		biomeBaseClass = Class.forName("net.minecraft.server." + version + ".BiomeBase");
-		craftChunkClass = Class.forName("org.bukkit.craftbukkit." + version + ".CraftChunk");
-		nmsChunkClass = Class.forName("net.minecraft.server." + version + ".Chunk");
-		craftBlockClass = Class.forName("org.bukkit.craftbukkit." + version + ".block.CraftBlock");
-		// get methods needed for biome getting and setting methods
+		Chunk tempChunk = Bukkit.getServer().getWorlds().get(0).getChunkAt(0, 0);
+		craftChunkClass = tempChunk.getClass();
 		getHandleMethod = craftChunkClass.getMethod("getHandle");
+		Object nmsChunk = getHandleMethod.invoke(tempChunk);
+		nmsChunkClass = nmsChunk.getClass();
 		getBiomeIndexMethod = nmsChunkClass.getMethod("getBiomeIndex");
-		Class<?> iRegistryClass = Class.forName("net.minecraft.server." + version + ".IRegistry");
-		biomeToBiomeBaseMethod = craftBlockClass.getMethod("biomeToBiomeBase", iRegistryClass, Biome.class);
-		biomeBaseToBiomeMethod = craftBlockClass.getMethod("biomeBaseToBiome", iRegistryClass, biomeBaseClass);
-		// get fields needed for biome getting and setting methods
-		storageRegistryField = biomeStorageClass.getDeclaredField(post1dot16dot5 ? "registry" : "g");
+		Object biomeStorage = getBiomeIndexMethod.invoke(nmsChunk);
+		biomeStorageClass = biomeStorage.getClass();
+		storageRegistryField = biomeStorageClass
+				.getDeclaredField(post1dot16dot5 ? (post1dot17 ? "e" : "registry") : "g");
 		storageRegistryField.setAccessible(true);
-		biomeBaseField = biomeStorageClass.getDeclaredField("h");
+		Object registry = storageRegistryField.get(biomeStorage);
+		Class<?> iRegistryClass = registry.getClass();
+
+		craftBlockClass = Class.forName("org.bukkit.craftbukkit." + version + ".block.CraftBlock");
+		biomeToBiomeBaseMethod = craftBlockClass.getMethod("biomeToBiomeBase",
+				iRegistryClass.getSuperclass().getSuperclass(), Biome.class);
+		Object nmsBiome = biomeToBiomeBaseMethod.invoke(null, registry, Biome.values()[0]);
+		biomeBaseClass = nmsBiome.getClass();
+		biomeBaseToBiomeMethod = craftBlockClass.getMethod("biomeBaseToBiome",
+				iRegistryClass.getSuperclass().getSuperclass(), biomeBaseClass);
+		biomeBaseField = biomeStorageClass.getDeclaredField(post1dot17 ? "f" : "h");
 		biomeBaseField.setAccessible(true);
 
 		// map biomes with reflection
 
-		Class<?> biomesClass = Class.forName("net.minecraft.server." + version + ".Biomes");
+		Class<?> biomesClass = Class.forName(
+				(post1dot17 ? "net.minecraft.world.level.biome" : "net.minecraft.server." + version) + ".Biomes");
 
-		Class<?> registryMaterialsClass = Class.forName("net.minecraft.server." + version + ".RegistryMaterials");
+		Class<?> registryMaterialsClass = Class.forName(
+				(post1dot17 ? "net.minecraft.core" : "net.minecraft.server." + version) + ".RegistryMaterials");
 
 		Method getIdMethod = null;
 		for (Method method : registryMaterialsClass.getMethods()) {
