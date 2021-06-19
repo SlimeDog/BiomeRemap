@@ -94,7 +94,7 @@ public class Post1dot16dot2BiomeManager implements BiomeManager {
 
 		Method getIdMethod = null;
 		for (Method method : registryMaterialsClass.getMethods()) {
-			if (!method.getName().equals("a"))
+			if (!method.getName().equals(post1dot17 ? "getId" : "a"))
 				continue;
 			Class<?>[] types = method.getParameterTypes();
 			if (method.getReturnType() != int.class || types.length != 1 || types[0] != Object.class)
@@ -104,10 +104,10 @@ public class Post1dot16dot2BiomeManager implements BiomeManager {
 		}
 		if (getIdMethod == null) {
 			br.getLogger().log(Level.SEVERE, "Issue while getting NMS BiomeBase#a method");
-			return;
+			throw new IllegalStateException("Issue while getting NMS BiomeBase#a method");
 		}
 
-		Field resourceKeyField = iRegistryClass.getDeclaredField("ay");
+		Field resourceKeyField = iRegistryClass.getField(post1dot17 ? "aO" : "ay");
 		Object resourceKey = resourceKeyField.get(null);
 		Method getHandleMethod = Bukkit.getServer().getWorlds().get(0).getClass().getMethod("getHandle");
 		for (World world : Bukkit.getWorlds()) {
