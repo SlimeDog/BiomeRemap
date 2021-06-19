@@ -31,7 +31,7 @@ public class BiomeMap {
 		for (String key : mapSection.getKeys(false)) {
 			Biome from;
 			try {
-				from = Biome.valueOf(key);
+				from = Biome.valueOf(key.toUpperCase());
 			} catch (IllegalArgumentException e) {
 				BiomeRemap.logger().severe(messages.errorBiomeNotFound(key));
 				throw new MappingException();
