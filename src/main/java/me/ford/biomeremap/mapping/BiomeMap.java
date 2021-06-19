@@ -44,7 +44,7 @@ public class BiomeMap {
 			String toName = curSection.getString("replacement-biome", "");
 			Biome to;
 			try {
-				to = Biome.valueOf(toName);
+				to = Biome.valueOf(toName.toUpperCase());
 			} catch (IllegalArgumentException e) {
 				BiomeRemap.logger().severe(messages.errorBiomeNotFound(toName));
 				throw new MappingException();
