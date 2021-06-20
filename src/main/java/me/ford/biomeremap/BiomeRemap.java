@@ -72,7 +72,7 @@ public class BiomeRemap extends JavaPlugin {
 		settings = new Settings(this);
 
 		if (settings.enableMetrics() && !testing) {
-			new Metrics(this);
+			new Metrics(this, 7234);
 		}
 
 		// commands
