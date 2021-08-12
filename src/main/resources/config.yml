@@ -339,7 +339,7 @@ biomemaps:
       gravelly_mountains:
         replacement-biome: gravelly_mountains
       ice_spikes:
-        replacement-biome: ice_spikes
+        replacement-biome: mountains
       jungle:
         replacement-biome: jungle
       jungle_edge:
