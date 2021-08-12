@@ -69,28 +69,28 @@ enable-metrics: true
 #        BIOME_ENUM:
 #         replacement-biome: BIOME_ENUM
 #
-# biomeremap.NAME
+# biomemaps.NAME
 #   * required, unique
 #   * identifies a biomemap
 #   * multiple biomemaps may be defined, and subsets of worlds assigned to them
 #   * snowbound and boilerroom sample biomemaps are included in the default configuration
-# biomeremap.NAME.description
+# biomemaps.NAME.description
 #   * optional, for reference only
-# biomeremap.NAME.enabled-worlds
+# biomemaps.NAME.enabled-worlds
 #   * required, a list of assigned worlds
 #   * a world may be assigned to more than one biomemap, if you understand the consequences
 #   * may be the empty set [] if no worlds are assigned
 #   * overlapping combinations of worlds and biomes will generate non-fatal warnings in the console/log
-# biomeremap.NAME.full-chunk-remap
+# biomemaps.NAME.full-chunk-remap
 #   * Prior to MC 1.16.2, "chunk" referred to a 16x16 column, across all Y values; the biome of the
 #     entire column was specified by a single BIOME_ENUM value in the base chunk (Y=0).
 #   * Starting with MC 1.16.2, "chunk" refers to a 16x16x16 cube; the biome of each cubic chunk may
 #     be specified independently. BiomeRemap addresses this change in the following way:
-#        * biomeremap.NAME.full-chunk-remap: false (default)
+#        * biomemaps.NAME.full-chunk-remap: false (default)
 #          Only the base chunk (Y=0) will be remapped. This changes weather (for example, rain vs.
 #          snow) in the entire column, but changes the visual characteristics (for example, grass
 #          color) in the base chunk only. So the surface terrain characteristics remain unchanged.
-#        * biomeremap.NAME.full-chunk-remap: true
+#        * biomemaps.NAME.full-chunk-remap: true
 #          The entire column will be remapped. This changes weather in the same way, but changes the
 #          the visual characteristics of the entire column, so the surface terrain characteristics
 #          will reflect the new biome. This will incur a small additional computational cost to loop
@@ -98,8 +98,7 @@ enable-metrics: true
 #          game play if the chunks are pre-generated (which we recommend in any event).
 #   * WARNING: The configuration should be changed only after careful consideration and testing. The
 #     consequences of TRUE cannot be reversed, except by regenerating chunks after reverting to FALSE.
-
-# biomes.BIOME_ENUM
+# biomemaps.NAME.biomes.BIOME_ENUM
 #   * Required, unique per biomemap
 #   * Identifies the vanilla biome that will be replaced
 #   * An invalid biome ENUM will generate a non-fatal warning in the console/log
@@ -107,7 +106,7 @@ enable-metrics: true
 #     but we use lowercase, which may be found at https://minecraft.gamepedia.com/Biome
 #   * Biome descriptions may be found at https://minecraft.gamepedia.com/Biome
 #   * Additional information may be found at https://github.com/SlimeDog/BiomeRemap/wiki/
-# biomes.BIOME_ENUM.replacement-biome
+# biomemaps.NAME.biomes.BIOME_ENUM.replacement-biome
 #   * Optional
 #   * If present, defines the replacement biome
 #   * If replacement is not defined for any biome, the biome will not be replaced
