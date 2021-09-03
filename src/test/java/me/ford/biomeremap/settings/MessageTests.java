@@ -21,7 +21,7 @@ public class MessageTests {
 
 	@After
 	public void tearDown() {
-		MockBukkit.unload();
+		MockBukkit.unmock();
 	}
 
 	public void assertMessage(String msg) {

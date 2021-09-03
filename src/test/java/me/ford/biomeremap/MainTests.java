@@ -18,7 +18,7 @@ public class MainTests {
 
 	@After
 	public void tearDown() {
-		MockBukkit.unload();
+		MockBukkit.unmock();
 	}
 
 	@Test

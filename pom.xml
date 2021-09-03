@@ -25,6 +25,14 @@
 		</repository>
 	</repositories>
 
+	<pluginRepositories>
+		<!-- This is used for the snapshot version of the maven shade plugin which normally does not play well with Java 16 quite yet-->
+		<pluginRepository>
+			<id>maven-snapshots</id>
+			<url>https://repository.apache.org/content/repositories/snapshots/</url>
+		</pluginRepository>
+	</pluginRepositories>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.spigotmc</groupId>
@@ -34,8 +42,8 @@
 		</dependency>
 		<dependency>
 			<groupId>com.github.seeseemelk</groupId>
-			<artifactId>mockbukkit</artifactId>
-			<version>0.2.2</version> <!-- 1.14 version (local) -->
+			<artifactId>MockBukkit-v1.17</artifactId>
+			<version>1.7.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -79,7 +87,14 @@
 			</resource>
 		</resources>
 		<plugins>
-
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>16</source>
+					<target>16</target>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -89,7 +104,9 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.2.1</version>
+				<!-- The plugin's version is in a snapshot state because the non-snapshot version does not
+				support Java 16 quite yet.-->
+				<version>3.3.0-SNAPSHOT</version>
 				<!-- Do not include the <configuration>...</configuration> part if you are using Sponge! -->
 				<configuration>
 					<relocations>
