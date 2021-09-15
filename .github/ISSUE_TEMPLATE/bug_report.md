@@ -20,7 +20,7 @@ If applicable, add screenshots to help explain your problem
 
 **Server Environment**
  - OS [Linux, MacOS, Windows] version:
- - Java version [java -version]
+ - Java version [java -version]:
  - Server version [/version]: 
  - BiomeRemap version [/version BiomeRemap]:
 
