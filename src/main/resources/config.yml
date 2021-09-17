@@ -113,6 +113,17 @@ enable-metrics: true
 #   * An invalid biome ENUM will generate a non-fatal warning in the console/log, and revert to the named biome
 #
 # Other configuration nodes may be added, as usage warrants.
+#
+# Starting with MC 1.18, the following biomes do not generate naturally.
+#   badlands_plateau                   bamboo_jungle_hills                 birch_forest_hills
+#   dark_forest_hills                  desert_hills                        desert_lakes
+#   giant_spruce_taiga_hills           giant_tree_taiga_hills              jungle_hills
+#   modified_badlands_plateau          modified_gravelly_mountains         modified_jungle
+#   modified_jungle_edge               modified_wooded_badlands_plateau    mushroom_field_shore
+#   shattered_savanna_plateau          snowy_mountains                     snowy_taiga_hills
+#   snowy_taiga_mountains              swamp_hills                         taiga_hills
+#   taiga_mountains                    tall_birch_hills                    wooded_hills
+# They are included in the biomemaps for compatibility, but are no longer used as default replacement biomes
 
 biomemaps:
   # ======== BiomeRemap example: snowbound ===========================================================
@@ -134,19 +145,19 @@ biomemaps:
       bamboo_jungle:
         replacement-biome: snowy_taiga
       bamboo_jungle_hills:
-        replacement-biome: snowy_taiga_hills
+        replacement-biome: snowy_taiga
       beach:
         replacement-biome: snowy_beach
       birch_forest:
         replacement-biome: snowy_tundra
       birch_forest_hills:
-        replacement-biome: snowy_taiga_hills
+        replacement-biome: snowy_taiga
       cold_ocean:
         replacement-biome: frozen_river
       dark_forest:
         replacement-biome: snowy_tundra
       dark_forest_hills:
-        replacement-biome: snowy_taiga_hills
+        replacement-biome: snowy_taiga
       deep_cold_ocean:
         replacement-biome: frozen_river
       deep_frozen_ocean:
@@ -160,7 +171,7 @@ biomemaps:
       desert:
         replacement-biome: snowy_tundra
       desert_hills:
-        replacement-biome: snowy_taiga_hills
+        replacement-biome: snowy_taiga
       desert_lakes:
         replacement-biome: snowy_tundra
       dripstone_caves:
@@ -178,13 +189,15 @@ biomemaps:
       giant_spruce_taiga:
         replacement-biome: snowy_taiga
       giant_spruce_taiga_hills:
-        replacement-biome: snowy_taiga_hills
+        replacement-biome: snowy_taiga
       giant_tree_taiga:
         replacement-biome: snowy_taiga
       giant_tree_taiga_hills:
-        replacement-biome: snowy_taiga_hills
+        replacement-biome: snowy_taiga
       gravelly_mountains:
-        replacement-biome: snowy_taiga_mountains
+        replacement-biome: snowy_slopes
+      grove
+        replacement-biome: grove
       ice_spikes:
         replacement-biome: ice_spikes
       jungle:
@@ -192,15 +205,19 @@ biomemaps:
       jungle_edge:
         replacement-biome: snowy_tundra
       jungle_hills:
-        replacement-biome: snowy_taiga_hills
+        replacement-biome: snowy_taiga
+      lofty_peaks
+        replacement-biome: lofty_peaks
       lukewarm_ocean:
         replacement-biome: frozen_river
       lush_caves:
         replacement-biome: snowy_tundra
+      meadow
+        replacement-biome: snowy_tundra
       modified_badlands_plateau:
         replacement-biome: snowy_tundra
       modified_gravelly_mountains:
-        replacement-biome: snowy_taiga_mountains
+        replacement-biome: snowy_slopes
       modified_jungle:
         replacement-biome: snowy_tundra
       modified_jungle_edge:
@@ -210,7 +227,7 @@ biomemaps:
       mountain_edge:
         replacement-biome: snowy_tundra
       mountains:
-        replacement-biome: snowy_taiga_mountains
+        replacement-biome: snowy_slopes
       mushroom_field_shore:
         replacement-biome: snowy_beach
       mushroom_fields:
@@ -229,10 +246,14 @@ biomemaps:
         replacement-biome: snowy_tundra
       shattered_savanna_plateau:
         replacement-biome: snowy_tundra
+      snow_capped_peaks
+        replacement-biome: snow_capped_peaks
       snowy_beach:
         replacement-biome: snowy_beach
       snowy_mountains:
-        replacement-biome: snowy_taiga_mountains
+        replacement-biome: snowy_slopes
+      snowy_slopes
+        replacement-biome: snowy_slopes
       snowy_taiga:
         replacement-biome: snowy_taiga
       snowy_taiga_hills:
@@ -243,30 +264,32 @@ biomemaps:
         replacement-biome: snowy_tundra
       stone_shore:
         replacement-biome: snowy_beach
+      stony_peaks
+        replacement-biome: snowy_slopes
       sunflower_plains:
         replacement-biome: snowy_tundra
       swamp:
         replacement-biome: snowy_tundra
       swamp_hills:
-        replacement-biome: snowy_taiga_hills
+        replacement-biome: snowy_taiga
       taiga:
         replacement-biome: snowy_tundra
       taiga_hills:
-        replacement-biome: snowy_taiga_hills
+        replacement-biome: snowy_taiga
       taiga_mountains:
-        replacement-biome: snowy_taiga_mountains
+        replacement-biome: snowy_slopes
       tall_birch_forest:
         replacement-biome: snowy_tundra
       tall_birch_hills:
-        replacement-biome: snowy_taiga_hills
+        replacement-biome: snowy_taiga
       warm_ocean:
         replacement-biome: frozen_river
       wooded_badlands_plateau:
         replacement-biome: snowy_tundra
       wooded_hills:
-        replacement-biome: snowy_taiga_hills
+        replacement-biome: snowy_taiga
       wooded_mountains:
-        replacement-biome: snowy_taiga_mountains
+        replacement-biome: snowy_slopes
 
   # ======== BiomeRemap example: boilerroom ==========================================================
   # Climate change is real. The entire world is warm, warmer, hot, hotter.
