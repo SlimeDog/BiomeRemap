@@ -196,7 +196,7 @@ biomemaps:
         replacement-biome: snowy_taiga
       gravelly_mountains:
         replacement-biome: snowy_slopes
-      grove
+      grove:
         replacement-biome: grove
       ice_spikes:
         replacement-biome: ice_spikes
@@ -206,13 +206,13 @@ biomemaps:
         replacement-biome: snowy_tundra
       jungle_hills:
         replacement-biome: snowy_taiga
-      lofty_peaks
+      lofty_peaks:
         replacement-biome: lofty_peaks
       lukewarm_ocean:
         replacement-biome: frozen_river
       lush_caves:
         replacement-biome: snowy_tundra
-      meadow
+      meadow:
         replacement-biome: snowy_tundra
       modified_badlands_plateau:
         replacement-biome: snowy_tundra
@@ -246,7 +246,7 @@ biomemaps:
         replacement-biome: snowy_tundra
       shattered_savanna_plateau:
         replacement-biome: snowy_tundra
-      snowcapped_peaks
+      snowcapped_peaks:
         replacement-biome: snowcapped_peaks
       snowy_beach:
         replacement-biome: snowy_beach
@@ -264,7 +264,7 @@ biomemaps:
         replacement-biome: snowy_tundra
       stone_shore:
         replacement-biome: snowy_beach
-      stony_peaks
+      stony_peaks:
         replacement-biome: snowy_slopes
       sunflower_plains:
         replacement-biome: snowy_tundra
@@ -360,7 +360,7 @@ biomemaps:
         replacement-biome: giant_tree_taiga_hills
       gravelly_mountains:
         replacement-biome: gravelly_mountains
-      grove
+      grove:
         replacement-biome: meadow
       ice_spikes:
         replacement-biome: mountains
@@ -376,7 +376,7 @@ biomemaps:
         replacement-biome: warm_ocean
       lush_caves:
         replacement-biome: lush_caves
-      meadow
+      meadow:
         replacement-biome: meadow
       modified_badlands_plateau:
         replacement-biome: modified_badlands_plateau
@@ -416,7 +416,7 @@ biomemaps:
         replacement-biome: desert
       snowy_mountains:
         replacement-biome: mountains
-      snowy_slopes
+      snowy_slopes:
         replacement-biome: mountains
       snowy_taiga:
         replacement-biome: taiga
