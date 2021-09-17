@@ -12,6 +12,7 @@
 #   BiomeRemap 2.0.3    Spigot 1.15.2     
 #   BiomeRemap 2.2.1    Spigot and Paper 1.16.5     
 #   BiomeRemap 2.3.1    Spigot and Paper 1.17.1
+#   BiomeRemap 2.4.0    Spigot and Paper 1.18
 #
 # ========== CAVEATS AND WARNINGS ==================================================================
 # BiomeRemap is provided for your enjoyment and entertainment. We cannot guarantee that the results
@@ -31,11 +32,20 @@
 # remap the chunks initially-generated on world creation. These chunks must be remapped manually.
 # Commands to do so are described in the wiki.
 #
-# Note that all 1.14/1.15/1.16/1.17 biomes are included in the configured biomemaps. These include
-# dripstone_caves and lush_caves, which cannot be created on vanilla servers, but are included for
-# completeness, since they are found in the 1.17 locatebiome list. We do not recommend that other
-# biomes be remapped to them until 1.18. Biomes that do not exist in your Minecraft version will
-# generate warnings in the console/log on plugin enable; these may be safely ignored.
+# Note that all biomes for 1.14 through 1.18 are included in the configured biomemaps. Biomes that
+# do not exist in your Minecraft version will generate warnings in the console/log on plugin enable;
+# these may be safely ignored.
+#
+# Starting with MC 1.18, the following biomes do not generate naturally.
+#   badlands_plateau                   bamboo_jungle_hills                 birch_forest_hills
+#   dark_forest_hills                  desert_hills                        desert_lakes
+#   giant_spruce_taiga_hills           giant_tree_taiga_hills              jungle_hills
+#   modified_badlands_plateau          modified_gravelly_mountains         modified_jungle
+#   modified_jungle_edge               modified_wooded_badlands_plateau    mushroom_field_shore
+#   shattered_savanna_plateau          snowy_mountains                     snowy_taiga_hills
+#   snowy_taiga_mountains              swamp_hills                         taiga_hills
+#   taiga_mountains                    tall_birch_hills                    wooded_hills
+# They are included for completeness, but are no longer used as default replacement biomes.
 #
 # Changes of this magnitude should always be performed first on a test server, in order to verify
 # that the configuration and results meet expectations. We strongly recommend making a server backup
@@ -113,17 +123,6 @@ enable-metrics: true
 #   * An invalid biome ENUM will generate a non-fatal warning in the console/log, and revert to the named biome
 #
 # Other configuration nodes may be added, as usage warrants.
-#
-# Starting with MC 1.18, the following biomes do not generate naturally.
-#   badlands_plateau                   bamboo_jungle_hills                 birch_forest_hills
-#   dark_forest_hills                  desert_hills                        desert_lakes
-#   giant_spruce_taiga_hills           giant_tree_taiga_hills              jungle_hills
-#   modified_badlands_plateau          modified_gravelly_mountains         modified_jungle
-#   modified_jungle_edge               modified_wooded_badlands_plateau    mushroom_field_shore
-#   shattered_savanna_plateau          snowy_mountains                     snowy_taiga_hills
-#   snowy_taiga_mountains              swamp_hills                         taiga_hills
-#   taiga_mountains                    tall_birch_hills                    wooded_hills
-# They are included in the biomemaps for compatibility, but are no longer used as default replacement biomes
 
 biomemaps:
   # ======== BiomeRemap example: snowbound ===========================================================
