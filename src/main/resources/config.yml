@@ -246,8 +246,8 @@ biomemaps:
         replacement-biome: snowy_tundra
       shattered_savanna_plateau:
         replacement-biome: snowy_tundra
-      snow_capped_peaks
-        replacement-biome: snow_capped_peaks
+      snowcapped_peaks
+        replacement-biome: snowcapped_peaks
       snowy_beach:
         replacement-biome: snowy_beach
       snowy_mountains:
@@ -360,6 +360,8 @@ biomemaps:
         replacement-biome: giant_tree_taiga_hills
       gravelly_mountains:
         replacement-biome: gravelly_mountains
+      grove
+        replacement-biome: meadow
       ice_spikes:
         replacement-biome: mountains
       jungle:
@@ -368,10 +370,14 @@ biomemaps:
         replacement-biome: jungle_edge
       jungle_hills:
         replacement-biome: jungle_hills
+      lofty_peaks
+        replacement-biome: mountains
       lukewarm_ocean:
         replacement-biome: warm_ocean
       lush_caves:
         replacement-biome: lush_caves
+      meadow
+        replacement-biome: meadow
       modified_badlands_plateau:
         replacement-biome: modified_badlands_plateau
       modified_gravelly_mountains:
@@ -404,9 +410,13 @@ biomemaps:
         replacement-biome: shattered_savanna
       shattered_savanna_plateau:
         replacement-biome: shattered_savanna_plateau
+      snowcapped_peaks:
+        replacement-biome: mountains
       snowy_beach:
         replacement-biome: desert
       snowy_mountains:
+        replacement-biome: mountains
+      snowy_slopes
         replacement-biome: mountains
       snowy_taiga:
         replacement-biome: taiga
@@ -418,6 +428,8 @@ biomemaps:
         replacement-biome: plains
       stone_shore:
         replacement-biome: desert
+      stony_peaks:
+        replacement-biome: stony_peaks
       sunflower_plains:
         replacement-biome: sunflower_plains
       swamp:
