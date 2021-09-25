@@ -2,10 +2,10 @@ package me.ford.biomeremap.settings;
 
 import java.util.Arrays;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import me.ford.biomeremap.BiomeRemap;
@@ -13,19 +13,19 @@ import me.ford.biomeremap.BiomeRemap;
 public class MessageTests {
 	private BiomeRemap plugin;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		MockBukkit.mock();
 		plugin = MockBukkit.load(BiomeRemap.class);
 	}
 
-	@After
+	@AfterEach
 	public void tearDown() {
 		MockBukkit.unmock();
 	}
 
 	public void assertMessage(String msg) {
-		Assert.assertFalse(msg.contains("{") && msg.contains("}"));
+		Assertions.assertFalse(msg.contains("{") && msg.contains("}"));
 	}
 
 	@Test
