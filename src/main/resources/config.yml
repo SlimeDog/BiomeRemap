@@ -113,8 +113,8 @@ enable-metrics: true
 #   * Identifies the vanilla biome that will be replaced
 #   * An invalid biome ENUM will generate a non-fatal warning in the console/log
 #   * Valid biome ENUMs may be found at https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/block/Biome.html
-#     but we use lowercase, which may be found at https://minecraft.gamepedia.com/Biome
-#   * Biome descriptions may be found at https://minecraft.gamepedia.com/Biome
+#     but we use lowercase, which may be found at https://minecraft.fandom.com/wiki/Biome
+#   * Biome descriptions may be found at https://minecraft.fandom.com/wiki/Biome
 #   * Additional information may be found at https://github.com/SlimeDog/BiomeRemap/wiki/
 # biomemaps.NAME.biomes.BIOME_ENUM.replacement-biome
 #   * Optional
