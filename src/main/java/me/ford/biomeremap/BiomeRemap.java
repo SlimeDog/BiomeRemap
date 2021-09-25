@@ -36,6 +36,7 @@ import me.ford.biomeremap.volotile.VolatileChunkUpdater;
 
 public class BiomeRemap extends JavaPlugin {
 	private static BiomeRemap staticInstance;
+	private final Logger logger;
 	private Messages messages;
 	private Settings settings;
 	private boolean testing = false;
@@ -56,10 +57,17 @@ public class BiomeRemap extends JavaPlugin {
 
 	public BiomeRemap() {
 		super();
+		this.logger = null;
 	}
 
 	protected BiomeRemap(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
+		this(loader, description, dataFolder, file, null);
+	}
+
+	protected BiomeRemap(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file,
+			Logger logger) {
 		super(loader, description, dataFolder, file);
+		this.logger = logger;
 		testing = true;
 	}
 
@@ -280,6 +288,11 @@ public class BiomeRemap extends JavaPlugin {
 		}
 		debugBuffer.clear();
 		debugIsSaving = true;
+	}
+
+	@Override
+	public Logger getLogger() {
+		return logger != null ? logger : super.getLogger();
 	}
 
 }
