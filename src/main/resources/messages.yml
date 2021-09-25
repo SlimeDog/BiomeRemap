@@ -5,7 +5,7 @@
 # A YAML checker may be found at http://www.yamllint.com
 #
 # Message may contain color codes and other format codes. Both & and § are recognized.
-# A list of valid formatting codes may be found at https://minecraft.gamepedia.com/Formatting_codes
+# A list of valid formatting codes may be found at https://minecraft.fandom.com/wiki/Formatting_codes
 #
 # Message placeholders are indicated by {PLACEHOLDER}.
 # PlaceholderAPI variables are not supported.
