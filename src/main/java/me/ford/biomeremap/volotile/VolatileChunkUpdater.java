@@ -78,6 +78,8 @@ public class VolatileChunkUpdater implements ChunkUpdater {
 		Object load;
 		if (one16point1) {
 			load = packetPlayOutMapChunkConstructor.newInstance(nmsChunk, 65535, true);
+		} else if (one17) {
+			load = packetPlayOutMapChunkConstructor.newInstance(nmsChunk);
 		} else {
 			load = packetPlayOutMapChunkConstructor.newInstance(nmsChunk, 65535);
 		}
