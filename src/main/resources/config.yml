@@ -28,23 +28,25 @@
 # automatically, even if the configuration is changed. They can be remapped manually, if desired.
 # Commands to do so are described in the wiki.
 #
-# Due to the way Minecraft world creation and chunk generation work, BiomeRemap cannot automatically
+# Due to the way Minecraft world creation and chunk generation work, BiomeRemap does automatically
 # remap the chunks initially-generated on world creation. These chunks must be remapped manually.
 # Commands to do so are described in the wiki.
 #
-# Starting with Minecraft 1.18, 13 biomes were renamed. See the BiomeRemap WIKI for details.
+# Thirteen (13) biomes were renamed in Minecraft 1.18. See the BiomeRemap WIKI for details.
 # Renamed biomes are included at the bottom of the default overworld biomemaps for completeness,
 # but they are no longer used as default replacement biomes. The renamed list is clearly marked in
-# the biomemaps, and may be safely removed when your servers are running 1.18 or later.
+# the biomemaps. It is expected that they will be removed from the configuration after testing.
 #
-# Starting with Minecraft 1.18, 25 biomes were deleted. See the BiomeRemap WIKI for details.
+# Twenty-five (25) biomes were deleted in Minecraft 1.18. See the BiomeRemap WIKI for details.
 # Deleted biomes are included at the bottom of the default overworld biomemaps for completeness,
 # but they are no longer used as default replacement biomes. The deleted list is clearly marked in
-# the biomemaps, and may be safely removed when your servers are running 1.18 or later.
+# the biomemaps. It is expected that they will be removed from the configuration after testing.
 #
-# Note that all biomes for 1.14 through 1.18 are included in the configured biomemaps. Biomes that
-# do not exist in your Minecraft version will generate warnings in the console/log on plugin enable;
-# these warnings may be safely ignored.
+# Note that all biomes from 1.14 through 1.18 are included in the configured biomemaps, so this
+# configuration file may be used on pre-1.18 servers. However, adjustments will be necessary.
+# Biomes that do not exist in your Minecraft version will generate errors in the console/log,
+# and BiomeRemap will fail to enable. If you are using this configuration on a pre-1.18 server,
+# delete the offending entries, then reload the plugin or restart the server.
 #
 # Changes of this magnitude should always be performed first on a test server, in order to verify
 # that the configuration and results meet expectations. We strongly recommend making a server backup
