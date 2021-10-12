@@ -55,7 +55,7 @@
 # ========== CONFIGURATION FILE VERSION ============================================================
 # Do not edit the version string unless you know what you are dolng.
 file: config.yml
-version: 5
+version: 1.18
 
 # ========== CHECK FOR UPDATES =====================================================================
 # If you do not want notification of available updates in the console log, you may disable it here.
