@@ -218,10 +218,10 @@ biomemaps:
         replacement-biome: snowy_taiga
       sparse_jungle:
         replacement-biome: snowy_tundra
-      stony_shore:
-        replacement-biome: snowy_beach
       stony_peaks:
         replacement-biome: snowy_slopes
+      stony_shore:
+        replacement-biome: snowy_beach
       sunflower_plains:
         replacement-biome: snowy_tundra
       swamp:
@@ -410,10 +410,10 @@ biomemaps:
         replacement-biome: taiga
       sparse_jungle:
         replacement-biome: sparse_jungle
-      stony_shore:
-        replacement-biome: desert
       stony_peaks:
         replacement-biome: stony_peaks
+      stony_shore:
+        replacement-biome: desert
       sunflower_plains:
         replacement-biome: sunflower_plains
       swamp:
