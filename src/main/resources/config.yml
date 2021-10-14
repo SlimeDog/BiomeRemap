@@ -14,6 +14,9 @@
 #   BiomeRemap 2.3.2    Spigot and Paper 1.17.1
 #   BiomeRemap 3.0.0    Spigot and Paper 1.18
 #
+# This configuration file is compatible with Minecraft 1.18 only. Versions for previous Minecraft
+# versions may be found at https://github.com/SlimeDog/BiomeRemap/wiki/Configuration.
+#
 # ========== CAVEATS AND WARNINGS ==================================================================
 # BiomeRemap is provided for your enjoyment and entertainment. We cannot guarantee that the results
 # will meet your needs or desires.
@@ -37,8 +40,8 @@
 # before installing and using any new plugin.
 
 # ========== CONFIGURATION FILE VERSION ============================================================
-# This version of the configuration file should be used only on Minecraft 1.18. Versions of the file
-# for previous Minecraft versions may be found at https://github.com/SlimeDog/BiomeRemap/wiki/Configuration.
+# This configuration file is compatible with Minecraft 1.18 only. Versions for previous Minecraft
+# versions may be found at https://github.com/SlimeDog/BiomeRemap/wiki/Configuration.
 #
 # In Minecraft 1.18, 13 biomes were renamed, 25 biomes were deleted, and six new biomes were
 # introduced. See https://github.com/SlimeDog/BiomeRemap/wiki/ for details.
