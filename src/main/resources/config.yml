@@ -159,8 +159,6 @@ biomemaps:
         replacement-biome: frozen_river
       deep_ocean:
         replacement-biome: frozen_river
-      deep_warm_ocean:
-        replacement-biome: frozen_river
       desert:
         replacement-biome: snowy_tundra
       dripstone_caves:
@@ -277,6 +275,8 @@ biomemaps:
         replacement-biome: snowy_taiga
       dark_forest_hills:
         replacement-biome: snowy_taiga
+      deep_warm_ocean:
+        replacement-biome: frozen_river
       desert_hills:
         replacement-biome: snowy_taiga
       desert_lakes:
@@ -351,8 +351,6 @@ biomemaps:
         replacement-biome: deep_lukewarm_ocean
       deep_ocean:
         replacement-biome: deep_lukewarm_ocean
-      deep_warm_ocean:
-        replacement-biome: deep_warm_ocean
       desert:
         replacement-biome: desert
       dripstone_caves:
@@ -469,6 +467,8 @@ biomemaps:
         replacement-biome: birch_forest_hills
       dark_forest_hills:
         replacement-biome: dark_forest_hills
+      deep_warm_ocean:
+        replacement-biome: deep_warm_ocean
       desert_hills:
         replacement-biome: desert_hills
       desert_lakes:
