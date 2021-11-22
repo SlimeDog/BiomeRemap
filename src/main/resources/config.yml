@@ -283,6 +283,8 @@ biomemaps:
         replacement-biome: snowy_taiga
       warm_ocean:
         replacement-biome: frozen_river
+      windswept_hills:
+        replacement-biome: snowy_slopes
       wooded_badlands_plateau:
         replacement-biome: snowy_tundra
       wooded_hills:
@@ -362,7 +364,7 @@ biomemaps:
       grove:
         replacement-biome: meadow
       ice_spikes:
-        replacement-biome: mountains
+        replacement-biome: windswept_hills
       jungle:
         replacement-biome: jungle
       jungle_edge:
@@ -370,7 +372,7 @@ biomemaps:
       jungle_hills:
         replacement-biome: jungle_hills
       lofty_peaks:
-        replacement-biome: mountains
+        replacement-biome: windswept_hills
       lukewarm_ocean:
         replacement-biome: warm_ocean
       lush_caves:
@@ -390,7 +392,7 @@ biomemaps:
       mountain_edge:
         replacement-biome: mountain_edge
       mountains:
-        replacement-biome: mountains
+        replacement-biome: windswept_hills
       mushroom_field_shore:
         replacement-biome: desert
       mushroom_fields:
@@ -410,13 +412,13 @@ biomemaps:
       shattered_savanna_plateau:
         replacement-biome: shattered_savanna_plateau
       snowcapped_peaks:
-        replacement-biome: mountains
+        replacement-biome: windswept_hills
       snowy_beach:
         replacement-biome: desert
       snowy_mountains:
-        replacement-biome: mountains
+        replacement-biome: windswept_hills
       snowy_slopes:
-        replacement-biome: mountains
+        replacement-biome: windswept_hills
       snowy_taiga:
         replacement-biome: taiga
       snowy_taiga_hills:
@@ -447,6 +449,8 @@ biomemaps:
         replacement-biome: tall_birch_hills
       warm_ocean:
         replacement-biome: warm_ocean
+      windswept_hills:
+        replacement-biome: windswept_hills
       wooded_badlands_plateau:
         replacement-biome: wooded_badlands_plateau
       wooded_hills:
