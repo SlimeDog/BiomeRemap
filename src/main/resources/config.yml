@@ -315,6 +315,8 @@ biomemaps:
         replacement-biome: snowy_taiga
       taiga_mountains:
         replacement-biome: snowy_slopes
+      windswept_hills:
+        replacement-biome: snowy_slopes
       tall_birch_hills:
         replacement-biome: snowy_taiga
       wooded_hills:
@@ -364,15 +366,15 @@ biomemaps:
       frozen_ocean:
         replacement-biome: warm_ocean
       frozen_peaks:
-        replacement-biome: mountains
+        replacement-biome: windswept_hills
       frozen_river:
         replacement-biome: river
       grove:
         replacement-biome: meadow
       ice_spikes:
-        replacement-biome: mountains
+        replacement-biome: windswept_hills
       jagged_peaks:
-        replacement-biome: mountains
+        replacement-biome: windswept_hills
       jungle:
         replacement-biome: jungle
       lukewarm_ocean:
@@ -404,7 +406,7 @@ biomemaps:
       snowy_plains:
         replacement-biome: plains
       snowy_slopes:
-        replacement-biome: mountains
+        replacement-biome: windswept_hills
       snowy_taiga:
         replacement-biome: taiga
       sparse_jungle:
@@ -431,86 +433,6 @@ biomemaps:
         replacement-biome: windswept_savanna
       wooded_badlands:
         replacement-biome: wooded_badlands
-  # Biomes renamed in Minecraft 1.18.
-      giant_spruce_taiga:
-        replacement-biome: giant_spruce_taiga
-      giant_tree_taiga:
-        replacement-biome: giant_tree_taiga
-      gravelly_mountains:
-        replacement-biome: gravelly_mountains
-      jungle_edge:
-        replacement-biome: jungle_edge
-      lofty_peaks:
-        replacement-biome: mountains
-      mountains:
-        replacement-biome: mountains
-      shattered_savanna:
-        replacement-biome: shattered_savanna
-      snowcapped_peaks:
-        replacement-biome: mountains
-      snowy_tundra:
-        replacement-biome: plains
-      stone_shore:
-        replacement-biome: desert
-      tall_birch_forest:
-        replacement-biome: tall_birch_forest
-      wooded_badlands_plateau:
-        replacement-biome: wooded_badlands_plateau
-      wooded_mountains:
-        replacement-biome: wooded_mountains
-  # Biomes deleted in Minecraft 1.18.
-      badlands_plateau:
-        replacement-biome: badlands_plateau
-      bamboo_jungle_hills:
-        replacement-biome: bamboo_jungle_hills
-      birch_forest_hills:
-        replacement-biome: birch_forest_hills
-      dark_forest_hills:
-        replacement-biome: dark_forest_hills
-      deep_warm_ocean:
-        replacement-biome: deep_warm_ocean
-      desert_hills:
-        replacement-biome: desert_hills
-      desert_lakes:
-        replacement-biome: desert_lakes
-      giant_spruce_taiga_hills:
-        replacement-biome: giant_spruce_taiga_hills
-      giant_tree_taiga_hills:
-        replacement-biome: giant_tree_taiga_hills
-      jungle_hills:
-        replacement-biome: jungle_hills
-      modified_badlands_plateau:
-        replacement-biome: modified_badlands_plateau
-      modified_gravelly_mountains:
-        replacement-biome: modified_gravelly_mountains
-      modified_jungle:
-        replacement-biome: modified_jungle
-      modified_jungle_edge:
-        replacement-biome: modified_jungle_edge
-      modified_wooded_badlands_plateau:
-        replacement-biome: modified_wooded_badlands_plateau
-      mountain_edge:
-        replacement-biome: mountain_edge
-      mushroom_field_shore:
-        replacement-biome: desert
-      shattered_savanna_plateau:
-        replacement-biome: shattered_savanna_plateau
-      snowy_mountains:
-        replacement-biome: mountains
-      snowy_taiga_hills:
-        replacement-biome: taiga_hills
-      snowy_taiga_mountains:
-        replacement-biome: taiga_mountains
-      swamp_hills:
-        replacement-biome: swamp_hills
-      taiga_hills:
-        replacement-biome: taiga_hills
-      taiga_mountains:
-        replacement-biome: taiga_mountains
-      tall_birch_hills:
-        replacement-biome: tall_birch_hills
-      wooded_hills:
-        replacement-biome: wooded_hills
 
   # ======== BiomeRemap example: hell ================================================================
   # There will be hell to pay.
