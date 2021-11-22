@@ -140,17 +140,17 @@ biomemaps:
     full-chunk-remap: false
     biomes:
       badlands:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       bamboo_jungle:
         replacement-biome: snowy_taiga
       beach:
         replacement-biome: snowy_beach
       birch_forest:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       cold_ocean:
         replacement-biome: frozen_river
       dark_forest:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       deep_cold_ocean:
         replacement-biome: frozen_river
       deep_frozen_ocean:
@@ -160,15 +160,15 @@ biomemaps:
       deep_ocean:
         replacement-biome: frozen_river
       desert:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       dripstone_caves:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       eroded_badlands:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       flower_forest:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       forest:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       frozen_ocean:
         replacement-biome: frozen_river
       frozen_peaks:
@@ -182,31 +182,31 @@ biomemaps:
       jagged_peaks:
         replacement-biome: jagged_peaks
       jungle:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       lukewarm_ocean:
         replacement-biome: frozen_river
       lush_caves:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       meadow:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       mushroom_fields:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       ocean:
         replacement-biome: frozen_river
       old_growth_birch_forest:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       old_growth_pine_taiga:
         replacement-biome: snowy_taiga
       old_growth_spruce_taiga:
         replacement-biome: snowy_taiga
       plains:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       river:
         replacement-biome: frozen_river
       savanna:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       savanna_plateau:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       snowy_beach:
         replacement-biome: snowy_beach
       snowy_plains:
@@ -216,17 +216,17 @@ biomemaps:
       snowy_taiga:
         replacement-biome: snowy_taiga
       sparse_jungle:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       stony_peaks:
         replacement-biome: snowy_slopes
       stony_shore:
         replacement-biome: snowy_beach
       sunflower_plains:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       swamp:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       taiga:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       warm_ocean:
         replacement-biome: frozen_river
       windswept_forest:
@@ -236,9 +236,9 @@ biomemaps:
       windswept_hills:
         replacement-biome: snowy_slopes
       windswept_savanna:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       wooded_badlands:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
   # Biomes renamed in Minecraft 1.18.
       giant_spruce_taiga:
         replacement-biome: snowy_taiga
@@ -247,28 +247,28 @@ biomemaps:
       gravelly_mountains:
         replacement-biome: snowy_slopes
       jungle_edge:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       lofty_peaks:
         replacement-biome: lofty_peaks
       mountains:
         replacement-biome: snowy_slopes
       shattered_savanna:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       snowcapped_peaks:
         replacement-biome: snowcapped_peaks
       snowy_tundra:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       stone_shore:
         replacement-biome: snowy_beach
       tall_birch_forest:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       wooded_badlands_plateau:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       wooded_mountains:
         replacement-biome: snowy_slopes
   # Biomes deleted in Minecraft 1.18.
       badlands_plateau:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       bamboo_jungle_hills:
         replacement-biome: snowy_taiga
       birch_forest_hills:
@@ -280,7 +280,7 @@ biomemaps:
       desert_hills:
         replacement-biome: snowy_taiga
       desert_lakes:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       giant_spruce_taiga_hills:
         replacement-biome: snowy_taiga
       giant_tree_taiga_hills:
@@ -288,21 +288,21 @@ biomemaps:
       jungle_hills:
         replacement-biome: snowy_taiga
       modified_badlands_plateau:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       modified_gravelly_mountains:
         replacement-biome: snowy_slopes
       modified_jungle:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       modified_jungle_edge:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       modified_wooded_badlands_plateau:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       mountain_edge:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       mushroom_field_shore:
         replacement-biome: snowy_beach
       shattered_savanna_plateau:
-        replacement-biome: snowy_tundra
+        replacement-biome: snowy_plains
       snowy_mountains:
         replacement-biome: snowy_slopes
       snowy_taiga_hills:
