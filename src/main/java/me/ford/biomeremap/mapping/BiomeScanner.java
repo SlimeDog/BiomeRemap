@@ -1,6 +1,5 @@
 package me.ford.biomeremap.mapping;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 import org.bukkit.World;
@@ -57,24 +56,24 @@ public final class BiomeScanner {
 														// positions
 			for (int z = startZ; z < startZ + 16; z++) { // not sure why, but I still need to set the data for all the
 															// positions
-				addBiome(map, world.getBiome(x, yLayer, z)); // TODO - in the future, we might need to change/get biomes
-																// at other y values, but for now only y=0 has an effect
+				addBiome(map, world.getBiome(x, yLayer, z));
 			}
 		}
 	}
 
 	private void addBiomesNMS(org.bukkit.Chunk chunk, Map<Biome, Integer> map, int yLayer) {
+		throw new IllegalStateException("This is not currently implemented!");
 		// 16 per ylayer
-		final int startNr = yLayer << 4;
-		for (int nr = startNr; nr < startNr + 16; nr++) {
-			try {
-				addBiome(map, br.getBiomeManager().getBiomeNMS(chunk, nr));
-			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				br.getLogger().severe("Problem getting biome!");
-				e.printStackTrace();
-				continue;
-			}
-		}
+		// final int startNr = yLayer << 4;
+		// for (int nr = startNr; nr < startNr + 16; nr++) {
+		// 	try {
+		// 		addBiome(map, br.getBiomeManager().getBiomeNMS(chunk, nr));
+		// 	} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+		// 		br.getLogger().severe("Problem getting biome!");
+		// 		e.printStackTrace();
+		// 		continue;
+		// 	}
+		// }
 	}
 
 	private void addBiome(Map<Biome, Integer> map, Biome biome) {

@@ -1,6 +1,5 @@
 package me.ford.biomeremap.mapping;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -65,14 +64,9 @@ public class TeleportListener implements Listener {
 		return null;
 	}
 
+	@SuppressWarnings("deprecation")
 	private void sendUpdate(Player player, Chunk chunk) {
-		try {
-			br.getChunkUpdater().updateChunk(player, chunk);
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
-				| InstantiationException e) {
-			br.getLogger().severe("Problem updating chunk for player " + player.getName());
-			e.printStackTrace();
-		}
+		chunk.getWorld().refreshChunk(chunk.getX(), chunk.getZ());
 	}
 
 }
