@@ -12,21 +12,19 @@ public class PopulatorQueue {
 	private final Map<Biome, Integer> map;
 	private final World world;
 	private final int yLayer;
-	private final boolean useNMS;
 	private final Set<ChunkLoc> one = new HashSet<>();
 	private final Set<ChunkLoc> two = new HashSet<>();
 	private final Set<ChunkLoc> three = new HashSet<>();
 
 	public PopulatorQueue(Map<Biome, Integer> map, World world, BiomeScanner scanner) {
-		this(map, world, scanner, 0, false);
+		this(map, world, scanner, 0);
 	}
 
-	public PopulatorQueue(Map<Biome, Integer> map, World world, BiomeScanner scanner, int yLayer, boolean useNMS) {
+	public PopulatorQueue(Map<Biome, Integer> map, World world, BiomeScanner scanner, int yLayer) {
 		this.scanner = scanner;
 		this.map = map;
 		this.world = world;
 		this.yLayer = yLayer;
-		this.useNMS = useNMS;
 	}
 
 	public Map<Biome, Integer> getMap() {
@@ -39,10 +37,6 @@ public class PopulatorQueue {
 
 	public int getYLayer() {
 		return yLayer;
-	}
-
-	public boolean useNMS() {
-		return useNMS;
 	}
 
 	public void add(int x, int z) {
@@ -66,7 +60,7 @@ public class PopulatorQueue {
 	public void tick() {
 		// do three + clear
 		for (ChunkLoc loc : new HashSet<>(three)) { // they should be removed when scanned
-			scanner.addBiomesFor(map, world, loc.getX(), loc.getZ(), yLayer, useNMS);
+			scanner.addBiomesFor(map, world, loc.getX(), loc.getZ(), yLayer);
 		}
 		three.clear();
 		// two -> three + clear

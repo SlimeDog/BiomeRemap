@@ -16,11 +16,10 @@ public final class BiomeScanner {
 	}
 
 	public boolean addBiomesFor(Map<Biome, Integer> map, World world, int chunkX, int chunkZ) {
-		return addBiomesFor(map, world, chunkX, chunkZ, 0, false);
+		return addBiomesFor(map, world, chunkX, chunkZ, 0);
 	}
 
-	public boolean addBiomesFor(Map<Biome, Integer> map, World world, int chunkX, int chunkZ, int yLayer,
-			boolean useNMS) {
+	public boolean addBiomesFor(Map<Biome, Integer> map, World world, int chunkX, int chunkZ, int yLayer) {
 		int startX = chunkX * 16;
 		int startZ = chunkZ * 16;
 		if (!world.isChunkGenerated(chunkX, chunkZ)) {
@@ -28,27 +27,23 @@ public final class BiomeScanner {
 				forPopulator.add(chunkX, chunkZ);
 			world.getChunkAt(chunkX, chunkZ);
 			if (br.getSettings().getApplicableBiomeMap(world.getName()) == null) { // world not being remapped
-				addBiomesForInternal(world, chunkX, chunkZ, useNMS, startX, startZ, yLayer, map);
+				addBiomesForInternal(world, chunkX, chunkZ, startX, startZ, yLayer, map);
 				return true;
 			}
 			// allow populator to do its thing -> OnMappingDone counts them
 			return false;
 		} else {
-			addBiomesForInternal(world, chunkX, chunkZ, useNMS, startX, startZ, yLayer, map);
+			addBiomesForInternal(world, chunkX, chunkZ, startX, startZ, yLayer, map);
 			return true;
 		}
 	}
 
-	private void addBiomesForInternal(World world, int chunkX, int chunkZ, boolean useNMS, int startX, int startZ,
-			int yLayer, Map<Biome, Integer> map) {
+	private void addBiomesForInternal(World world, int chunkX, int chunkZ, int startX, int startZ, int yLayer,
+			Map<Biome, Integer> map) {
 		if (forPopulator != null)
 			forPopulator.remove(chunkX, chunkZ); // if present
 		world.getChunkAt(chunkX, chunkZ);
-		if (!useNMS) {
-			addBiomes(world, startX, startZ, yLayer, map);
-		} else {
-			addBiomesNMS(world.getChunkAt(chunkX, chunkZ), map, yLayer);
-		}
+		addBiomes(world, startX, startZ, yLayer, map);
 	}
 
 	private void addBiomes(World world, int startX, int startZ, int yLayer, Map<Biome, Integer> map) {
@@ -59,21 +54,6 @@ public final class BiomeScanner {
 				addBiome(map, world.getBiome(x, yLayer, z));
 			}
 		}
-	}
-
-	private void addBiomesNMS(org.bukkit.Chunk chunk, Map<Biome, Integer> map, int yLayer) {
-		throw new IllegalStateException("This is not currently implemented!");
-		// 16 per ylayer
-		// final int startNr = yLayer << 4;
-		// for (int nr = startNr; nr < startNr + 16; nr++) {
-		// 	try {
-		// 		addBiome(map, br.getBiomeManager().getBiomeNMS(chunk, nr));
-		// 	} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-		// 		br.getLogger().severe("Problem getting biome!");
-		// 		e.printStackTrace();
-		// 		continue;
-		// 	}
-		// }
 	}
 
 	private void addBiome(Map<Biome, Integer> map, Biome biome) {
@@ -100,8 +80,7 @@ public final class BiomeScanner {
 		int chunkZ = loc.getZ();
 		int startX = chunkX * 16;
 		int startZ = chunkZ * 16;
-		addBiomesForInternal(queue.getWorld(), chunkX, chunkZ, queue.useNMS(), startX, startZ, queue.getYLayer(),
-				queue.getMap());
+		addBiomesForInternal(queue.getWorld(), chunkX, chunkZ, startX, startZ, queue.getYLayer(), queue.getMap());
 	}
 
 	public void finalizePopulatorQueue() {

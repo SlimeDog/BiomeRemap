@@ -18,27 +18,25 @@ public class LargeScanTaskStarter extends LargeTaskStarter {
 	private final Runnable runnable;
 	private final Consumer<BiomeReport> mapReturner;
 	private final int yLayer;
-	private final boolean useNMS;
 
 	public LargeScanTaskStarter(BiomeRemap plugin, World world, ReportTarget owner, int x, int yLayer, int z,
-			boolean region, boolean debug, Runnable runnable, boolean useNMS) {
-		this(plugin, world, owner, x, yLayer, z, region, debug, runnable, useNMS, null);
+			boolean region, boolean debug, Runnable runnable) {
+		this(plugin, world, owner, x, yLayer, z, region, debug, runnable, null);
 	}
 
 	public LargeScanTaskStarter(BiomeRemap plugin, World world, ReportTarget owner, int x, int yLayer, int z,
-			boolean region, boolean debug, Runnable runnable, boolean useNMS, Consumer<BiomeReport> mapReturner) {
+			boolean region, boolean debug, Runnable runnable, Consumer<BiomeReport> mapReturner) {
 		super(plugin, world, owner, x, z, region, debug);
 		this.runnable = runnable;
 		this.mapReturner = mapReturner;
 		this.yLayer = yLayer;
-		this.useNMS = useNMS;
 	}
 
 	protected void startTask() {
 		new LargeScanTask(br(), world(), chunkX(), stopX(), chunkZ(), stopZ(), debug(),
 				br().getSettings().getScanProgressStep(), (progress) -> onProgress(owner(), progress),
 				(task) -> onEnd(owner(), task, debug()),
-				(report) -> showMap(owner(), report, region(), debug(), world().getName(), x(), z()), yLayer, useNMS);
+				(report) -> showMap(owner(), report, region(), debug(), world().getName(), x(), z()), yLayer);
 	}
 
 	private void onProgress(ReportTarget sender, String progress) {

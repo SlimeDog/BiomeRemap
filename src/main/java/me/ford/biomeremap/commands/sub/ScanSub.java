@@ -66,11 +66,7 @@ public class ScanSub extends SubCommand {
 		boolean region = regionOrChunk.equalsIgnoreCase("region");
 		boolean ingame = sender instanceof Player;
 		boolean debug = opts.contains("--debug");
-		boolean useNMS = opts.contains("--nms");
 		boolean temp = opts.contains("--temp");
-		if (useNMS) {
-			sender.sendMessage("Using NMS"); // TODO - message?
-		}
 		int layer = 0;
 		for (String opt : opts) {
 			Matcher matcher = layerPattern.matcher(opt);
@@ -109,10 +105,6 @@ public class ScanSub extends SubCommand {
 				runLayers(sender, args, opts, opt, start, stop);
 				return true;
 			}
-		}
-		if (useNMS && layer > 63) {
-			layer = 63; // higher = same
-			sender.sendMessage("Biome for layers higher than 63 is the same as for layer 63");
 		}
 		World world;
 		int x, z;
@@ -167,7 +159,7 @@ public class ScanSub extends SubCommand {
 			target = new MultiReportTarget(sender, br.getServer().getConsoleSender());
 		}
 		if (!temp) {
-			new LargeScanTaskStarter(br, world, target, x, layer, z, region, debug, () -> taskDone(), useNMS);
+			new LargeScanTaskStarter(br, world, target, x, layer, z, region, debug, () -> taskDone());
 		} else {
 			new LargeTempScanTaskStarter(br, world, target, x, layer, z, region, debug, () -> taskDone());
 		}

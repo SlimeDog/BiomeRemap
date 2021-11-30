@@ -41,7 +41,7 @@ public class BiomeRemapAPI {
 
 	public static void scanRegion(World world, int regionX, int regionZ, Consumer<BiomeReport> report) {
 		new LargeScanTaskStarter(getPlugin(), world, new SingleReportTarget(getPlugin().getServer().getConsoleSender()),
-				regionX, 0, regionZ, true, false, null, false, report);
+				regionX, 0, regionZ, true, false, null, report);
 	}
 
 }
