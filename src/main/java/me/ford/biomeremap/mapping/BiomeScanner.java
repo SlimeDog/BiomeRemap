@@ -51,8 +51,8 @@ public final class BiomeScanner {
 	private void addBiomes(World world, int startX, int startZ, int minLayer, int maxLayer, Map<Biome, Integer> map) {
 		for (int x = startX; x < startX + 16; x += BIOME_SIZE) {
 			for (int z = startZ; z < startZ + 16; z += BIOME_SIZE) {
-				for (int yLayer = minLayer; yLayer < maxLayer; yLayer += BIOME_SIZE) {
-					addBiome(map, world.getBiome(x, yLayer, z));
+				for (int y = minLayer; y < maxLayer; y += BIOME_SIZE) {
+					addBiome(map, world.getBiome(x, y, z));
 				}
 			}
 		}
