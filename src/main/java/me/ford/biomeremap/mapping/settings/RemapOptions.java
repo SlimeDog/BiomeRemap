@@ -60,7 +60,7 @@ public class RemapOptions {
         private boolean debug = false;
         private boolean scanAfter = false;
         private Runnable endRunnable = null;
-        private int maxY = 255 + 128;
+        private int maxY = 320;
 
         public Builder() {
         }
@@ -113,6 +113,9 @@ public class RemapOptions {
         public RemapOptions build() {
             if (area == null || reportTarget == null || map == null) {
                 throw new IllegalStateException("Need to specify area, report target and map");
+            }
+            if (area.getWorld().getMaxHeight() < maxY) {
+                maxY = area.getWorld().getMaxHeight();
             }
             return new RemapOptions(debug, scanAfter, area, reportTarget, map, endRunnable, maxY);
         }
