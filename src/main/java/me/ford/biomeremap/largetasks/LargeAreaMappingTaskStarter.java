@@ -30,11 +30,12 @@ public class LargeAreaMappingTaskStarter extends LargeTaskStarter {
         if (!options.doScanAfter()) {
             new LargeMappingTask(br(), world(), chunkX(), stopX(), chunkZ(), stopZ(), debug(),
                     br().getSettings().getRegionRemapProgressStep(), (progress) -> reportProgress(progress),
-                    (report) -> remappingEnded(report), options.getBiomeMap());
+                    (report) -> remappingEnded(report), options.getBiomeMap(), options.getMaxY());
         } else {
             new LargeMappingWithScanTask(br(), world(), chunkX(), stopX(), chunkZ(), stopZ(), debug(),
                     br().getSettings().getRegionRemapProgressStep(), (progress) -> reportProgress(progress),
-                    (report) -> remappingEnded(report), options.getBiomeMap(), (report) -> showMap(report));
+                    (report) -> remappingEnded(report), options.getBiomeMap(), (report) -> showMap(report),
+                    options.getMaxY());
         }
     }
 

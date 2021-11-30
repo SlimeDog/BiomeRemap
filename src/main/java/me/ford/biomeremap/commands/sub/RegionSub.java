@@ -56,6 +56,7 @@ public class RegionSub extends SubCommand {
 		if (!ingame && args.length < 3) {
 			return false;
 		}
+		int maxY = getMaxY(opts);
 		boolean myLocation = args.length < 3;
 		World world;
 		int regionX;
@@ -106,11 +107,12 @@ public class RegionSub extends SubCommand {
 		target.sendMessage(startedMsg);
 		remapping = true;
 		RegionArea area = new RegionArea(world, regionX, regionZ);
-		RemapOptions options = new RemapOptions(debug, scanAfter, area, target, map, () -> {
-			String completeMsg = br.getMessages().getBiomeRemapComplete();
-			target.sendMessage(completeMsg);
-			remapEnded();
-		});
+		RemapOptions options = new RemapOptions.Builder().isDebug(debug).scanAfter(scanAfter).withArea(area)
+				.withTarget(target).withMap(map).endRunnable(() -> {
+					String completeMsg = br.getMessages().getBiomeRemapComplete();
+					target.sendMessage(completeMsg);
+					remapEnded();
+				}).maxY(maxY).build();
 		br.getRemapper().remapArea(options);
 		return true;
 	}

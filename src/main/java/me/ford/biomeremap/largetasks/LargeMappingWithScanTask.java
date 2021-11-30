@@ -21,8 +21,9 @@ public class LargeMappingWithScanTask extends LargeMappingTask {
 
 	public LargeMappingWithScanTask(BiomeRemap plugin, World world, int minX, int maxX, int minZ, int maxZ,
 			boolean debug, int progressStep, Consumer<String> progress, Consumer<TaskReport> ender, BiomeMap map,
-			Consumer<BiomeReport> biomeReport) {
-		super(plugin, world, minX, maxX, minZ, maxZ, debug, progressStep, progress, ender, map);
+			Consumer<BiomeReport> biomeReport, int maxY) {
+		super(plugin, world, minX, maxX, minZ, maxZ, debug, progressStep, progress, ender, map, maxY);
+		// TODO - use maxY for scan
 		this.biomeReport = biomeReport;
 		this.onMappingDone = new OnMappingDone((x, z) -> addBiomes(world, x, z), world, minX, minZ, maxX, maxZ);
 		plugin.getRemapper().addDoneChecker(onMappingDone);

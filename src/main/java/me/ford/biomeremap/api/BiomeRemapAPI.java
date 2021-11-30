@@ -8,10 +8,12 @@ import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.ford.biomeremap.BiomeRemap;
-import me.ford.biomeremap.largetasks.LargeMappingTaskStarter;
+import me.ford.biomeremap.largetasks.LargeAreaMappingTaskStarter;
 import me.ford.biomeremap.largetasks.LargeScanTask.BiomeReport;
 import me.ford.biomeremap.largetasks.LargeScanTaskStarter;
 import me.ford.biomeremap.mapping.BiomeMap;
+import me.ford.biomeremap.mapping.settings.RegionArea;
+import me.ford.biomeremap.mapping.settings.RemapOptions;
 import me.ford.biomeremap.mapping.settings.SingleReportTarget;
 
 public class BiomeRemapAPI {
@@ -31,9 +33,10 @@ public class BiomeRemapAPI {
 	}
 
 	public static void remapRegion(World world, int regionX, int regionZ, BiomeMap map) {
-		new LargeMappingTaskStarter(getPlugin(), world,
-				new SingleReportTarget(getPlugin().getServer().getConsoleSender()), regionX, regionZ, true, false, null,
-				false, map);
+		RegionArea area = new RegionArea(world, regionX, regionZ);
+		RemapOptions options = new RemapOptions.Builder().withArea(area)
+				.withTarget(getPlugin().getServer().getConsoleSender()).withMap(map).build();
+		new LargeAreaMappingTaskStarter(getPlugin(), options, null);
 	}
 
 	public static void scanRegion(World world, int regionX, int regionZ, Consumer<BiomeReport> report) {

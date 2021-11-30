@@ -51,6 +51,7 @@ public class ChunkSub extends SubCommand {
 		if (!ingame && args.length < 3) {
 			return false;
 		}
+		int maxY = getMaxY(opts);
 		boolean myLocation = args.length < 3;
 		Chunk chunk;
 		if (myLocation) {
@@ -98,10 +99,11 @@ public class ChunkSub extends SubCommand {
 		}
 		target.sendMessage(startMsg);
 		ChunkArea area = new ChunkArea(chunk.getWorld(), chunk.getX(), chunk.getZ());
-		RemapOptions options = new RemapOptions(debug, scanAfter, area, target, map, () -> {
-			String completeMsg = br.getMessages().getBiomeRemapComplete();
-			target.sendMessage(completeMsg);
-		});
+		RemapOptions options = new RemapOptions.Builder().isDebug(debug).scanAfter(scanAfter).withArea(area)
+				.withTarget(target).withMap(map).endRunnable(() -> {
+					String completeMsg = br.getMessages().getBiomeRemapComplete();
+					target.sendMessage(completeMsg);
+				}).maxY(maxY).build();
 		br.getRemapper().remapArea(options);
 		return true;
 	}

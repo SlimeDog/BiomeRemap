@@ -13,7 +13,7 @@ public class LargeMappingTask extends LargeTask {
 	private PopulatorQueue queue;
 
 	public LargeMappingTask(BiomeRemap plugin, World world, int minX, int maxX, int minZ, int maxZ, boolean debug,
-			int progressStep, Consumer<String> progress, Consumer<TaskReport> ender, BiomeMap map) {
+			int progressStep, Consumer<String> progress, Consumer<TaskReport> ender, BiomeMap map, int maxY) {
 		super(plugin, world, minX, maxX, minZ, maxZ, debug, progressStep, progress, ender);
 		this.map = map;
 		if (this.map == null) {
