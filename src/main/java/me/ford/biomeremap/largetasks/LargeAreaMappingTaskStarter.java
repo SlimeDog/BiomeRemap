@@ -17,11 +17,11 @@ public class LargeAreaMappingTaskStarter extends LargeTaskStarter {
     private final RemapArea area;
     private final Runnable runnable;
 
-    public LargeAreaMappingTaskStarter(BiomeRemap plugin, RemapArea area, RemapOptions options, Runnable runnable) {
-        super(plugin, area.getWorld(), options.getReportTarget(), area.getAreaX(), area.getAreaZ(),
-                area.describesRegion(), options.isDebug());
+    public LargeAreaMappingTaskStarter(BiomeRemap plugin, RemapOptions options, Runnable runnable) {
+        super(plugin, options.getRemapArea().getWorld(), options.getReportTarget(), options.getRemapArea().getAreaX(),
+                options.getRemapArea().getAreaZ(), options.getRemapArea().describesRegion(), options.isDebug());
         this.options = options;
-        this.area = area;
+        this.area = options.getRemapArea();
         this.runnable = runnable;
     }
 

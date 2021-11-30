@@ -36,7 +36,7 @@ public class BiomeRemapper {
 	}
 
 	public void remapArea(RemapOptions options) {
-		new LargeAreaMappingTaskStarter(br, options.getRemapArea(), options, options.getEndRunnable());
+		new LargeAreaMappingTaskStarter(br, options, options.getEndRunnable());
 	}
 
 	public long remapChunk(Chunk chunk) {
