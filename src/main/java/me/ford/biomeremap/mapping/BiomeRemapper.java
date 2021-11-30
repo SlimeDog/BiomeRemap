@@ -15,7 +15,6 @@ import org.bukkit.block.Biome;
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.largetasks.LargeAreaMappingTaskStarter;
 import me.ford.biomeremap.largetasks.OnMappingDone;
-import me.ford.biomeremap.mapping.settings.RemapArea;
 import me.ford.biomeremap.mapping.settings.RemapOptions;
 
 public class BiomeRemapper {
@@ -36,8 +35,8 @@ public class BiomeRemapper {
 		doneCheckers.remove(checker);
 	}
 
-	public void remapArea(RemapArea area, RemapOptions options) {
-		new LargeAreaMappingTaskStarter(br, area, options, options.getEndRunnable());
+	public void remapArea(RemapOptions options) {
+		new LargeAreaMappingTaskStarter(br, options.getRemapArea(), options, options.getEndRunnable());
 	}
 
 	public long remapChunk(Chunk chunk) {

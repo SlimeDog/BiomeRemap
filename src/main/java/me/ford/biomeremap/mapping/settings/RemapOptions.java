@@ -28,7 +28,7 @@ public class RemapOptions {
         return scanAfter;
     }
 
-    public RemapArea getRemapRegion() {
+    public RemapArea getRemapArea() {
         return region;
     }
 
