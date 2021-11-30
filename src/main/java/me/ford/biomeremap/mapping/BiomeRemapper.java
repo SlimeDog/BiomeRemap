@@ -77,7 +77,7 @@ public class BiomeRemapper {
 		br.getServer().getScheduler().runTaskAsynchronously(br, () -> {
 			for (int x = 0; x < 16; x += BIOME_SIZE) {
 				for (int z = 0; z < 16; z += BIOME_SIZE) {
-					for (int y = 0; y <= maxy; y += BIOME_SIZE) {
+					for (int y = chunk.getWorld().getMinHeight(); y <= maxy; y += BIOME_SIZE) {
 						Biome cur;
 						try {
 							cur = snapshot.getBiome(x, y, z);
