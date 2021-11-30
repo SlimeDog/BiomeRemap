@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 
 public abstract class SubCommand implements CommandWithOptions {
 	private static final Pattern MAX_Y_PATTERN = Pattern.compile("\\-\\-maxy=(\\d*)");
-	public static final int MAX_Y = 255 + 128;
+	public static final int MAX_Y = 320;
 	private final String name;
 
 	public SubCommand(String name) {

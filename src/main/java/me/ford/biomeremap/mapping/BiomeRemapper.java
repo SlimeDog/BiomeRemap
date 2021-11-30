@@ -13,6 +13,7 @@ import org.bukkit.ChunkSnapshot;
 import org.bukkit.block.Biome;
 
 import me.ford.biomeremap.BiomeRemap;
+import me.ford.biomeremap.commands.SubCommand;
 import me.ford.biomeremap.largetasks.LargeAreaMappingTaskStarter;
 import me.ford.biomeremap.largetasks.OnMappingDone;
 import me.ford.biomeremap.mapping.settings.RemapOptions;
@@ -53,6 +54,16 @@ public class BiomeRemapper {
 	}
 
 	public long remapChunk(final Chunk chunk, boolean debug, final BiomeMap map) {
+		return remapChunk(chunk, debug, map, SubCommand.MAX_Y);
+	}
+
+	public long remapChunk(final Chunk chunk, boolean debug, final BiomeMap map, int maxY) {
+		final int maxy;
+		if (maxY > SubCommand.MAX_Y) {
+			maxy = SubCommand.MAX_Y;
+		} else {
+			maxy = maxY;
+		}
 		long start = System.currentTimeMillis();
 		if (debug)
 			BiomeRemap
@@ -66,7 +77,6 @@ public class BiomeRemapper {
 		br.getServer().getScheduler().runTaskAsynchronously(br, () -> {
 			for (int x = 0; x < 16; x += BIOME_SIZE) {
 				for (int z = 0; z < 16; z += BIOME_SIZE) {
-					final int maxy = 255 + 64;
 					for (int y = 0; y <= maxy; y += BIOME_SIZE) {
 						Biome cur;
 						try {
