@@ -8,6 +8,7 @@ import org.bukkit.block.Biome;
 import me.ford.biomeremap.BiomeRemap;
 
 public final class BiomeScanner {
+	private static final int BIOME_SIZE = 4;
 	private final BiomeRemap br;
 	private PopulatorQueue forPopulator;
 
@@ -47,10 +48,8 @@ public final class BiomeScanner {
 	}
 
 	private void addBiomes(World world, int startX, int startZ, int yLayer, Map<Biome, Integer> map) {
-		for (int x = startX; x < startX + 16; x++) { // not sure why, but I still need to set the data for all the
-														// positions
-			for (int z = startZ; z < startZ + 16; z++) { // not sure why, but I still need to set the data for all the
-															// positions
+		for (int x = startX; x < startX + 16; x += BIOME_SIZE) {
+			for (int z = startZ; z < startZ + 16; z += BIOME_SIZE) {
 				addBiome(map, world.getBiome(x, yLayer, z));
 			}
 		}
