@@ -17,10 +17,11 @@ public final class BiomeScanner {
 	}
 
 	public boolean addBiomesFor(Map<Biome, Integer> map, World world, int chunkX, int chunkZ) {
-		return addBiomesFor(map, world, chunkX, chunkZ, 0);
+		return addBiomesFor(map, world, chunkX, chunkZ, world.getMinHeight(), world.getMaxHeight());
 	}
 
-	public boolean addBiomesFor(Map<Biome, Integer> map, World world, int chunkX, int chunkZ, int yLayer) {
+	public boolean addBiomesFor(Map<Biome, Integer> map, World world, int chunkX, int chunkZ, int minLayer,
+			int maxLayer) {
 		int startX = chunkX * 16;
 		int startZ = chunkZ * 16;
 		if (!world.isChunkGenerated(chunkX, chunkZ)) {
@@ -28,29 +29,31 @@ public final class BiomeScanner {
 				forPopulator.add(chunkX, chunkZ);
 			world.getChunkAt(chunkX, chunkZ);
 			if (br.getSettings().getApplicableBiomeMap(world.getName()) == null) { // world not being remapped
-				addBiomesForInternal(world, chunkX, chunkZ, startX, startZ, yLayer, map);
+				addBiomesForInternal(world, chunkX, chunkZ, startX, startZ, minLayer, maxLayer, map);
 				return true;
 			}
 			// allow populator to do its thing -> OnMappingDone counts them
 			return false;
 		} else {
-			addBiomesForInternal(world, chunkX, chunkZ, startX, startZ, yLayer, map);
+			addBiomesForInternal(world, chunkX, chunkZ, startX, startZ, minLayer, maxLayer, map);
 			return true;
 		}
 	}
 
-	private void addBiomesForInternal(World world, int chunkX, int chunkZ, int startX, int startZ, int yLayer,
-			Map<Biome, Integer> map) {
+	private void addBiomesForInternal(World world, int chunkX, int chunkZ, int startX, int startZ, int minLayer,
+			int maxLayer, Map<Biome, Integer> map) {
 		if (forPopulator != null)
 			forPopulator.remove(chunkX, chunkZ); // if present
 		world.getChunkAt(chunkX, chunkZ);
-		addBiomes(world, startX, startZ, yLayer, map);
+		addBiomes(world, startX, startZ, minLayer, maxLayer, map);
 	}
 
-	private void addBiomes(World world, int startX, int startZ, int yLayer, Map<Biome, Integer> map) {
+	private void addBiomes(World world, int startX, int startZ, int minLayer, int maxLayer, Map<Biome, Integer> map) {
 		for (int x = startX; x < startX + 16; x += BIOME_SIZE) {
 			for (int z = startZ; z < startZ + 16; z += BIOME_SIZE) {
-				addBiome(map, world.getBiome(x, yLayer, z));
+				for (int yLayer = minLayer; yLayer < maxLayer; yLayer += BIOME_SIZE) {
+					addBiome(map, world.getBiome(x, yLayer, z));
+				}
 			}
 		}
 	}
@@ -79,7 +82,8 @@ public final class BiomeScanner {
 		int chunkZ = loc.getZ();
 		int startX = chunkX * 16;
 		int startZ = chunkZ * 16;
-		addBiomesForInternal(queue.getWorld(), chunkX, chunkZ, startX, startZ, queue.getYLayer(), queue.getMap());
+		addBiomesForInternal(queue.getWorld(), chunkX, chunkZ, startX, startZ, queue.getMinLayer(), queue.getMaxLayer(),
+				queue.getMap());
 	}
 
 	public void finalizePopulatorQueue() {

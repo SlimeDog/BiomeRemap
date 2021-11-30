@@ -16,13 +16,15 @@ import me.ford.biomeremap.mapping.settings.ReportTarget;
  * LargeTempScanTaskStarter
  */
 public class LargeTempScanTaskStarter extends LargeTaskStarter {
-	private final int yLayer;
+	private final int minLayer;
+	private final int maxLayer;
 	private final Runnable endRunnable;
 
-	public LargeTempScanTaskStarter(BiomeRemap plugin, World world, ReportTarget owner, int x, int yLayer, int z,
-			boolean region, boolean debug, Runnable endRunnable) {
+	public LargeTempScanTaskStarter(BiomeRemap plugin, World world, ReportTarget owner, int x, int minLayer,
+			int maxLayer, int z, boolean region, boolean debug, Runnable endRunnable) {
 		super(plugin, world, owner, x, z, region, debug);
-		this.yLayer = yLayer;
+		this.minLayer = minLayer;
+		this.maxLayer = maxLayer;
 		this.endRunnable = endRunnable;
 	}
 
@@ -31,7 +33,7 @@ public class LargeTempScanTaskStarter extends LargeTaskStarter {
 		new LargeTempScanTask(br(), world(), chunkX(), stopX(), chunkZ(), stopZ(), debug(),
 				br().getSettings().getScanProgressStep(), (progress) -> onProgress(owner(), progress),
 				(task) -> onEnd(owner(), task, debug()),
-				(map) -> showMap(owner(), map, region(), debug(), world().getName(), x(), z()), yLayer);
+				(map) -> showMap(owner(), map, region(), debug(), world().getName(), x(), z()), minLayer, maxLayer);
 	}
 
 	private void onProgress(ReportTarget sender, String progress) {

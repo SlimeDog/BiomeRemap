@@ -11,20 +11,22 @@ public class PopulatorQueue {
 	private final BiomeScanner scanner;
 	private final Map<Biome, Integer> map;
 	private final World world;
-	private final int yLayer;
+	private final int minLayer;
+	private final int maxLayer;
 	private final Set<ChunkLoc> one = new HashSet<>();
 	private final Set<ChunkLoc> two = new HashSet<>();
 	private final Set<ChunkLoc> three = new HashSet<>();
 
 	public PopulatorQueue(Map<Biome, Integer> map, World world, BiomeScanner scanner) {
-		this(map, world, scanner, 0);
+		this(map, world, scanner, world.getMinHeight(), world.getMaxHeight());
 	}
 
-	public PopulatorQueue(Map<Biome, Integer> map, World world, BiomeScanner scanner, int yLayer) {
+	public PopulatorQueue(Map<Biome, Integer> map, World world, BiomeScanner scanner, int minLayer, int maxLayer) {
 		this.scanner = scanner;
 		this.map = map;
 		this.world = world;
-		this.yLayer = yLayer;
+		this.minLayer = minLayer;
+		this.maxLayer = maxLayer;
 	}
 
 	public Map<Biome, Integer> getMap() {
@@ -35,8 +37,12 @@ public class PopulatorQueue {
 		return world;
 	}
 
-	public int getYLayer() {
-		return yLayer;
+	public int getMinLayer() {
+		return minLayer;
+	}
+
+	public int getMaxLayer() {
+		return maxLayer;
 	}
 
 	public void add(int x, int z) {
@@ -60,7 +66,7 @@ public class PopulatorQueue {
 	public void tick() {
 		// do three + clear
 		for (ChunkLoc loc : new HashSet<>(three)) { // they should be removed when scanned
-			scanner.addBiomesFor(map, world, loc.getX(), loc.getZ(), yLayer);
+			scanner.addBiomesFor(map, world, loc.getX(), loc.getZ(), minLayer, maxLayer);
 		}
 		three.clear();
 		// two -> three + clear

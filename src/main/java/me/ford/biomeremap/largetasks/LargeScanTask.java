@@ -13,7 +13,8 @@ import me.ford.biomeremap.mapping.PopulatorQueue;
 public class LargeScanTask extends LargeTask {
 	private final Map<Biome, Integer> biomeMap = new HashMap<>();
 	private final Consumer<BiomeReport> biomes;
-	private final int yLayer;
+	private final int minLayer;
+	private final int maxLayer;
 	private final OnMappingDone onMappingDone;
 	private final PopulatorQueue queue;
 	private final boolean[][] checked = new boolean[32][32];
@@ -23,13 +24,14 @@ public class LargeScanTask extends LargeTask {
 
 	public LargeScanTask(BiomeRemap plugin, World world, int minX, int maxX, int minZ, int maxZ, boolean debug,
 			int progressStep, Consumer<String> progress, Consumer<TaskReport> ender, Consumer<BiomeReport> biomes,
-			int yLayer) {
+			int minLayer, int maxLayer) {
 		super(plugin, world, minX, maxX, minZ, maxZ, debug, progressStep, progress, ender);
 		this.biomes = biomes;
-		this.yLayer = yLayer;
+		this.minLayer = minLayer;
+		this.maxLayer = maxLayer;
 		this.onMappingDone = new OnMappingDone((x, z) -> findBiomes(x, z, debug), world, minX, minZ, maxX, maxZ);
 		getPlugin().getRemapper().addDoneChecker(onMappingDone); // checks the newly generated ones
-		queue = new PopulatorQueue(biomeMap, world, getPlugin().getScanner(), yLayer);
+		queue = new PopulatorQueue(biomeMap, world, getPlugin().getScanner(), minLayer, maxLayer);
 		getPlugin().getScanner().setPopulatorQueue(queue);
 	}
 
@@ -51,7 +53,7 @@ public class LargeScanTask extends LargeTask {
 		}
 		// wasGenerated[chunkX - getMinX()][chunkZ - getMinZ()] =
 		// getWorld().isChunkGenerated(chunkX, chunkZ);
-		if (getPlugin().getScanner().addBiomesFor(biomeMap, getWorld(), chunkX, chunkZ, yLayer)) {
+		if (getPlugin().getScanner().addBiomesFor(biomeMap, getWorld(), chunkX, chunkZ, minLayer, maxLayer)) {
 			checked[chunkX - getMinX()][chunkZ - getMinZ()] = true;
 		} else { // else will be done later, after the remap
 			// noDice[chunkX - getMinX()][chunkZ - getMinZ()] = true;
