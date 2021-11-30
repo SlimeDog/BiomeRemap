@@ -13,6 +13,9 @@ import org.bukkit.util.StringUtil;
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.commands.SubCommand;
 import me.ford.biomeremap.largetasks.LargeScanTaskStarter;
+import me.ford.biomeremap.mapping.settings.MultiReportTarget;
+import me.ford.biomeremap.mapping.settings.ReportTarget;
+import me.ford.biomeremap.mapping.settings.SingleReportTarget;
 
 public class ChunkSub extends SubCommand {
 	private static final String PERMS = "biomeremap.remap";
@@ -84,16 +87,18 @@ public class ChunkSub extends SubCommand {
 			return true;
 		}
 		String startMsg = br.getMessages().getChunkRemapStarted(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
-		sender.sendMessage(startMsg);
-		if (ingame)
-			br.logMessage(startMsg);
+		ReportTarget target;
+		if (ingame) {
+			target = new SingleReportTarget(sender);
+		} else {
+			target = new MultiReportTarget(sender, br.getServer().getConsoleSender());
+		}
+		target.sendMessage(startMsg);
 		br.getRemapper().remapChunk(chunk, debug);
 		String completeMsg = br.getMessages().getBiomeRemapComplete();
-		sender.sendMessage(completeMsg);
-		if (ingame)
-			br.logMessage(completeMsg);
+		target.sendMessage(completeMsg);
 		if (scanAfter) {
-			new LargeScanTaskStarter(br, chunk.getWorld(), sender, chunk.getX(), 0, chunk.getZ(), false, debug, null,
+			new LargeScanTaskStarter(br, chunk.getWorld(), target, chunk.getX(), 0, chunk.getZ(), false, debug, null,
 					false);
 		}
 		return true;

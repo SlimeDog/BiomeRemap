@@ -13,6 +13,9 @@ import org.bukkit.util.StringUtil;
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.commands.SubCommand;
 import me.ford.biomeremap.largetasks.LargeMappingTaskStarter;
+import me.ford.biomeremap.mapping.settings.MultiReportTarget;
+import me.ford.biomeremap.mapping.settings.ReportTarget;
+import me.ford.biomeremap.mapping.settings.SingleReportTarget;
 
 public class RegionSub extends SubCommand {
 	private static final String PERMS = "biomeremap.remap";
@@ -90,12 +93,16 @@ public class RegionSub extends SubCommand {
 			sender.sendMessage(br.getMessages().getBiomeRemapNoMap(world.getName()));
 			return true;
 		}
+		ReportTarget target;
+		if (ingame) {
+			target = new SingleReportTarget(sender);
+		} else {
+			target = new MultiReportTarget(sender, br.getServer().getConsoleSender());
+		}
 		String startedMsg = br.getMessages().getRegionRemapStarted(world.getName(), regionX, regionZ);
-		sender.sendMessage(startedMsg);
-		if (ingame)
-			br.logMessage(startedMsg);
+		target.sendMessage(startedMsg);
 		remapping = true;
-		new LargeMappingTaskStarter(br, world, sender, regionX, regionZ, true, debug, () -> remapEnded(), scanAfter,
+		new LargeMappingTaskStarter(br, world, target, regionX, regionZ, true, debug, () -> remapEnded(), scanAfter,
 				null);
 		return true;
 	}

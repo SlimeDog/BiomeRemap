@@ -18,6 +18,9 @@ import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.commands.SubCommand;
 import me.ford.biomeremap.largetasks.LargeScanTaskStarter;
 import me.ford.biomeremap.largetasks.LargeTempScanTaskStarter;
+import me.ford.biomeremap.mapping.settings.MultiReportTarget;
+import me.ford.biomeremap.mapping.settings.ReportTarget;
+import me.ford.biomeremap.mapping.settings.SingleReportTarget;
 
 public class ScanSub extends SubCommand {
 	private static final String PERMS = "biomeremap.scan";
@@ -157,10 +160,16 @@ public class ScanSub extends SubCommand {
 		} else {
 			sender.sendMessage(br.getMessages().getScanChunkStart(world.getName(), x, z));
 		}
-		if (!temp) {
-			new LargeScanTaskStarter(br, world, sender, x, layer, z, region, debug, () -> taskDone(), useNMS);
+		ReportTarget target;
+		if (ingame) {
+			target = new SingleReportTarget(sender);
 		} else {
-			new LargeTempScanTaskStarter(br, world, sender, x, layer, z, region, debug, () -> taskDone());
+			target = new MultiReportTarget(sender, br.getServer().getConsoleSender());
+		}
+		if (!temp) {
+			new LargeScanTaskStarter(br, world, target, x, layer, z, region, debug, () -> taskDone(), useNMS);
+		} else {
+			new LargeTempScanTaskStarter(br, world, target, x, layer, z, region, debug, () -> taskDone());
 		}
 		scanning = true;
 		return true;

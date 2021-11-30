@@ -6,12 +6,11 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import org.bukkit.World;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.largetasks.LargeTask.TaskReport;
 import me.ford.biomeremap.largetasks.LargeTempScanTask.TemperatureReport;
+import me.ford.biomeremap.mapping.settings.ReportTarget;
 
 /**
  * LargeTempScanTaskStarter
@@ -20,7 +19,7 @@ public class LargeTempScanTaskStarter extends LargeTaskStarter {
 	private final int yLayer;
 	private final Runnable endRunnable;
 
-	public LargeTempScanTaskStarter(BiomeRemap plugin, World world, CommandSender owner, int x, int yLayer, int z,
+	public LargeTempScanTaskStarter(BiomeRemap plugin, World world, ReportTarget owner, int x, int yLayer, int z,
 			boolean region, boolean debug, Runnable endRunnable) {
 		super(plugin, world, owner, x, z, region, debug);
 		this.yLayer = yLayer;
@@ -35,18 +34,14 @@ public class LargeTempScanTaskStarter extends LargeTaskStarter {
 				(map) -> showMap(owner(), map, region(), debug(), world().getName(), x(), z()), yLayer);
 	}
 
-	private void onProgress(CommandSender sender, String progress) {
+	private void onProgress(ReportTarget sender, String progress) {
 		String msg = br().getMessages().getScanProgress(progress);
 		sender.sendMessage(msg);
-		if (!(sender instanceof ConsoleCommandSender))
-			br().logMessage(progress);
 	}
 
-	private void onEnd(CommandSender sender, TaskReport report, boolean debug) {
+	private void onEnd(ReportTarget sender, TaskReport report, boolean debug) {
 		String completeMsg = br().getMessages().getScanComplete();
 		sender.sendMessage(completeMsg);
-		if (!(sender instanceof ConsoleCommandSender))
-			br().logMessage(completeMsg);
 		if (debug)
 			sender.sendMessage(br().getMessages().getBiomeRemapSummary(report.getChunksDone(), report.getCompTime(),
 					report.getTicksUsed()));
@@ -54,8 +49,8 @@ public class LargeTempScanTaskStarter extends LargeTaskStarter {
 			endRunnable.run();
 	}
 
-	private void showMap(CommandSender sender, TemperatureReport report, boolean region, boolean debug,
-			String worldName, int x, int z) {
+	private void showMap(ReportTarget sender, TemperatureReport report, boolean region, boolean debug, String worldName,
+			int x, int z) {
 		String header;
 		if (region) {
 			header = br().getMessages().getScanRegionHeader(worldName, x, z);
@@ -63,8 +58,6 @@ public class LargeTempScanTaskStarter extends LargeTaskStarter {
 			header = br().getMessages().getScanChunkHeader(worldName, x, z);
 		}
 		sender.sendMessage(header);
-		if (!(sender instanceof ConsoleCommandSender))
-			br().logMessage(header);
 		Map<Double, Integer> sortedMap = report.getTemps().entrySet().stream()
 				.sorted((e1, e2) -> e1.getKey().compareTo(e2.getKey()))
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
@@ -77,13 +70,9 @@ public class LargeTempScanTaskStarter extends LargeTaskStarter {
 			String msg = br().getMessages().getScanListItem(percentage, String.format("%4.2f", entry.getKey()),
 					entry.getValue());
 			sender.sendMessage(msg);
-			if (!(sender instanceof ConsoleCommandSender))
-				br().logMessage(msg);
 		}
 		String msg = br().getMessages().getScanListItem("100%", "TOTAL", (int) total);
 		sender.sendMessage(msg);
-		if (!(sender instanceof ConsoleCommandSender))
-			br().logMessage(msg);
 	}
 
 }

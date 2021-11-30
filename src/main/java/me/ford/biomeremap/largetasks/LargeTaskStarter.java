@@ -1,14 +1,14 @@
 package me.ford.biomeremap.largetasks;
 
 import org.bukkit.World;
-import org.bukkit.command.CommandSender;
 
 import me.ford.biomeremap.BiomeRemap;
+import me.ford.biomeremap.mapping.settings.ReportTarget;
 
 public abstract class LargeTaskStarter {
 	private final BiomeRemap br;
 	private final World world;
-	private final CommandSender owner;
+	private final ReportTarget owner;
 	private final int x, z;
 	private final int chunkX;
 	private final int chunkZ;
@@ -17,7 +17,7 @@ public abstract class LargeTaskStarter {
 	private final boolean region;
 	private final boolean debug;
 
-	public LargeTaskStarter(BiomeRemap plugin, World world, CommandSender owner, int x, int z, boolean region,
+	public LargeTaskStarter(BiomeRemap plugin, World world, ReportTarget owner, int x, int z, boolean region,
 			boolean debug) {
 		this.br = plugin;
 		this.world = world;
@@ -53,7 +53,7 @@ public abstract class LargeTaskStarter {
 		return world;
 	}
 
-	protected CommandSender owner() {
+	protected ReportTarget owner() {
 		return owner;
 	}
 
