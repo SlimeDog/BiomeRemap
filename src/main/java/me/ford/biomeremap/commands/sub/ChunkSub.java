@@ -12,8 +12,10 @@ import org.bukkit.util.StringUtil;
 
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.commands.SubCommand;
-import me.ford.biomeremap.largetasks.LargeScanTaskStarter;
+import me.ford.biomeremap.mapping.BiomeMap;
+import me.ford.biomeremap.mapping.settings.ChunkArea;
 import me.ford.biomeremap.mapping.settings.MultiReportTarget;
+import me.ford.biomeremap.mapping.settings.RemapOptions;
 import me.ford.biomeremap.mapping.settings.ReportTarget;
 import me.ford.biomeremap.mapping.settings.SingleReportTarget;
 
@@ -82,7 +84,8 @@ public class ChunkSub extends SubCommand {
 			}
 			chunk = world.getChunkAt(x, z);
 		}
-		if (br.getSettings().getApplicableBiomeMap(chunk.getWorld().getName()) == null) {
+		BiomeMap map = br.getSettings().getApplicableBiomeMap(chunk.getWorld().getName());
+		if (map == null) {
 			sender.sendMessage(br.getMessages().getBiomeRemapNoMap(chunk.getWorld().getName()));
 			return true;
 		}
@@ -94,13 +97,12 @@ public class ChunkSub extends SubCommand {
 			target = new MultiReportTarget(sender, br.getServer().getConsoleSender());
 		}
 		target.sendMessage(startMsg);
-		br.getRemapper().remapChunk(chunk, debug);
-		String completeMsg = br.getMessages().getBiomeRemapComplete();
-		target.sendMessage(completeMsg);
-		if (scanAfter) {
-			new LargeScanTaskStarter(br, chunk.getWorld(), target, chunk.getX(), 0, chunk.getZ(), false, debug, null,
-					false);
-		}
+		ChunkArea area = new ChunkArea(chunk.getWorld(), chunk.getX(), chunk.getZ());
+		RemapOptions options = new RemapOptions(debug, scanAfter, area, target, map, () -> {
+			String completeMsg = br.getMessages().getBiomeRemapComplete();
+			target.sendMessage(completeMsg);
+		});
+		br.getRemapper().remapArea(options);
 		return true;
 	}
 
