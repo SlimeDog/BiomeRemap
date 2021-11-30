@@ -69,8 +69,6 @@ public class LargeAreaMappingTaskStarter extends LargeTaskStarter {
     }
 
     private void remappingEnded(TaskReport report) {
-        String completeMsg = br().getMessages().getBiomeRemapComplete();
-        options.getReportTarget().sendMessage(completeMsg);
         if (options.isDebug())
             options.getReportTarget().sendMessage(br().getMessages().getBiomeRemapSummary(report.getChunksDone(),
                     report.getCompTime(), report.getTicksUsed()));
