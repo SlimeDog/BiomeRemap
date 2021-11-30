@@ -12,6 +12,7 @@ import me.ford.biomeremap.largetasks.LargeMappingTaskStarter;
 import me.ford.biomeremap.largetasks.LargeScanTask.BiomeReport;
 import me.ford.biomeremap.largetasks.LargeScanTaskStarter;
 import me.ford.biomeremap.mapping.BiomeMap;
+import me.ford.biomeremap.mapping.settings.SingleReportTarget;
 
 public class BiomeRemapAPI {
 
@@ -30,13 +31,14 @@ public class BiomeRemapAPI {
 	}
 
 	public static void remapRegion(World world, int regionX, int regionZ, BiomeMap map) {
-		new LargeMappingTaskStarter(getPlugin(), world, getPlugin().getServer().getConsoleSender(), regionX, regionZ,
-				true, false, null, false, map);
+		new LargeMappingTaskStarter(getPlugin(), world,
+				new SingleReportTarget(getPlugin().getServer().getConsoleSender()), regionX, regionZ, true, false, null,
+				false, map);
 	}
 
 	public static void scanRegion(World world, int regionX, int regionZ, Consumer<BiomeReport> report) {
-		new LargeScanTaskStarter(getPlugin(), world, getPlugin().getServer().getConsoleSender(), regionX, 0, regionZ,
-				true, false, null, false, report);
+		new LargeScanTaskStarter(getPlugin(), world, new SingleReportTarget(getPlugin().getServer().getConsoleSender()),
+				regionX, 0, regionZ, true, false, null, false, report);
 	}
 
 }
