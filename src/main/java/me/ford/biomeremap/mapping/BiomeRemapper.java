@@ -13,7 +13,10 @@ import org.bukkit.ChunkSnapshot;
 import org.bukkit.block.Biome;
 
 import me.ford.biomeremap.BiomeRemap;
+import me.ford.biomeremap.largetasks.LargeAreaMappingTaskStarter;
 import me.ford.biomeremap.largetasks.OnMappingDone;
+import me.ford.biomeremap.mapping.settings.RemapArea;
+import me.ford.biomeremap.mapping.settings.RemapOptions;
 
 public class BiomeRemapper {
 	private static final int BIOME_SIZE = 4;
@@ -31,6 +34,10 @@ public class BiomeRemapper {
 
 	public void removeDoneCheker(OnMappingDone checker) {
 		doneCheckers.remove(checker);
+	}
+
+	public void remapArea(RemapArea area, RemapOptions options) {
+		new LargeAreaMappingTaskStarter(br, area, options, options.getEndRunnable());
 	}
 
 	public long remapChunk(Chunk chunk) {
