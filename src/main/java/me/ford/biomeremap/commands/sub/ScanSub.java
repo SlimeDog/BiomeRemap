@@ -67,7 +67,7 @@ public class ScanSub extends SubCommand {
 		boolean ingame = sender instanceof Player;
 		boolean debug = opts.contains("--debug");
 		boolean temp = opts.contains("--temp");
-		int maxLayer = 0;
+		int maxLayer = Integer.MIN_VALUE;
 		for (String opt : opts) {
 			Matcher matcher = layerPattern.matcher(opt);
 			if (matcher.matches()) {
@@ -142,6 +142,12 @@ public class ScanSub extends SubCommand {
 		if (world == null) {
 			sender.sendMessage(br.getMessages().errorWorldNotFound(args[1]));
 			return true;
+		}
+		if (maxLayer == Integer.MIN_VALUE) {
+			maxLayer = world.getMaxHeight();
+		}
+		if (maxLayer > world.getMaxHeight()) {
+			maxLayer = world.getMaxHeight();
 		}
 		int minLayer = world.getMinHeight();
 		if (br.getSettings().getApplicableBiomeMap(world.getName()) == null) {
