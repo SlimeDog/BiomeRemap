@@ -55,6 +55,7 @@ BIOMEREMAP_SCAN_LIST_ITEM: "{PERCENTAGE} {BIOME_ID} ({AMOUNT})"
 # 
 INFO_CONFIG_FILES_LOADED_SUCCESSFULLY: "Configuration files loaded successfully"
 INFO_WORLD_BIOME_MAPPED: "Biomemap {BIOMEMAP} was successfully assigned to world {WORLD_NAME}"
+INFO_CHUNK_REMAP_FLOOR: "The floor is set to {FLOOR} in world {WORLD_NAME}"
 
 # Update messages
 #

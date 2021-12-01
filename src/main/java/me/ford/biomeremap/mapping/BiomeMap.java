@@ -12,10 +12,12 @@ import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.settings.Messages;
 
 public class BiomeMap {
+	private static final int MAX_FLOOR = 0;
 	private final String name;
 	private final String description;
 	private final List<String> worldNames;
 	private final Map<Biome, Biome> biomeMap = new HashMap<>();
+	private final int floor;
 
 	public BiomeMap(Messages messages, ConfigurationSection section) {
 		name = section.getName();
@@ -50,6 +52,11 @@ public class BiomeMap {
 			}
 			biomeMap.put(from, to);
 		}
+		floor = Math.min(section.getInt("floor", -64), MAX_FLOOR);
+	}
+
+	public int getFloor() {
+		return floor;
 	}
 
 	public String getName() {

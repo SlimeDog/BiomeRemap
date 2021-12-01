@@ -79,6 +79,11 @@ public class Messages extends CustomConfigHandler {
 						.replace("{BIOMEMAP}", biomemap);
 	}
 
+	public String getInfoChunkRemapFloor(int floor, String worldName) {
+		return getMessage("INFO_CHUNK_REMAP_FLOOR", "The floor is set to {FLOOR} in world {WORLD_NAME}")
+				.replace("{VALUE}", String.valueOf(floor)).replace("{WORLD_NAME}", worldName);
+	}
+
 	public String getScanInProgress() {
 		return getMessage("BIOMEREMAP_SCAN_IN_PROGRESS",
 				"A biome scan is already in progress; please try again in a few minutes");

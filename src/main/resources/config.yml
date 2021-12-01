@@ -243,6 +243,7 @@ biomemaps:
   boilerroom:
     description: "Climate change is real. The entire world is warm, warmer, hot, hotter."
     enabled-worlds: []
+    floor: -64
     biomes:
       badlands:
         replacement-biome: badlands
@@ -354,6 +355,7 @@ biomemaps:
   hell:
     description: "There will be hell to pay."
     enabled-worlds: []
+    floor: -64
     biomes:
       basalt_deltas:
         replacement-biome: basalt_deltas
