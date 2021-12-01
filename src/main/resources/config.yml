@@ -31,8 +31,8 @@
 # automatically, even if the configuration is changed. They can be remapped manually, if desired.
 # Commands to do so are described in the wiki.
 #
-# Due to the way Minecraft world creation and chunk generation work, BiomeRemap does automatically
-# remap the chunks initially-generated on world creation. These chunks must be remapped manually.
+# Due to the way MC world creation and chunk generation work, BiomeRemap does not automatically
+# remap the chunks initially generated on world creation. These chunks must be remapped manually.
 # Commands to do so are described in the wiki.
 #
 # Changes of this magnitude should always be performed first on a test server, in order to verify
@@ -45,11 +45,6 @@
 #
 # In Minecraft 1.18, 13 biomes were renamed, 25 biomes were deleted, and six new biomes were
 # introduced. See https://github.com/SlimeDog/BiomeRemap/wiki/ for details.
-#
-# In this DRAFT FILE, deleted and renamed biomes are included at the bottom of the default overworld
-# biomemaps for completeness, but they are no longer used as  replacement biomes. The deleted and
-# renamed lists are clearly marked in the biomemaps. It is expected that they will be removed from
-# the configuration after testing confirms that they are no longer required.
 #
 # Biomes that do not exist in your Minecraft version will generate errors in the console/log,
 # and BiomeRemap will fail to enable.
@@ -148,29 +143,29 @@ biomemaps:
       birch_forest:
         replacement-biome: snowy_plains
       cold_ocean:
-        replacement-biome: frozen_river
+        replacement-biome: frozen_ocean
       dark_forest:
         replacement-biome: snowy_plains
       deep_cold_ocean:
-        replacement-biome: frozen_river
+        replacement-biome: frozen_ocean
       deep_frozen_ocean:
-        replacement-biome: frozen_river
+        replacement-biome: frozen_ocean
       deep_lukewarm_ocean:
-        replacement-biome: frozen_river
+        replacement-biome: frozen_ocean
       deep_ocean:
-        replacement-biome: frozen_river
+        replacement-biome: frozen_ocean
       desert:
         replacement-biome: snowy_plains
       dripstone_caves:
         replacement-biome: snowy_plains
       eroded_badlands:
-        replacement-biome: snowy_plains
+        replacement-biome: snowy_slopes
       flower_forest:
         replacement-biome: snowy_plains
       forest:
         replacement-biome: snowy_plains
       frozen_ocean:
-        replacement-biome: frozen_river
+        replacement-biome: frozen_ocean
       frozen_peaks:
         replacement-biome: frozen_peaks
       frozen_river:
@@ -180,11 +175,11 @@ biomemaps:
       ice_spikes:
         replacement-biome: ice_spikes
       jagged_peaks:
-        replacement-biome: jagged_peaks
+        replacement-biome: frozen_peaks
       jungle:
         replacement-biome: snowy_plains
       lukewarm_ocean:
-        replacement-biome: frozen_river
+        replacement-biome: frozen_ocean
       lush_caves:
         replacement-biome: snowy_plains
       meadow:
@@ -192,7 +187,7 @@ biomemaps:
       mushroom_fields:
         replacement-biome: snowy_plains
       ocean:
-        replacement-biome: frozen_river
+        replacement-biome: frozen_ocean
       old_growth_birch_forest:
         replacement-biome: snowy_plains
       old_growth_pine_taiga:
@@ -226,9 +221,9 @@ biomemaps:
       swamp:
         replacement-biome: snowy_plains
       taiga:
-        replacement-biome: snowy_plains
+        replacement-biome: snowy_taiga
       warm_ocean:
-        replacement-biome: frozen_river
+        replacement-biome: frozen_ocean
       windswept_forest:
         replacement-biome: snowy_slopes
       windswept_gravelly_hills:
