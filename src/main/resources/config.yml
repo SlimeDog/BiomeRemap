@@ -132,7 +132,6 @@ biomemaps:
     description: "The world is cold and icy. Snow everywhere."
     enabled-worlds:
       - world_name_goes_here
-    full-chunk-remap: false
     biomes:
       badlands:
         replacement-biome: snowy_plains
@@ -244,7 +243,6 @@ biomemaps:
   boilerroom:
     description: "Climate change is real. The entire world is warm, warmer, hot, hotter."
     enabled-worlds: []
-    full-chunk-remap: false
     biomes:
       badlands:
         replacement-biome: badlands
@@ -356,7 +354,6 @@ biomemaps:
   hell:
     description: "There will be hell to pay."
     enabled-worlds: []
-    full-chunk-remap: false
     biomes:
       basalt_deltas:
         replacement-biome: basalt_deltas
