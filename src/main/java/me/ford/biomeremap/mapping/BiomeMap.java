@@ -12,6 +12,7 @@ import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.settings.Messages;
 
 public class BiomeMap {
+	private static final int MIN_FLOOR = -64;
 	private static final int MAX_FLOOR = 0;
 	private final String name;
 	private final String description;
@@ -52,7 +53,10 @@ public class BiomeMap {
 			}
 			biomeMap.put(from, to);
 		}
-		floor = Math.min(section.getInt("floor", -64), MAX_FLOOR);
+		floor = section.getInt("floor", MIN_FLOOR);
+		if (floor < MIN_FLOOR || floor > MAX_FLOOR) {
+			throw new IncompatibleFloorException(floor);
+		}
 	}
 
 	public int getFloor() {
@@ -99,6 +103,16 @@ public class BiomeMap {
 
 		public MappingException() {
 			super("Problem mapping biomes");
+		}
+
+	}
+
+	public static final class IncompatibleFloorException extends IllegalStateException {
+
+		private static final long serialVersionUID = 1L;
+
+		public IncompatibleFloorException(int floor) {
+			super(String.format("Floor should be between %d and %d, found %d", MIN_FLOOR, MAX_FLOOR, floor));
 		}
 
 	}
