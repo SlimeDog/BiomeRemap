@@ -71,7 +71,7 @@ enable-metrics: true
 #   NAME:
 #     description: TEXT
 #     enabled-worlds: LIST
-#     full-chunk-remap: true|false (default:false)
+#     floor: Y-VALUE (default:-64 for overworld, 0 for nether and end)
 #     biomes:
 #        BIOME_ENUM:
 #         replacement-biome: BIOME_ENUM
@@ -88,23 +88,13 @@ enable-metrics: true
 #   * a world may be assigned to more than one biomemap, if you understand the consequences
 #   * may be the empty set [] if no worlds are assigned
 #   * overlapping combinations of worlds and biomes will generate non-fatal warnings in the console/log
-# biomemaps.NAME.full-chunk-remap
-#   * Prior to MC 1.16.2, "chunk" referred to a 16x16 column, across all Y values; the biome of the
-#     entire column was specified by a single BIOME_ENUM value in the base chunk (Y=0).
-#   * Starting with MC 1.16.2, "chunk" refers to a 16x16x16 cube; the biome of each cubic chunk may
-#     be specified independently. BiomeRemap addresses this change in the following way:
-#        * biomemaps.NAME.full-chunk-remap: false (default)
-#          Only the base chunk (Y=0) will be remapped. This changes weather (for example, rain vs.
-#          snow) in the entire column, but changes the visual characteristics (for example, grass
-#          color) in the base chunk only. So the surface terrain characteristics remain unchanged.
-#        * biomemaps.NAME.full-chunk-remap: true
-#          The entire column will be remapped. This changes weather in the same way, but changes the
-#          the visual characteristics of the entire column, so the surface terrain characteristics
-#          will reflect the new biome. This will incur a small additional computational cost to loop
-#          through the entire column, but it should not be noticeable in practice, and will not affect
-#          game play if the chunks are pre-generated (which we recommend in any event).
-#   * WARNING: The configuration should be changed only after careful consideration and testing. The
-#     consequences of TRUE cannot be reversed, except by regenerating chunks after reverting to FALSE.
+# biomemaps.NAME.floor
+#   * The floor is the minimul Y value that will be mapped. By default, floor is -64 for overworlds,
+#     and 0 for nether and end worlds. If the floor is not set, the default will be used.
+#   * Raising the floor will result in some performance gain, at the cost of players finding different
+#     biomes below the floor, which could result in different weather if a below-floor area is open to
+#     the sky. We strongly recommend that worlds are pre-generated, so that in-game performance is not
+#     affected by the floor setting.
 # biomemaps.NAME.biomes.BIOME_ENUM
 #   * Required, unique per biomemap
 #   * Identifies the vanilla biome that will be replaced
@@ -348,14 +338,14 @@ biomemaps:
 
   # ======== BiomeRemap example: hell ================================================================
   # There will be hell to pay.
-  # It is unclear what you might want to do, but MC 1.16 nether biomes are listed here for reference.
+  # It is unclear what you might want to do, but MC 1.18 nether biomes are listed here for reference.
   #
   # enabled-worlds must be changed to reflect your target worlds.
   #
   hell:
     description: "There will be hell to pay."
     enabled-worlds: []
-    floor: -64
+    floor: 0
     biomes:
       basalt_deltas:
         replacement-biome: basalt_deltas
