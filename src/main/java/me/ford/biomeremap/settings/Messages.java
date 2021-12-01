@@ -81,7 +81,7 @@ public class Messages extends CustomConfigHandler {
 
 	public String getInfoChunkRemapFloor(int floor, String worldName) {
 		return getMessage("INFO_CHUNK_REMAP_FLOOR", "The floor is set to {FLOOR} in world {WORLD_NAME}")
-				.replace("{VALUE}", String.valueOf(floor)).replace("{WORLD_NAME}", worldName);
+				.replace("{FLOOR}", String.valueOf(floor)).replace("{WORLD_NAME}", worldName);
 	}
 
 	public String getScanInProgress() {
