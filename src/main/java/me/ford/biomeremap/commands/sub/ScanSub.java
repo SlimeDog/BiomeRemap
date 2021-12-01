@@ -160,7 +160,7 @@ public class ScanSub extends SubCommand {
 			sender.sendMessage(br.getMessages().getScanChunkStart(world.getName(), x, z));
 		}
 		ReportTarget target;
-		if (ingame) {
+		if (!ingame) {
 			target = new SingleReportTarget(sender);
 		} else {
 			target = new MultiReportTarget(sender, br.getServer().getConsoleSender());

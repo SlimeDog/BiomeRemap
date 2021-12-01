@@ -92,7 +92,7 @@ public class ChunkSub extends SubCommand {
 		}
 		String startMsg = br.getMessages().getChunkRemapStarted(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
 		ReportTarget target;
-		if (ingame) {
+		if (!ingame) {
 			target = new SingleReportTarget(sender);
 		} else {
 			target = new MultiReportTarget(sender, br.getServer().getConsoleSender());

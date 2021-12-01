@@ -98,7 +98,7 @@ public class RegionSub extends SubCommand {
 			return true;
 		}
 		ReportTarget target;
-		if (ingame) {
+		if (!ingame) {
 			target = new SingleReportTarget(sender);
 		} else {
 			target = new MultiReportTarget(sender, br.getServer().getConsoleSender());
