@@ -180,14 +180,14 @@ public class Messages extends CustomConfigHandler {
 						.replace("{BIOMEMAP}", map);
 	}
 
-	public String errorIncompatibleFloor(String map) {
-		return getMessage("ERROR_INCOMPATIBLE_FLOOR", "Incompatible floor found for biomemap {BIOMEMAP}")
-				.replace("{BIOMEMAP}", map);
+	public String errorIncompatibleFloor(String map, int floor) {
+		return getMessage("ERROR_INCOMPATIBLE_FLOOR", "Incompatible floor found for biomemap {BIOMEMAP}: {FLOOR}")
+				.replace("{BIOMEMAP}", map).replace("{FLOOR}", String.valueOf(floor));
 	}
 
-	public String errorIncompatibleCeiling(String map) {
-		return getMessage("ERROR_INCOMPATIBLE_CEILING", "Incompatible ceiling found for biomemap {BIOMEMAP}")
-				.replace("{BIOMEMAP}", map);
+	public String errorIncompatibleCeiling(String map, int ceiling) {
+		return getMessage("ERROR_INCOMPATIBLE_CEILING", "Incompatible ceiling found for biomemap {BIOMEMAP}: {CEILING}")
+				.replace("{BIOMEMAP}", map).replace("{CEILING}", String.valueOf(ceiling));
 	}
 
 	// Update messages

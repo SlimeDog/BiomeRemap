@@ -121,8 +121,11 @@ public class BiomeMap {
 
 		private static final long serialVersionUID = 1L;
 
+		public final int floor;
+
 		public IncompatibleFloorException(int floor) {
 			super(String.format("Floor should be between %d and %d, found %d", MIN_FLOOR, MAX_FLOOR, floor));
+			this.floor = floor;
 		}
 
 	}
@@ -131,9 +134,13 @@ public class BiomeMap {
 
 		private static final long serialVersionUID = 1L;
 
+		public final int floor, ceiling;
+
 		public IncompatibleCeilingException(int floor, int ceiling) {
 			super(String.format("Ceiling should be above the floor (%d) and not above max (%d), found %d", floor,
 					DEFAULT_CEILING, ceiling));
+			this.floor = floor;
+			this.ceiling = ceiling;
 		}
 
 	}

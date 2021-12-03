@@ -47,10 +47,10 @@ public class Settings {
 				issues.addIssue(br.getMessages().errorNoBiomeMapAssigned(key));
 				continue;
 			} catch (IncompatibleFloorException e) {
-				br.getLogger().severe(br.getMessages().errorIncompatibleFloor(key));
+				br.getLogger().severe(br.getMessages().errorIncompatibleFloor(key, e.floor));
 				continue;
 			} catch (IncompatibleCeilingException e) {
-				br.getLogger().severe(br.getMessages().errorIncompatibleCeiling(key));
+				br.getLogger().severe(br.getMessages().errorIncompatibleCeiling(key, e.ceiling));
 				continue;
 			}
 			maps.put(key, map);
