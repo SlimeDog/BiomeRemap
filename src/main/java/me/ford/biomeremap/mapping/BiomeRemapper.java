@@ -58,18 +58,20 @@ public class BiomeRemapper {
 	}
 
 	public long remapChunk(final Chunk chunk, boolean debug, final BiomeMap map, int maxY) {
-		final int maxy;
-		if (maxY > SubCommand.MAX_Y) {
-			maxy = SubCommand.MAX_Y;
-		} else {
-			maxy = maxY;
-		}
 		long start = System.currentTimeMillis();
 		if (debug)
 			BiomeRemap
 					.debug("Looking for biomes to remap (SYNC) in chunk:" + chunk.getX() + "," + chunk.getZ() + "...");
 		if (map == null)
-			return 0;
+			return 0L;
+		final int maxy;
+		if (maxY > map.getCeiling()) {
+			maxy = map.getCeiling();
+		} else if (maxY > SubCommand.MAX_Y) {
+			maxy = SubCommand.MAX_Y;
+		} else {
+			maxy = maxY;
+		}
 		if (debug)
 			BiomeRemap.debug(chunk.getWorld().getName() + "->Mapping " + map.getName());
 		List<BiomeChange> toChange = new ArrayList<>();

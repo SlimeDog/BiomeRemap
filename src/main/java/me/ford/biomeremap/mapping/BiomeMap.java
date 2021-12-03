@@ -69,6 +69,10 @@ public class BiomeMap {
 		return floor;
 	}
 
+	public int getCeiling() {
+		return ceiling;
+	}
+
 	public String getName() {
 		return name;
 	}
