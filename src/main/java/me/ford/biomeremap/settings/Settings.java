@@ -9,6 +9,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.mapping.BiomeMap;
+import me.ford.biomeremap.mapping.BiomeMap.IncompatibleFloorException;
 import me.ford.biomeremap.mapping.BiomeMap.IncompleteBiomeMapException;
 import me.ford.biomeremap.mapping.BiomeMap.MappingException;
 
@@ -43,6 +44,9 @@ public class Settings {
 			} catch (MappingException e) {
 				br.getLogger().severe(br.getMessages().errorNoBiomeMapAssigned(key));
 				issues.addIssue(br.getMessages().errorNoBiomeMapAssigned(key));
+				continue;
+			} catch (IncompatibleFloorException e) {
+				br.getLogger().severe(br.getMessages().errorIncompatibleFloor(key));
 				continue;
 			}
 			maps.put(key, map);

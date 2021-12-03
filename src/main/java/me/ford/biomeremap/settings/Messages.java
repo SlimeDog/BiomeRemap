@@ -180,6 +180,11 @@ public class Messages extends CustomConfigHandler {
 						.replace("{BIOMEMAP}", map);
 	}
 
+	public String errorIncompatibleFloor(String map) {
+		return getMessage("ERROR_INCOMPATIBLE_FLOOR", "Incompatible floor found for biomemap {BIOMEMAP}")
+				.replace("{BIOMEMAP}", map);
+	}
+
 	// Update messages
 
 	public String updateNewVersionAvailable(String version) {
