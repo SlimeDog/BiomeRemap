@@ -14,11 +14,13 @@ import me.ford.biomeremap.settings.Messages;
 public class BiomeMap {
 	private static final int MIN_FLOOR = -64;
 	private static final int MAX_FLOOR = 0;
+	private static final int DEFAULT_CEILING = 320;
 	private final String name;
 	private final String description;
 	private final List<String> worldNames;
 	private final Map<Biome, Biome> biomeMap = new HashMap<>();
 	private final int floor;
+	private final int ceiling;
 
 	public BiomeMap(Messages messages, ConfigurationSection section) {
 		name = section.getName();
@@ -56,6 +58,10 @@ public class BiomeMap {
 		floor = section.getInt("floor", MIN_FLOOR);
 		if (floor < MIN_FLOOR || floor > MAX_FLOOR) {
 			throw new IncompatibleFloorException(floor);
+		}
+		ceiling = section.getInt("ceiling", DEFAULT_CEILING);
+		if (ceiling > DEFAULT_CEILING || ceiling <= floor) {
+			throw new IncompatibleCeilingException(floor, ceiling);
 		}
 	}
 
@@ -113,6 +119,17 @@ public class BiomeMap {
 
 		public IncompatibleFloorException(int floor) {
 			super(String.format("Floor should be between %d and %d, found %d", MIN_FLOOR, MAX_FLOOR, floor));
+		}
+
+	}
+
+	public static final class IncompatibleCeilingException extends IllegalStateException {
+
+		private static final long serialVersionUID = 1L;
+
+		public IncompatibleCeilingException(int floor, int ceiling) {
+			super(String.format("Ceiling should be above the floor (%d) and not above max (%d), found %d", floor,
+					DEFAULT_CEILING, ceiling));
 		}
 
 	}

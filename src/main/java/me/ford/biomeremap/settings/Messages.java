@@ -185,6 +185,11 @@ public class Messages extends CustomConfigHandler {
 				.replace("{BIOMEMAP}", map);
 	}
 
+	public String errorIncompatibleCeiling(String map) {
+		return getMessage("ERROR_INCOMPATIBLE_CEILING", "Incompatible ceiling found for biomemap {BIOMEMAP}")
+				.replace("{BIOMEMAP}", map);
+	}
+
 	// Update messages
 
 	public String updateNewVersionAvailable(String version) {

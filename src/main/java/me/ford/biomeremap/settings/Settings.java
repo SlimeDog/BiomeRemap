@@ -9,6 +9,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.mapping.BiomeMap;
+import me.ford.biomeremap.mapping.BiomeMap.IncompatibleCeilingException;
 import me.ford.biomeremap.mapping.BiomeMap.IncompatibleFloorException;
 import me.ford.biomeremap.mapping.BiomeMap.IncompleteBiomeMapException;
 import me.ford.biomeremap.mapping.BiomeMap.MappingException;
@@ -47,6 +48,9 @@ public class Settings {
 				continue;
 			} catch (IncompatibleFloorException e) {
 				br.getLogger().severe(br.getMessages().errorIncompatibleFloor(key));
+				continue;
+			} catch (IncompatibleCeilingException e) {
+				br.getLogger().severe(br.getMessages().errorIncompatibleCeiling(key));
 				continue;
 			}
 			maps.put(key, map);
