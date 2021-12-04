@@ -55,6 +55,7 @@ permissions:
       biomeremap.remap: true
       biomeremap.scan: true
       biomeremap.use: true
+      biomeremap.cb: true
   biomeremap.reload:
     description: Allows use of /biomeremap reload command.
     default: false
@@ -66,4 +67,7 @@ permissions:
     default: false
   biomeremap.use:
     description: Allows use of /biomeremap command.
+    default: false
+  biomeremap.cb:
+    description: Allows remappinkg current block
     default: false

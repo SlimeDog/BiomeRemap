@@ -9,6 +9,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.util.StringUtil;
 
 import me.ford.biomeremap.BiomeRemap;
+import me.ford.biomeremap.commands.sub.CBCommand;
 import me.ford.biomeremap.commands.sub.ChunkSub;
 import me.ford.biomeremap.commands.sub.HelpSub;
 import me.ford.biomeremap.commands.sub.InfoSub;
@@ -20,7 +21,6 @@ import me.ford.biomeremap.commands.sub.ScanSub;
 public class BiomeRemapCommand extends ArgSplittingCommand {
 	private static final String PERMS = "biomeremap.use";
 	private final List<SubCommand> subCommands = new ArrayList<>();
-	private final List<String> subCommandNames = new ArrayList<>();
 	private final BiomeRemap br;
 
 	public BiomeRemapCommand(BiomeRemap plugin) {
@@ -32,9 +32,7 @@ public class BiomeRemapCommand extends ArgSplittingCommand {
 		subCommands.add(new RegionSub(br));
 		subCommands.add(new ScanSub(br));
 		subCommands.add(new ReloadSub(br));
-		for (SubCommand cmd : subCommands) {
-			subCommandNames.add(cmd.getName());
-		}
+		subCommands.add(new CBCommand(br));
 	}
 
 	public List<SubCommand> getSubCommands() {
