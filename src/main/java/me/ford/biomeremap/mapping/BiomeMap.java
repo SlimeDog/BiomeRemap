@@ -59,7 +59,7 @@ public class BiomeMap {
 		if (floor < MIN_FLOOR || floor > MAX_FLOOR) {
 			throw new IncompatibleFloorException(floor);
 		}
-		ceiling = section.getInt("ceiling", DEFAULT_CEILING);
+		ceiling = DEFAULT_CEILING; // section.getInt("ceiling", DEFAULT_CEILING);
 		if (ceiling > DEFAULT_CEILING || ceiling <= floor) {
 			throw new IncompatibleCeilingException(floor, ceiling);
 		}

@@ -50,7 +50,9 @@ public class Settings {
 				br.getLogger().severe(br.getMessages().errorIncompatibleFloor(key, e.floor));
 				continue;
 			} catch (IncompatibleCeilingException e) {
-				br.getLogger().severe(br.getMessages().errorIncompatibleCeiling(key, e.ceiling));
+				// br.getLogger().severe(br.getMessages().errorIncompatibleCeiling(key, e.ceiling));
+				br.getLogger().severe("Problem with ceiling of biome map (this should not happen!)");
+				e.printStackTrace();
 				continue;
 			}
 			maps.put(key, map);
