@@ -83,7 +83,9 @@ public class Settings {
 		for (String worldName : successes) {
 			BiomeMap map = worldMap.get(worldName);
 			br.logMessage(br.getMessages().getInfoWorldMapped(worldName, map.getName()));
-			br.logMessage(br.getMessages().getInfoChunkRemapFloor(map.getFloor(), worldName));
+			if (map.getFloor() != BiomeMap.DEFAULT_FLOOR) {
+				br.logMessage(br.getMessages().getInfoChunkRemapFloor(map.getFloor(), worldName));
+			}
 		}
 		for (String worldName : duplicates) { // otherwise the third (or 5th, so on) duplicate would stay
 			worldMap.remove(worldName);

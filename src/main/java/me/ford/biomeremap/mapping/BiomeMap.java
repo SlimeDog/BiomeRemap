@@ -12,6 +12,7 @@ import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.settings.Messages;
 
 public class BiomeMap {
+	public static final int DEFAULT_FLOOR = -64;
 	private static final int MIN_FLOOR = -64;
 	private static final int MAX_FLOOR = 0;
 	private static final int DEFAULT_CEILING = 320;
@@ -55,7 +56,7 @@ public class BiomeMap {
 			}
 			biomeMap.put(from, to);
 		}
-		floor = section.getInt("floor", MIN_FLOOR);
+		floor = section.getInt("floor", DEFAULT_FLOOR);
 		if (floor < MIN_FLOOR || floor > MAX_FLOOR) {
 			throw new IncompatibleFloorException(floor);
 		}
