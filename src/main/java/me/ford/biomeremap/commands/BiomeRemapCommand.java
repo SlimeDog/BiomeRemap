@@ -9,7 +9,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.util.StringUtil;
 
 import me.ford.biomeremap.BiomeRemap;
-import me.ford.biomeremap.commands.sub.CBCommand;
+// import me.ford.biomeremap.commands.sub.CBCommand;
 import me.ford.biomeremap.commands.sub.ChunkSub;
 import me.ford.biomeremap.commands.sub.HelpSub;
 import me.ford.biomeremap.commands.sub.InfoSub;
@@ -32,7 +32,7 @@ public class BiomeRemapCommand extends ArgSplittingCommand {
 		subCommands.add(new RegionSub(br));
 		subCommands.add(new ScanSub(br));
 		subCommands.add(new ReloadSub(br));
-		subCommands.add(new CBCommand(br));
+		// subCommands.add(new CBCommand(br));
 	}
 
 	public List<SubCommand> getSubCommands() {
