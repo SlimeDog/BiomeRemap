@@ -79,5 +79,4 @@ ERROR_PARAMETER_INVALID_INTEGER: "{VALUE} is not a value integer"
 ERROR_WORLD_DUPLICATE_ASSIGNMENT: "Multiple biomemaps are assigned to world {WORLD_NAME}; fix configuration and reload"
 ERROR_WORLD_NOT_FOUND: "World {WORLD_NAME} does not exist"
 ERROR_INCOMPATIBLE_FLOOR: "Incompatible floor found for biomemap {BIOMEMAP}: {FLOOR}"
-
 ERROR_NO_PERMISSION: "You do not have permission to execute that command"
