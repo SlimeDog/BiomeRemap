@@ -46,7 +46,7 @@ public class InfoSub extends SubCommand {
 		}
 		sender.sendMessage(messages.getBiomeRemapInfo(map.getDescription(), map.getApplicableWorldNames()));
 		int floor = map.getFloor();
-		if (floor != BiomeMap.DEFAULT_FLOOR) {
+		if (floor != BiomeMap.DEFAULT_FLOOR && !map.getApplicableWorldNames().isEmpty()) {
 			sender.sendMessage(messages.getInfoChunkRemapFloor(map.getFloor(), map.getApplicableWorldNames()));
 		}
 		return true;
