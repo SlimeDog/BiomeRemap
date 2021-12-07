@@ -25,8 +25,7 @@ public class LargeMappingWithScanTask extends LargeMappingTask {
 		super(plugin, world, minX, maxX, minZ, maxZ, debug, progressStep, progress, ender, map, maxY);
 		this.biomeReport = biomeReport;
 		this.onMappingDone = new OnMappingDone((x, z) -> addBiomes(world, x, z, map.getFloor(), maxY), world, minX,
-				minZ, maxX,
-				maxZ);
+				minZ, maxX, maxZ);
 		plugin.getRemapper().addDoneChecker(onMappingDone);
 		queue = new PopulatorQueue(biomeMap, world, getPlugin().getScanner());
 		getPlugin().getScanner().setPopulatorQueue(queue);
