@@ -79,9 +79,10 @@ public class Messages extends CustomConfigHandler {
 						.replace("{BIOMEMAP}", biomemap);
 	}
 
-	public String getInfoChunkRemapFloor(int floor, String worldName) {
-		return getMessage("INFO_CHUNK_REMAP_FLOOR", "The floor is set to {FLOOR} in world {WORLD_NAME}")
-				.replace("{FLOOR}", String.valueOf(floor)).replace("{WORLD_NAME}", worldName);
+	public String getInfoChunkRemapFloor(int floor, List<String> worldNames) {
+		String wn = worldNames.isEmpty() ? "none" : String.join(", ", worldNames);
+		return getMessage("INFO_CHUNK_REMAP_FLOOR", "The floor is set to {FLOOR} in worlds {WORLD_NAMES}")
+				.replace("{FLOOR}", String.valueOf(floor)).replace("{WORLD_NAME}", wn).replace("{WORLD_NAMES}", wn);
 	}
 
 	public String getScanInProgress() {
@@ -186,8 +187,9 @@ public class Messages extends CustomConfigHandler {
 	}
 
 	// public String errorIncompatibleCeiling(String map, int ceiling) {
-	// 	return getMessage("ERROR_INCOMPATIBLE_CEILING", "Incompatible ceiling found for biomemap {BIOMEMAP}: {CEILING}")
-	// 			.replace("{BIOMEMAP}", map).replace("{CEILING}", String.valueOf(ceiling));
+	// return getMessage("ERROR_INCOMPATIBLE_CEILING", "Incompatible ceiling found
+	// for biomemap {BIOMEMAP}: {CEILING}")
+	// .replace("{BIOMEMAP}", map).replace("{CEILING}", String.valueOf(ceiling));
 	// }
 
 	// Update messages
