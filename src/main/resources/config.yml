@@ -89,12 +89,13 @@ enable-metrics: true
 #   * may be the empty set [] if no worlds are assigned
 #   * overlapping combinations of worlds and biomes will generate non-fatal warnings in the console/log
 # biomemaps.NAME.floor
-#   * The floor is the minimul Y value that will be mapped. By default, floor is -64 for overworlds,
+#   * The floor is the minimal Y value that will be mapped. By default, floor is -64 for overworlds,
 #     and 0 for nether and end worlds. If the floor is not set, the default will be used.
-#   * Raising the floor will result in some performance gain, at the cost of players finding different
-#     biomes below the floor, which could result in different weather if a below-floor area is open to
-#     the sky. We strongly recommend that worlds are pre-generated, so that in-game performance is not
-#     affected by the floor setting.
+#   * Raising the floor results in negligible performance gain, at the cost of finding different biomes
+#     below the floor, which could result in different weather if a below-floor area is opened to the
+#     sky (for example, by open-pit mining).
+#   * We strongly recommend that worlds are pre-generated, so that in-game performance is not affected
+#     by the floor setting.
 # biomemaps.NAME.biomes.BIOME_ENUM
 #   * Required, unique per biomemap
 #   * Identifies the vanilla biome that will be replaced
