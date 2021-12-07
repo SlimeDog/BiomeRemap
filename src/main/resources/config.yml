@@ -122,6 +122,7 @@ biomemaps:
     description: "The world is cold and icy. Snow everywhere."
     enabled-worlds:
       - world_name_goes_here
+    floor: -64
     biomes:
       badlands:
         replacement-biome: snowy_plains
