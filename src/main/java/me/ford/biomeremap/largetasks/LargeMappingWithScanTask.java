@@ -23,9 +23,10 @@ public class LargeMappingWithScanTask extends LargeMappingTask {
 			boolean debug, int progressStep, Consumer<String> progress, Consumer<TaskReport> ender, BiomeMap map,
 			Consumer<BiomeReport> biomeReport, int maxY) {
 		super(plugin, world, minX, maxX, minZ, maxZ, debug, progressStep, progress, ender, map, maxY);
-		// TODO - use maxY for scan
 		this.biomeReport = biomeReport;
-		this.onMappingDone = new OnMappingDone((x, z) -> addBiomes(world, x, z), world, minX, minZ, maxX, maxZ);
+		this.onMappingDone = new OnMappingDone((x, z) -> addBiomes(world, x, z, map.getFloor(), maxY), world, minX,
+				minZ, maxX,
+				maxZ);
 		plugin.getRemapper().addDoneChecker(onMappingDone);
 		queue = new PopulatorQueue(biomeMap, world, getPlugin().getScanner());
 		getPlugin().getScanner().setPopulatorQueue(queue);
@@ -38,10 +39,10 @@ public class LargeMappingWithScanTask extends LargeMappingTask {
 		queue.tick();
 	}
 
-	private void addBiomes(World world, int chunkX, int chunkZ) {
+	private void addBiomes(World world, int chunkX, int chunkZ, int minY, int maxY) {
 		if (checked[chunkX - getMinX()][chunkZ - getMinZ()])
 			return;
-		if (getPlugin().getScanner().addBiomesFor(biomeMap, world, chunkX, chunkZ)) {
+		if (getPlugin().getScanner().addBiomesFor(biomeMap, world, chunkX, chunkZ, minY, maxY)) {
 			checked[chunkX - getMinX()][chunkZ - getMinZ()] = true;
 		} // else will be done later, after the remap
 	}
