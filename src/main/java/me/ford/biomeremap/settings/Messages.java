@@ -84,11 +84,12 @@ public class Messages extends CustomConfigHandler {
 				.replace("{FLOOR}", String.valueOf(floor)).replace("{WORLD_NAME}", wn);
 	}
 
-	public String getInfoFloorWithDefault(int floor, int defaultFloor) {
+	public String getInfoFloorWithDefault(int floor, int defaultFloor, List<String> worldNames) {
+		String wn = String.join(",", worldNames);
 		return getMessage("BIOMEREMAP_INFO_FLOOR",
-				"The floor is set to {FLOOR} in worlds world_whitedog (default {DEFAULT_FLOOR})")
+				"The floor is set to {FLOOR} in worlds {WORLD_NAMES} (default {DEFAULT_FLOOR})")
 						.replace("{FLOOR}", String.valueOf(floor))
-						.replace("{DEFAULT_FLOOR}", String.valueOf(defaultFloor));
+						.replace("{DEFAULT_FLOOR}", String.valueOf(defaultFloor)).replace("{WORLD_NAMES}", wn);
 	}
 
 	public String getScanInProgress() {
