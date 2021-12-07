@@ -84,6 +84,13 @@ public class Messages extends CustomConfigHandler {
 				.replace("{FLOOR}", String.valueOf(floor)).replace("{WORLD_NAME}", wn);
 	}
 
+	public String getInfoFloorWithDefault(int floor, int defaultFloor) {
+		return getMessage("BIOMEREMAP_INFO_FLOOR",
+				"The floor is set to {FLOOR} in worlds world_whitedog (default {DEFAULT_FLOOR})")
+						.replace("{FLOOR}", String.valueOf(floor))
+						.replace("{DEFAULT_FLOOR}", String.valueOf(defaultFloor));
+	}
+
 	public String getScanInProgress() {
 		return getMessage("BIOMEREMAP_SCAN_IN_PROGRESS",
 				"A biome scan is already in progress; please try again in a few minutes");

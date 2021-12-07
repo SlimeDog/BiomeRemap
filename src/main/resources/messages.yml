@@ -20,6 +20,7 @@ BIOMEREMAP_PREFIX: "[BiomeRemap] "
 # Messages produced by /biomeremap info
 #
 BIOMEREMAP_INFO: "Description: {BIOMEREMAP_DESC} \nWorlds: {BIOMEREMAP_WORLDS}"
+BIOMEREMAP_INFO_FLOOR: "The floor is set to {FLOOR} in worlds world_whitedog (default {DEFAULT_FLOOR})"
 
 # Messages produced by /biomeremap list
 #
