@@ -79,9 +79,11 @@ public class Messages extends CustomConfigHandler {
 						.replace("{BIOMEMAP}", biomemap);
 	}
 
-	public String getInfoChunkRemapFloor(int floor, String wn) {
-		return getMessage("INFO_CHUNK_REMAP_FLOOR", "The floor is set to {FLOOR} in world {WORLD_NAME}")
-				.replace("{FLOOR}", String.valueOf(floor)).replace("{WORLD_NAME}", wn);
+	public String getInfoChunkRemapFloor(int floor, int defFloor, String wn) {
+		return getMessage("INFO_CHUNK_REMAP_FLOOR",
+				"The floor is set to {FLOOR} in world {WORLD_NAME} (default {DEFAULT_FLOOR})")
+						.replace("{FLOOR}", String.valueOf(floor)).replace("{WORLD_NAME}", wn)
+						.replace("{DEFAULT_FLOOR}", String.valueOf(defFloor));
 	}
 
 	public String getInfoFloorWithDefault(int floor, int defaultFloor, List<String> worldNames) {
