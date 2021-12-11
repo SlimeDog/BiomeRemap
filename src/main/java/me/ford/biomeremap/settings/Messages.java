@@ -79,9 +79,18 @@ public class Messages extends CustomConfigHandler {
 						.replace("{BIOMEMAP}", biomemap);
 	}
 
-	public String getInfoFullChunkInfo(boolean fullChunk, String worldName) {
-		return getMessage("INFO_FULL_CHUNK_REMAP", "Full chunk remap is {VALUE} in world {WORLD_NAME}")
-				.replace("{VALUE}", String.valueOf(fullChunk)).replace("{WORLD_NAME}", worldName);
+	public String getInfoChunkRemapFloor(int floor, int defFloor, String wn) {
+		return getMessage("INFO_CHUNK_REMAP_FLOOR",
+				"The floor is set to {FLOOR} in world {WORLD_NAME} (default {DEFAULT_FLOOR})")
+						.replace("{FLOOR}", String.valueOf(floor)).replace("{WORLD_NAME}", wn)
+						.replace("{DEFAULT_FLOOR}", String.valueOf(defFloor));
+	}
+
+	public String getInfoFloorWithDefault(int floor, int defaultFloor, String wn) {
+		return getMessage("BIOMEREMAP_INFO_FLOOR",
+				"The floor is set to {FLOOR} in world {WORLD_NAME} (default {DEFAULT_FLOOR})")
+						.replace("{FLOOR}", String.valueOf(floor))
+						.replace("{DEFAULT_FLOOR}", String.valueOf(defaultFloor)).replace("{WORLD_NAME}", wn);
 	}
 
 	public String getScanInProgress() {
@@ -179,6 +188,17 @@ public class Messages extends CustomConfigHandler {
 				"Errors were found in biomemap {BIOMEMAP}; biomemap was not assigned to any worlds")
 						.replace("{BIOMEMAP}", map);
 	}
+
+	public String errorIncompatibleFloor(String map, int floor) {
+		return getMessage("ERROR_INCOMPATIBLE_FLOOR", "Incompatible floor found for biomemap {BIOMEMAP}: {FLOOR}")
+				.replace("{BIOMEMAP}", map).replace("{FLOOR}", String.valueOf(floor));
+	}
+
+	// public String errorIncompatibleCeiling(String map, int ceiling) {
+	// return getMessage("ERROR_INCOMPATIBLE_CEILING", "Incompatible ceiling found
+	// for biomemap {BIOMEMAP}: {CEILING}")
+	// .replace("{BIOMEMAP}", map).replace("{CEILING}", String.valueOf(ceiling));
+	// }
 
 	// Update messages
 

@@ -1,20 +1,25 @@
 package me.ford.biomeremap.mapping;
 
-import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import org.bukkit.Chunk;
 import org.bukkit.ChunkSnapshot;
 import org.bukkit.block.Biome;
 
 import me.ford.biomeremap.BiomeRemap;
+import me.ford.biomeremap.commands.SubCommand;
+import me.ford.biomeremap.largetasks.LargeAreaMappingTaskStarter;
 import me.ford.biomeremap.largetasks.OnMappingDone;
+import me.ford.biomeremap.mapping.settings.RemapOptions;
 
 public class BiomeRemapper {
+	private static final int BIOME_SIZE = 4;
 	private final BiomeRemap br;
 	private final Set<OnMappingDone> doneCheckers = new HashSet<>();
 	private long timeLastTick = 0L;
@@ -31,6 +36,10 @@ public class BiomeRemapper {
 		doneCheckers.remove(checker);
 	}
 
+	public void remapArea(RemapOptions options) {
+		new LargeAreaMappingTaskStarter(br, options, options.getEndRunnable());
+	}
+
 	public long remapChunk(Chunk chunk) {
 		return remapChunk(chunk, true);
 	}
@@ -45,55 +54,60 @@ public class BiomeRemapper {
 	}
 
 	public long remapChunk(final Chunk chunk, boolean debug, final BiomeMap map) {
+		return remapChunk(chunk, debug, map, SubCommand.MAX_Y);
+	}
+
+	public long remapChunk(final Chunk chunk, boolean debug, final BiomeMap map, int maxY) {
 		long start = System.currentTimeMillis();
 		if (debug)
 			BiomeRemap
 					.debug("Looking for biomes to remap (SYNC) in chunk:" + chunk.getX() + "," + chunk.getZ() + "...");
 		if (map == null)
-			return 0;
+			return 0L;
+		final int maxy;
+		if (maxY > map.getCeiling()) {
+			maxy = map.getCeiling();
+		} else if (maxY > SubCommand.MAX_Y) {
+			maxy = SubCommand.MAX_Y;
+		} else {
+			maxy = maxY;
+		}
 		if (debug)
 			BiomeRemap.debug(chunk.getWorld().getName() + "->Mapping " + map.getName());
-		Map<Integer, BiomeChoice> toChange = new HashMap<>();
-		Map<Biome, Biome> changes = new HashMap<>();
-		ChunkSnapshot snapshot = chunk.getChunkSnapshot(false, true, false);
+		List<BiomeChange> toChange = new ArrayList<>();
+		ChunkSnapshot snapshot = chunk.getChunkSnapshot(true, true, false);
 		br.getServer().getScheduler().runTaskAsynchronously(br, () -> {
-			for (int x = 0; x < 16; x++) { // the grid only has 4 sections per horizontal axis
-				for (int z = 0; z < 16; z++) { // the grid only has 4 sections per horizontal axis
-					Biome cur;
-					try {
-						cur = snapshot.getBiome(x, 0, z); // TODO - in the future, we might need to change/get biomes
-															// at other y values, but for now only y=0 has an effect
-					} catch (NullPointerException e) {
-						br.getLogger().warning("Problem geting biome in snapshot " + snapshot + " at " + x + "," + z);
+			for (int x = 0; x < 16; x += BIOME_SIZE) {
+				for (int z = 0; z < 16; z += BIOME_SIZE) {
+					int yStart = Math.max(map.getFloor(), chunk.getWorld().getMinHeight());
+					for (int y = yStart; y <= maxy; y += BIOME_SIZE) {
+						Biome cur;
 						try {
-							java.lang.reflect.Field field = snapshot.getClass().getDeclaredField("biome");
-							field.setAccessible(true);
-							Object bs = field.get(snapshot);
-							java.lang.reflect.Method getBiomeMethod = bs.getClass().getMethod("getBiome", int.class,
-									int.class, int.class);
-							Object bb = getBiomeMethod.invoke(bs, x >> 2, 0 >> 2, z >> 2);
-							br.getLogger().warning("Found base:" + bb);
-						} catch (Exception e2) {
-							e2.printStackTrace();
+							cur = snapshot.getBiome(x, y, z);
+						} catch (NullPointerException e) {
+							br.getLogger().warning(
+									"Problem geting biome in snapshot " + snapshot + " at " + x + "," + y + "," + z);
+							try {
+								java.lang.reflect.Field field = snapshot.getClass().getDeclaredField("biome");
+								field.setAccessible(true);
+								Object bs = field.get(snapshot);
+								java.lang.reflect.Method getBiomeMethod = bs.getClass().getMethod("getBiome", int.class,
+										int.class, int.class);
+								Object bb = getBiomeMethod.invoke(bs, x >> 2, 0 >> 2, z >> 2);
+								br.getLogger().warning("Found base:" + bb);
+							} catch (Exception e2) {
+								e2.printStackTrace();
+							}
+							continue;
 						}
-						continue;
-					}
-					Biome req = map.getBiomeFor(cur);
-					if (req != null) {
-						int key = x >> 2 << 2 | z >> 2;
-						if (!toChange.containsKey(key)) {
-							toChange.put(key, new BiomeChoice());
+						Biome req = map.getBiomeFor(cur);
+						if (req != null) {
+							toChange.add(new BiomeChange(x, y, z, cur, req));
 						}
-						toChange.get(key).addChoice(req);
-					}
-					if (!changes.containsKey(cur)) {
-						changes.put(cur, req);
 					}
 				}
 			}
 			if (!toChange.isEmpty()) {
-				if (debug)
-					BiomeRemap.debug("Found:" + changes);
 				br.getServer().getScheduler().runTask(br, () -> doMapping(chunk, toChange, debug));
 			} else {
 				br.getServer().getScheduler().runTask(br, () -> {
@@ -108,18 +122,28 @@ public class BiomeRemapper {
 		return timeSpent;
 	}
 
-	private void doMapping(Chunk chunk, Map<Integer, BiomeChoice> toChange, boolean debug) {
+	private void doMapping(Chunk chunk, List<BiomeChange> toChange, boolean debug) {
 		long start = System.currentTimeMillis();
 		if (debug)
 			BiomeRemap.debug("Remapping biomes");
-		for (Entry<Integer, BiomeChoice> entry : toChange.entrySet()) {
+		Map<BiomePair, Integer> countedChanges = debug ? new HashMap<>() : null;
+		for (BiomeChange change : toChange) {
+			int setX = (chunk.getX() << 4) + change.x;
+			int setY = change.y;
+			int setZ = (chunk.getZ() << 4) + change.z;
 			try {
-				br.getBiomeManager().setBiomeNMS(chunk, entry.getKey(), entry.getValue().choose());
-			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				chunk.getWorld().setBiome(setX, setY, setZ, change.to);
+				if (debug) {
+					countedChanges.compute(new BiomePair(change.from, change.to), (k, v) -> v == null ? 1 : v + 1);
+				}
+			} catch (IllegalArgumentException e) {
 				br.getLogger().severe("Problem setting biome!");
 				e.printStackTrace();
 				continue;
 			}
+		}
+		if (debug) {
+			System.out.println("Counted: " + countedChanges);
 		}
 		br.getTeleportListener().sendUpdatesIfNeeded(chunk);
 		runAfterRemaps(chunk);
@@ -132,29 +156,75 @@ public class BiomeRemapper {
 		}
 	}
 
-	private class BiomeChoice {
-		private Map<Biome, Integer> choices = new HashMap<>();
+	private class BiomePair {
+		private final Biome one, two;
 
-		private void addChoice(Biome biome) {
-			if (choices.containsKey(biome)) {
-				choices.put(biome, choices.get(biome) + 1);
-			} else {
-				choices.put(biome, 1);
-			}
+		private BiomePair(Biome one, Biome two) {
+			this.one = one;
+			this.two = two;
 		}
 
-		private Biome choose() { // arbitraily, the first with the max value is used (which could lead to the
-									// same biome being prioritized)
-			int maxi = 0;
-			Biome biome = null;
-			for (Entry<Biome, Integer> entry : choices.entrySet()) {
-				if (entry.getValue() > maxi) {
-					maxi = entry.getValue();
-					biome = entry.getKey();
-				}
-			}
-			return biome;
+		@Override
+		public int hashCode() {
+			return Objects.hash(one.name(), two.name());
 		}
+
+		@Override
+		public boolean equals(Object other) {
+			if (this == other) {
+				return true;
+			}
+			if (!(other instanceof BiomePair)) {
+				return false;
+			}
+			BiomePair o = (BiomePair) other;
+			return o.one == one && o.two == two;
+		}
+
+		@Override
+		public String toString() {
+			return String.format("{%s -> %s}", one.name(), two.name());
+		}
+
+	}
+
+	private class BiomeChange {
+		private final int x;
+		private final int y;
+		private final int z;
+		private final Biome from;
+		private final Biome to;
+
+		private BiomeChange(int x, int y, int z, Biome from, Biome to) {
+			this.x = x;
+			this.y = y;
+			this.z = z;
+			this.from = from;
+			this.to = to;
+		}
+
+		@Override
+		public boolean equals(Object other) {
+			if (this == other) {
+				return true;
+			}
+			if (!(other instanceof BiomeChange)) {
+				return false;
+			}
+			BiomeChange o = (BiomeChange) other;
+			return o.x == x && o.y == y && o.z == z && o.from == from && o.to == to;
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(x, y, z, from, to);
+		}
+
+		@Override
+		public String toString() {
+			return String.format("{%s -> %s @ %d, %d, %d}", from.name(), to.name(), x, y, z);
+		}
+
 	}
 
 }

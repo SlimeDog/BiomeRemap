@@ -9,6 +9,8 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.mapping.BiomeMap;
+import me.ford.biomeremap.mapping.BiomeMap.IncompatibleCeilingException;
+import me.ford.biomeremap.mapping.BiomeMap.IncompatibleFloorException;
 import me.ford.biomeremap.mapping.BiomeMap.IncompleteBiomeMapException;
 import me.ford.biomeremap.mapping.BiomeMap.MappingException;
 
@@ -44,6 +46,13 @@ public class Settings {
 				br.getLogger().severe(br.getMessages().errorNoBiomeMapAssigned(key));
 				issues.addIssue(br.getMessages().errorNoBiomeMapAssigned(key));
 				continue;
+			} catch (IncompatibleFloorException e) {
+				br.getLogger().severe(br.getMessages().errorIncompatibleFloor(key, e.floor));
+				continue;
+			} catch (IncompatibleCeilingException e) {
+				br.getLogger().severe("Problem with ceiling of biome map (this should not happen!)");
+				e.printStackTrace();
+				continue;
 			}
 			maps.put(key, map);
 		}
@@ -73,7 +82,10 @@ public class Settings {
 		for (String worldName : successes) {
 			BiomeMap map = worldMap.get(worldName);
 			br.logMessage(br.getMessages().getInfoWorldMapped(worldName, map.getName()));
-			br.logMessage(br.getMessages().getInfoFullChunkInfo(map.remapEntireChunk(), worldName));
+			if (map.getFloor() != BiomeMap.DEFAULT_FLOOR) {
+				br.logMessage(
+						br.getMessages().getInfoChunkRemapFloor(map.getFloor(), BiomeMap.DEFAULT_FLOOR, worldName));
+			}
 		}
 		for (String worldName : duplicates) { // otherwise the third (or 5th, so on) duplicate would stay
 			worldMap.remove(worldName);

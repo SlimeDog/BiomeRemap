@@ -12,7 +12,12 @@ import org.bukkit.util.StringUtil;
 
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.commands.SubCommand;
-import me.ford.biomeremap.largetasks.LargeScanTaskStarter;
+import me.ford.biomeremap.mapping.BiomeMap;
+import me.ford.biomeremap.mapping.settings.ChunkArea;
+import me.ford.biomeremap.mapping.settings.MultiReportTarget;
+import me.ford.biomeremap.mapping.settings.RemapOptions;
+import me.ford.biomeremap.mapping.settings.ReportTarget;
+import me.ford.biomeremap.mapping.settings.SingleReportTarget;
 
 public class ChunkSub extends SubCommand {
 	private static final String PERMS = "biomeremap.remap";
@@ -46,6 +51,7 @@ public class ChunkSub extends SubCommand {
 		if (!ingame && args.length < 3) {
 			return false;
 		}
+		int maxY = getMaxY(opts);
 		boolean myLocation = args.length < 3;
 		Chunk chunk;
 		if (myLocation) {
@@ -79,23 +85,26 @@ public class ChunkSub extends SubCommand {
 			}
 			chunk = world.getChunkAt(x, z);
 		}
-		if (br.getSettings().getApplicableBiomeMap(chunk.getWorld().getName()) == null) {
+		BiomeMap map = br.getSettings().getApplicableBiomeMap(chunk.getWorld().getName());
+		if (map == null) {
 			sender.sendMessage(br.getMessages().getBiomeRemapNoMap(chunk.getWorld().getName()));
 			return true;
 		}
 		String startMsg = br.getMessages().getChunkRemapStarted(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
-		sender.sendMessage(startMsg);
-		if (ingame)
-			br.logMessage(startMsg);
-		br.getRemapper().remapChunk(chunk, debug);
-		String completeMsg = br.getMessages().getBiomeRemapComplete();
-		sender.sendMessage(completeMsg);
-		if (ingame)
-			br.logMessage(completeMsg);
-		if (scanAfter) {
-			new LargeScanTaskStarter(br, chunk.getWorld(), sender, chunk.getX(), 0, chunk.getZ(), false, debug, null,
-					false);
+		ReportTarget target;
+		if (!ingame) {
+			target = new SingleReportTarget(sender);
+		} else {
+			target = new MultiReportTarget(sender, br.getServer().getConsoleSender());
 		}
+		target.sendMessage(startMsg);
+		ChunkArea area = new ChunkArea(chunk.getWorld(), chunk.getX(), chunk.getZ());
+		RemapOptions options = new RemapOptions.Builder().isDebug(debug).scanAfter(scanAfter).withArea(area)
+				.withTarget(target).withMap(map).endRunnable(() -> {
+					String completeMsg = br.getMessages().getBiomeRemapComplete();
+					target.sendMessage(completeMsg);
+				}).maxY(maxY).build();
+		br.getRemapper().remapArea(options);
 		return true;
 	}
 

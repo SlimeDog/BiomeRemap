@@ -12,7 +12,12 @@ import org.bukkit.util.StringUtil;
 
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.commands.SubCommand;
-import me.ford.biomeremap.largetasks.LargeMappingTaskStarter;
+import me.ford.biomeremap.mapping.BiomeMap;
+import me.ford.biomeremap.mapping.settings.MultiReportTarget;
+import me.ford.biomeremap.mapping.settings.RegionArea;
+import me.ford.biomeremap.mapping.settings.RemapOptions;
+import me.ford.biomeremap.mapping.settings.ReportTarget;
+import me.ford.biomeremap.mapping.settings.SingleReportTarget;
 
 public class RegionSub extends SubCommand {
 	private static final String PERMS = "biomeremap.remap";
@@ -51,6 +56,7 @@ public class RegionSub extends SubCommand {
 		if (!ingame && args.length < 3) {
 			return false;
 		}
+		int maxY = getMaxY(opts);
 		boolean myLocation = args.length < 3;
 		World world;
 		int regionX;
@@ -86,17 +92,28 @@ public class RegionSub extends SubCommand {
 				return true;
 			}
 		}
-		if (br.getSettings().getApplicableBiomeMap(world.getName()) == null) {
+		BiomeMap map = br.getSettings().getApplicableBiomeMap(world.getName());
+		if (map == null) {
 			sender.sendMessage(br.getMessages().getBiomeRemapNoMap(world.getName()));
 			return true;
 		}
+		ReportTarget target;
+		if (!ingame) {
+			target = new SingleReportTarget(sender);
+		} else {
+			target = new MultiReportTarget(sender, br.getServer().getConsoleSender());
+		}
 		String startedMsg = br.getMessages().getRegionRemapStarted(world.getName(), regionX, regionZ);
-		sender.sendMessage(startedMsg);
-		if (ingame)
-			br.logMessage(startedMsg);
+		target.sendMessage(startedMsg);
 		remapping = true;
-		new LargeMappingTaskStarter(br, world, sender, regionX, regionZ, true, debug, () -> remapEnded(), scanAfter,
-				null);
+		RegionArea area = new RegionArea(world, regionX, regionZ);
+		RemapOptions options = new RemapOptions.Builder().isDebug(debug).scanAfter(scanAfter).withArea(area)
+				.withTarget(target).withMap(map).endRunnable(() -> {
+					String completeMsg = br.getMessages().getBiomeRemapComplete();
+					target.sendMessage(completeMsg);
+					remapEnded();
+				}).maxY(maxY).build();
+		br.getRemapper().remapArea(options);
 		return true;
 	}
 

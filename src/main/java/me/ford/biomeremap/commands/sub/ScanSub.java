@@ -18,6 +18,9 @@ import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.commands.SubCommand;
 import me.ford.biomeremap.largetasks.LargeScanTaskStarter;
 import me.ford.biomeremap.largetasks.LargeTempScanTaskStarter;
+import me.ford.biomeremap.mapping.settings.MultiReportTarget;
+import me.ford.biomeremap.mapping.settings.ReportTarget;
+import me.ford.biomeremap.mapping.settings.SingleReportTarget;
 
 public class ScanSub extends SubCommand {
 	private static final String PERMS = "biomeremap.scan";
@@ -63,23 +66,19 @@ public class ScanSub extends SubCommand {
 		boolean region = regionOrChunk.equalsIgnoreCase("region");
 		boolean ingame = sender instanceof Player;
 		boolean debug = opts.contains("--debug");
-		boolean useNMS = opts.contains("--nms");
 		boolean temp = opts.contains("--temp");
-		if (useNMS) {
-			sender.sendMessage("Using NMS"); // TODO - message?
-		}
-		int layer = 0;
+		int maxLayer = Integer.MIN_VALUE;
 		for (String opt : opts) {
 			Matcher matcher = layerPattern.matcher(opt);
 			if (matcher.matches()) {
 				try {
-					layer = Integer.parseInt(matcher.group(1));
+					maxLayer = Integer.parseInt(matcher.group(1));
 				} catch (NumberFormatException e) {
 					sender.sendMessage("Could not parse number for layer from option: " + opt); // shouldn't happen
 																								// because of the regex
 					return true;
 				}
-				sender.sendMessage("Scanning at layer " + layer + " instead of 0"); // TODO - message?
+				sender.sendMessage("Scanning at layer " + maxLayer + " instead of 0"); // TODO - message?
 				break;
 			}
 			matcher = multiLayerPattern.matcher(opt);
@@ -106,10 +105,6 @@ public class ScanSub extends SubCommand {
 				runLayers(sender, args, opts, opt, start, stop);
 				return true;
 			}
-		}
-		if (useNMS && layer > 63) {
-			layer = 63; // higher = same
-			sender.sendMessage("Biome for layers higher than 63 is the same as for layer 63");
 		}
 		World world;
 		int x, z;
@@ -148,6 +143,13 @@ public class ScanSub extends SubCommand {
 			sender.sendMessage(br.getMessages().errorWorldNotFound(args[1]));
 			return true;
 		}
+		if (maxLayer == Integer.MIN_VALUE) {
+			maxLayer = world.getMaxHeight();
+		}
+		if (maxLayer > world.getMaxHeight()) {
+			maxLayer = world.getMaxHeight();
+		}
+		int minLayer = world.getMinHeight();
 		if (br.getSettings().getApplicableBiomeMap(world.getName()) == null) {
 			sender.sendMessage(br.getMessages().getBiomeRemapNoMap(world.getName()));
 			return true;
@@ -157,10 +159,16 @@ public class ScanSub extends SubCommand {
 		} else {
 			sender.sendMessage(br.getMessages().getScanChunkStart(world.getName(), x, z));
 		}
-		if (!temp) {
-			new LargeScanTaskStarter(br, world, sender, x, layer, z, region, debug, () -> taskDone(), useNMS);
+		ReportTarget target;
+		if (!ingame) {
+			target = new SingleReportTarget(sender);
 		} else {
-			new LargeTempScanTaskStarter(br, world, sender, x, layer, z, region, debug, () -> taskDone());
+			target = new MultiReportTarget(sender, br.getServer().getConsoleSender());
+		}
+		if (!temp) {
+			new LargeScanTaskStarter(br, world, target, x, minLayer, maxLayer, z, region, debug, () -> taskDone());
+		} else {
+			new LargeTempScanTaskStarter(br, world, target, x, minLayer, maxLayer, z, region, debug, () -> taskDone());
 		}
 		scanning = true;
 		return true;

@@ -4,12 +4,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bstats.bukkit.Metrics;
@@ -28,11 +26,8 @@ import me.ford.biomeremap.settings.Messages;
 import me.ford.biomeremap.settings.Settings;
 import me.ford.biomeremap.settings.Settings.ReloadIssues;
 import me.ford.biomeremap.updates.UpdateChecker;
+import me.ford.biomeremap.volotile.APIBiomeManager;
 import me.ford.biomeremap.volotile.BiomeManager;
-import me.ford.biomeremap.volotile.ChunkUpdater;
-import me.ford.biomeremap.volotile.Post1dot16dot2BiomeManager;
-import me.ford.biomeremap.volotile.VolatileBiomeManager;
-import me.ford.biomeremap.volotile.VolatileChunkUpdater;
 
 public class BiomeRemap extends JavaPlugin {
 	private static BiomeRemap staticInstance;
@@ -45,7 +40,6 @@ public class BiomeRemap extends JavaPlugin {
 	private TeleportListener teleListener;
 	private MappingPopulator populator;
 	private BiomeManager biomeManager;
-	private ChunkUpdater chunkUpdater;
 
 	// helpers
 	private boolean existsDataFolder;
@@ -96,27 +90,7 @@ public class BiomeRemap extends JavaPlugin {
 
 		// NMS biome manager
 		if (!testing) {
-			try {
-				String version = getServer().getClass().getPackage().getName().split("\\.")[3];
-				if (version.equals("v1_16_R2") || version.equals("v1_16_R3") || version.contains("v1_17")
-						|| version.contains("v1_18")) {
-					biomeManager = new Post1dot16dot2BiomeManager(this);
-				} else {
-					biomeManager = new VolatileBiomeManager(this);
-				}
-			} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | NoSuchFieldException
-					| IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				getLogger().log(Level.SEVERE, "Could not start volotile biome manager! Disabling plugin! ", e);
-				getServer().getPluginManager().disablePlugin(this);
-				return;
-			}
-			// NMS chunk updater
-			try {
-				chunkUpdater = new VolatileChunkUpdater(this);
-			} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | NoSuchFieldException e) {
-				getLogger().log(Level.SEVERE, "Could not start volotile chunk updater! Disabling plugin! ", e);
-				e.printStackTrace();
-			}
+			biomeManager = new APIBiomeManager();
 		}
 
 		// setup up populator
@@ -156,10 +130,6 @@ public class BiomeRemap extends JavaPlugin {
 
 	public BiomeManager getBiomeManager() {
 		return biomeManager;
-	}
-
-	public ChunkUpdater getChunkUpdater() {
-		return chunkUpdater;
 	}
 
 	@Override

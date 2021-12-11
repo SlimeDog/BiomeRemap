@@ -5,7 +5,7 @@
 # A YAML checker may be found at http://www.yamllint.com
 #
 # Message may contain color codes and other format codes. Both & and § are recognized.
-# A list of valid formatting codes may be found at https://minecraft.gamepedia.com/Formatting_codes
+# A list of valid formatting codes may be found at https://minecraft.fandom.com/wiki/Formatting_codes
 #
 # Message placeholders are indicated by {PLACEHOLDER}.
 # PlaceholderAPI variables are not supported.
@@ -20,6 +20,7 @@ BIOMEREMAP_PREFIX: "[BiomeRemap] "
 # Messages produced by /biomeremap info
 #
 BIOMEREMAP_INFO: "Description: {BIOMEREMAP_DESC} \nWorlds: {BIOMEREMAP_WORLDS}"
+BIOMEREMAP_INFO_FLOOR: "The floor is set to {FLOOR} in world {WORLD_NAME} (default {DEFAULT_FLOOR})"
 
 # Messages produced by /biomeremap list
 #
@@ -55,7 +56,7 @@ BIOMEREMAP_SCAN_LIST_ITEM: "{PERCENTAGE} {BIOME_ID} ({AMOUNT})"
 # 
 INFO_CONFIG_FILES_LOADED_SUCCESSFULLY: "Configuration files loaded successfully"
 INFO_WORLD_BIOME_MAPPED: "Biomemap {BIOMEMAP} was successfully assigned to world {WORLD_NAME}"
-INFO_FULL_CHUNK_REMAP: "Full chunk remap is {VALUE} in world {WORLD_NAME}"
+INFO_CHUNK_REMAP_FLOOR: "The floor is set to {FLOOR} in world {WORLD_NAME} (default {DEFAULT_FLOOR})"
 
 # Update messages
 #
@@ -78,5 +79,5 @@ ERROR_NO_BIOMEMAP_ASSIGNMENT: "Errors were found in biomemap {BIOMEMAP}; biomema
 ERROR_PARAMETER_INVALID_INTEGER: "{VALUE} is not a value integer"
 ERROR_WORLD_DUPLICATE_ASSIGNMENT: "Multiple biomemaps are assigned to world {WORLD_NAME}; fix configuration and reload"
 ERROR_WORLD_NOT_FOUND: "World {WORLD_NAME} does not exist"
-
+ERROR_INCOMPATIBLE_FLOOR: "Incompatible floor found for biomemap {BIOMEMAP}: {FLOOR}"
 ERROR_NO_PERMISSION: "You do not have permission to execute that command"
