@@ -42,7 +42,6 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
 		}
 
 		Location loc = player.getLocation();
-		loc.setY(0.0D);
 		if (identifier.equals("biome_name")) {
 			return loc.getBlock().getBiome().name();
 		}
