@@ -12,9 +12,10 @@
 #   BiomeRemap 2.0.3    Spigot 1.15.2     
 #   BiomeRemap 2.2.1    Spigot and Paper 1.16.5     
 #   BiomeRemap 2.3.2    Spigot and Paper 1.17.1
-#   BiomeRemap 3.0.0    Spigot and Paper 1.18
+#   BiomeRemap 3.0.0    Spigot and Paper 1.18.2
+#   BiomeRemap 3.1.0    Spigot and Paper 1.19
 #
-# This configuration file is compatible with Minecraft 1.18 only. Versions for previous Minecraft
+# This configuration file is compatible with Minecraft 1.19 only. Versions for previous Minecraft
 # versions may be found at https://github.com/SlimeDog/BiomeRemap/wiki/Configuration.
 #
 # ========== CAVEATS AND WARNINGS ==================================================================
@@ -139,6 +140,8 @@ biomemaps:
         replacement-biome: snowy_plains
       deep_cold_ocean:
         replacement-biome: frozen_ocean
+      deep_dark:
+        replacement-biome: snowy_plains
       deep_frozen_ocean:
         replacement-biome: frozen_ocean
       deep_lukewarm_ocean:
@@ -172,6 +175,8 @@ biomemaps:
       lukewarm_ocean:
         replacement-biome: frozen_ocean
       lush_caves:
+        replacement-biome: snowy_plains
+      mangrove_swamp:
         replacement-biome: snowy_plains
       meadow:
         replacement-biome: snowy_plains
@@ -251,6 +256,8 @@ biomemaps:
         replacement-biome: dark_forest
       deep_cold_ocean:
         replacement-biome: deep_lukewarm_ocean
+      deep_dark:
+        replacement-biome: deep_dark
       deep_frozen_ocean:
         replacement-biome: deep_lukewarm_ocean
       deep_lukewarm_ocean:
@@ -285,6 +292,8 @@ biomemaps:
         replacement-biome: warm_ocean
       lush_caves:
         replacement-biome: lush_caves
+      mangrove_swamp:
+        replacement-biome: mangrove_swamp
       meadow:
         replacement-biome: meadow
       mushroom_fields:
