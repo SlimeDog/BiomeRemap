@@ -3,20 +3,23 @@ package me.ford.biomeremap.hooks;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import dev.ratas.slimedogcore.api.SlimeDogPlugin;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import me.ford.biomeremap.BiomeRemap;
+import me.ford.biomeremap.volotile.BiomeManager;
 
 public class PlaceholderAPIHook extends PlaceholderExpansion {
-	private final BiomeRemap br;
+	private final SlimeDogPlugin br;
+	private final BiomeManager biomeManager;
 
-	public PlaceholderAPIHook(BiomeRemap plugin) {
+	public PlaceholderAPIHook(SlimeDogPlugin plugin, BiomeManager biomeManager) {
 		br = plugin;
+		this.biomeManager = biomeManager;
 		register();
 	}
 
 	@Override
 	public String getAuthor() {
-		return String.join(", ", br.getDescription().getAuthors());
+		return String.join(", ", br.getPluginInformation().getAuthors());
 	}
 
 	@Override
@@ -26,12 +29,12 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
 
 	@Override
 	public String getIdentifier() {
-		return br.getDescription().getName().toLowerCase();
+		return br.getPluginInformation().getPluginName().toLowerCase();
 	}
 
 	@Override
 	public String getVersion() {
-		return br.getDescription().getVersion();
+		return br.getPluginInformation().getPluginVersion();
 	}
 
 	@Override
@@ -47,7 +50,7 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
 		}
 
 		if (identifier.equals("biome_id")) {
-			return String.valueOf(br.getBiomeManager().getBiomeIndex(loc.getBlock().getBiome()));
+			return String.valueOf(biomeManager.getBiomeIndex(loc.getBlock().getBiome()));
 		}
 
 		return null;

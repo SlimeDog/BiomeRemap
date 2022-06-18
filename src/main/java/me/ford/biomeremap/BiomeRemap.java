@@ -102,7 +102,7 @@ public class BiomeRemap extends SlimeDogCore {
 
 		// hooks
 		if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
-			new PlaceholderAPIHook(this);
+			new PlaceholderAPIHook(this, biomeManager);
 		} else {
 			getLogger().warning("PlaceholderAPI not found!");
 		}
