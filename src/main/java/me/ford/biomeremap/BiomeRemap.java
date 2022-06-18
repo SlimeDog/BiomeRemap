@@ -72,7 +72,7 @@ public class BiomeRemap extends SlimeDogCore {
 
 		messages = new Messages(this);
 		attempConfigReloads(true);
-		settings = new Settings(this);
+		settings = new Settings(this, messages);
 
 		if (settings.enableMetrics() && !testing) {
 			new Metrics(this, 5513);

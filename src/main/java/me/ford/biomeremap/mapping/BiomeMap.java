@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.block.Biome;
-import org.bukkit.configuration.ConfigurationSection;
 
+import dev.ratas.slimedogcore.api.config.SDCConfiguration;
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.settings.Messages;
 
@@ -23,13 +23,13 @@ public class BiomeMap {
 	private final int floor;
 	private final int ceiling;
 
-	public BiomeMap(Messages messages, ConfigurationSection section) {
+	public BiomeMap(Messages messages, SDCConfiguration section) {
 		name = section.getName();
 		description = section.getString("description", "");
 		worldNames = section.getStringList("enabled-worlds");
 
 		// setup biome mapping
-		ConfigurationSection mapSection = section.getConfigurationSection("biomes");
+		SDCConfiguration mapSection = section.getConfigurationSection("biomes");
 		if (mapSection == null || mapSection.getKeys(false).isEmpty()) {
 			throw new IncompleteBiomeMapException();
 		}
@@ -41,7 +41,7 @@ public class BiomeMap {
 				BiomeRemap.logger().severe(messages.errorBiomeNotFound(key));
 				throw new MappingException();
 			}
-			ConfigurationSection curSection = mapSection.getConfigurationSection(key);
+			SDCConfiguration curSection = mapSection.getConfigurationSection(key);
 			if (curSection == null) {
 				BiomeRemap.logger().severe(messages.errorConfigMapincomplete(key, from.name()));
 				throw new MappingException();

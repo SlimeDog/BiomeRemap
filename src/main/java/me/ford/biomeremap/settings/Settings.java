@@ -5,9 +5,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.bukkit.configuration.ConfigurationSection;
-
-import me.ford.biomeremap.BiomeRemap;
+import dev.ratas.slimedogcore.api.SlimeDogPlugin;
+import dev.ratas.slimedogcore.api.config.SDCConfiguration;
 import me.ford.biomeremap.mapping.BiomeMap;
 import me.ford.biomeremap.mapping.BiomeMap.IncompatibleCeilingException;
 import me.ford.biomeremap.mapping.BiomeMap.IncompatibleFloorException;
@@ -15,12 +14,14 @@ import me.ford.biomeremap.mapping.BiomeMap.IncompleteBiomeMapException;
 import me.ford.biomeremap.mapping.BiomeMap.MappingException;
 
 public class Settings {
-	private final BiomeRemap br;
+	private final SlimeDogPlugin br;
 	private final Map<String, BiomeMap> maps = new HashMap<>();
 	private final Map<String, BiomeMap> worldMap = new HashMap<>();
+	private final Messages messages;
 
-	public Settings(BiomeRemap plugin) {
+	public Settings(SlimeDogPlugin plugin, Messages messages) {
 		br = plugin;
+		this.messages = messages;
 		reload();
 	}
 
@@ -28,26 +29,26 @@ public class Settings {
 		ReloadIssues issues = new ReloadIssues();
 		maps.clear();
 		worldMap.clear();
-		ConfigurationSection mapsSection = br.getConfig().getConfigurationSection("biomemaps");
+		SDCConfiguration mapsSection = br.getDefaultConfig().getConfig().getConfigurationSection("biomemaps");
 		for (String key : mapsSection.getKeys(false)) {
-			ConfigurationSection curMapSection = mapsSection.getConfigurationSection(key);
+			SDCConfiguration curMapSection = mapsSection.getConfigurationSection(key);
 			if (curMapSection == null) {
-				br.getLogger().severe(br.getMessages().errorBiomeMapIncomplete(key));
+				br.getLogger().severe(messages.errorBiomeMapIncomplete(key));
 				continue;
 			}
 			BiomeMap map;
 			try {
-				map = new BiomeMap(br.getMessages(), curMapSection);
+				map = new BiomeMap(messages, curMapSection);
 			} catch (IncompleteBiomeMapException e) {
-				br.getLogger().severe(br.getMessages().errorBiomeMapIncomplete(key));
-				issues.addIssue(br.getMessages().errorBiomeMapIncomplete(key));
+				br.getLogger().severe(messages.errorBiomeMapIncomplete(key));
+				issues.addIssue(messages.errorBiomeMapIncomplete(key));
 				continue;
 			} catch (MappingException e) {
-				br.getLogger().severe(br.getMessages().errorNoBiomeMapAssigned(key));
-				issues.addIssue(br.getMessages().errorNoBiomeMapAssigned(key));
+				br.getLogger().severe(messages.errorNoBiomeMapAssigned(key));
+				issues.addIssue(messages.errorNoBiomeMapAssigned(key));
 				continue;
 			} catch (IncompatibleFloorException e) {
-				br.getLogger().severe(br.getMessages().errorIncompatibleFloor(key, e.floor));
+				br.getLogger().severe(messages.errorIncompatibleFloor(key, e.floor));
 				continue;
 			} catch (IncompatibleCeilingException e) {
 				br.getLogger().severe("Problem with ceiling of biome map (this should not happen!)");
@@ -65,14 +66,14 @@ public class Settings {
 					duplicates.add(worldName);
 					prev.removeWorld(worldName);
 					map.removeWorld(worldName);
-					br.getLogger().severe(br.getMessages().errorDuplicateBiomeMapsForWorld(worldName));
-					issues.addIssue(br.getMessages().errorDuplicateBiomeMapsForWorld(worldName));
+					br.getLogger().severe(messages.errorDuplicateBiomeMapsForWorld(worldName));
+					issues.addIssue(messages.errorDuplicateBiomeMapsForWorld(worldName));
 				} else {
-					if (br.getServer().getWorld(worldName) != null) {
+					if (br.getWorldProvider().getWorldByName(worldName) != null) {
 						successes.add(worldName);
 					} else {
-						br.getLogger().severe(br.getMessages().errorWorldNotFound(worldName));
-						issues.addIssue(br.getMessages().errorWorldNotFound(worldName));
+						br.getLogger().severe(messages.errorWorldNotFound(worldName));
+						issues.addIssue(messages.errorWorldNotFound(worldName));
 						map.removeWorld(worldName);
 					}
 				}
@@ -81,10 +82,9 @@ public class Settings {
 		successes.removeAll(duplicates);
 		for (String worldName : successes) {
 			BiomeMap map = worldMap.get(worldName);
-			br.logMessage(br.getMessages().getInfoWorldMapped(worldName, map.getName()));
+			br.getLogger().info(messages.getInfoWorldMapped(worldName, map.getName()));
 			if (map.getFloor() != BiomeMap.DEFAULT_FLOOR) {
-				br.logMessage(
-						br.getMessages().getInfoChunkRemapFloor(map.getFloor(), BiomeMap.DEFAULT_FLOOR, worldName));
+				br.getLogger().info(messages.getInfoChunkRemapFloor(map.getFloor(), BiomeMap.DEFAULT_FLOOR, worldName));
 			}
 		}
 		for (String worldName : duplicates) { // otherwise the third (or 5th, so on) duplicate would stay
@@ -94,15 +94,15 @@ public class Settings {
 	}
 
 	public String getVersion() {
-		return br.getConfig().getString("version");
+		return br.getDefaultConfig().getConfig().getString("version");
 	}
 
 	public boolean checkForUpdates() {
-		return br.getConfig().getBoolean("check-for-updates");
+		return br.getDefaultConfig().getConfig().getBoolean("check-for-updates");
 	}
 
 	public boolean enableMetrics() {
-		return br.getConfig().getBoolean("enable-metrics");
+		return br.getDefaultConfig().getConfig().getBoolean("enable-metrics");
 	}
 
 	public Set<String> getBiomeMapNames() {
@@ -110,15 +110,15 @@ public class Settings {
 	}
 
 	public boolean debugAutoremap() {
-		return br.getConfig().getBoolean("debug-autoremap", false);
+		return br.getDefaultConfig().getConfig().getBoolean("debug-autoremap", false);
 	}
 
 	public int getRegionRemapProgressStep() {
-		return br.getConfig().getInt("report-region-remap-progress", 5);
+		return br.getDefaultConfig().getConfig().getInt("report-region-remap-progress", 5);
 	}
 
 	public int getScanProgressStep() {
-		return br.getConfig().getInt("report-region-scan-progress", 0);
+		return br.getDefaultConfig().getConfig().getInt("report-region-scan-progress", 0);
 	}
 
 	public BiomeMap getBiomeMap(String name) {
@@ -130,7 +130,7 @@ public class Settings {
 	}
 
 	public long getTeleportCacheTime() {
-		return br.getConfig().getLong("teleport-cache-time-ticks", 20L); // TODO - add and/or change config path
+		return br.getDefaultConfig().getConfig().getLong("teleport-cache-time-ticks", 20L);
 	}
 
 	public static class ReloadIssues {

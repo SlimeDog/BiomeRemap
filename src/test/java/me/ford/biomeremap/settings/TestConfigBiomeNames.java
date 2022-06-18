@@ -27,7 +27,7 @@ public class TestConfigBiomeNames {
 
     @Test
     public void test_Enums() {
-        Settings settings = new Settings(plugin); // will show severe warnings if issues
+        Settings settings = new Settings(plugin, plugin.getMessages()); // will show severe warnings if issues
         settings.reload();
     }
 
