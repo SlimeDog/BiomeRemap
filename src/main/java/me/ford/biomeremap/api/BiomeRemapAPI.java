@@ -2,7 +2,7 @@ package me.ford.biomeremap.api;
 
 import java.util.function.Consumer;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
