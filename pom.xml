@@ -130,6 +130,10 @@
 							<!-- Replace this with your package! -->
 							<shadedPattern>me.ford</shadedPattern>
 						</relocation>
+                        <relocation>
+                            <pattern>dev.ratas.slimedogcore</pattern>
+                            <shadedPattern>${project.groupId}.${project.artifactId}.core</shadedPattern>
+                        </relocation>
 					</relocations>
 				</configuration>
 				<executions>
