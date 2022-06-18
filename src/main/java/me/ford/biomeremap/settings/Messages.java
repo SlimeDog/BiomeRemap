@@ -3,13 +3,15 @@ package me.ford.biomeremap.settings;
 import java.util.List;
 
 import org.bukkit.ChatColor;
-import org.bukkit.plugin.java.JavaPlugin;
 
-public class Messages extends CustomConfigHandler {
+import dev.ratas.slimedogcore.api.SlimeDogPlugin;
+import dev.ratas.slimedogcore.impl.messaging.MessagesBase;
+
+public class Messages extends MessagesBase {
 	private static final String FILE_NAME = "messages.yml";
 
-	public Messages(JavaPlugin plugin) {
-		super(plugin, FILE_NAME);
+	public Messages(SlimeDogPlugin plugin) {
+		super(plugin.getCustomConfigManager().getConfig(FILE_NAME));
 	}
 
 	public String getPrefix() {
@@ -65,8 +67,8 @@ public class Messages extends CustomConfigHandler {
 	public String getBiomeRemapSummary(int chunks, long ms, int ticks) {
 		return getMessage("BIOMEREMAP_REMAP_SUMMARY",
 				"Remapped {CHUNKS} chunks in {MILLISECONDS} ms in a total of {TICKS} ticks")
-						.replace("{CHUNKS}", String.valueOf(chunks)).replace("{MILLISECONDS}", String.valueOf(ms))
-						.replace("{TICKS}", String.valueOf(ticks));
+				.replace("{CHUNKS}", String.valueOf(chunks)).replace("{MILLISECONDS}", String.valueOf(ms))
+				.replace("{TICKS}", String.valueOf(ticks));
 	}
 
 	public String getInfoConfigLoaded() {
@@ -76,21 +78,21 @@ public class Messages extends CustomConfigHandler {
 	public String getInfoWorldMapped(String world, String biomemap) {
 		return getMessage("INFO_WORLD_BIOME_MAPPED",
 				"Biomemap {BIOMEMAP} was successfully assigned to world {WORLD_NAME}").replace("{WORLD_NAME}", world)
-						.replace("{BIOMEMAP}", biomemap);
+				.replace("{BIOMEMAP}", biomemap);
 	}
 
 	public String getInfoChunkRemapFloor(int floor, int defFloor, String wn) {
 		return getMessage("INFO_CHUNK_REMAP_FLOOR",
 				"The floor is set to {FLOOR} in world {WORLD_NAME} (default {DEFAULT_FLOOR})")
-						.replace("{FLOOR}", String.valueOf(floor)).replace("{WORLD_NAME}", wn)
-						.replace("{DEFAULT_FLOOR}", String.valueOf(defFloor));
+				.replace("{FLOOR}", String.valueOf(floor)).replace("{WORLD_NAME}", wn)
+				.replace("{DEFAULT_FLOOR}", String.valueOf(defFloor));
 	}
 
 	public String getInfoFloorWithDefault(int floor, int defaultFloor, String wn) {
 		return getMessage("BIOMEREMAP_INFO_FLOOR",
 				"The floor is set to {FLOOR} in world {WORLD_NAME} (default {DEFAULT_FLOOR})")
-						.replace("{FLOOR}", String.valueOf(floor))
-						.replace("{DEFAULT_FLOOR}", String.valueOf(defaultFloor)).replace("{WORLD_NAME}", wn);
+				.replace("{FLOOR}", String.valueOf(floor))
+				.replace("{DEFAULT_FLOOR}", String.valueOf(defaultFloor)).replace("{WORLD_NAME}", wn);
 	}
 
 	public String getScanInProgress() {
@@ -169,7 +171,7 @@ public class Messages extends CustomConfigHandler {
 	public String errorDuplicateBiomeMapsForWorld(String worldName) {
 		return getMessage("ERROR_WORLD_DUPLICATE_ASSIGNMENT",
 				"Multiple biomemaps are assigned to world {WORLD_NAME}; fix configuration and reload")
-						.replace("{WORLD_NAME}", worldName);
+				.replace("{WORLD_NAME}", worldName);
 	}
 
 	public String errorConfigUnreadable() {
@@ -180,13 +182,13 @@ public class Messages extends CustomConfigHandler {
 	public String errorConfigMapincomplete(String map, String biome) {
 		return getMessage("ERROR_CONFIG_MAP_INCOMPLETE",
 				"Biomemap {BIOMEMAP} has incomplete map for biome {BIOME_ID}; fix configuration and reload")
-						.replace("{BIOMEMAP}", map).replace("{BIOME_ID}", biome);
+				.replace("{BIOMEMAP}", map).replace("{BIOME_ID}", biome);
 	}
 
 	public String errorNoBiomeMapAssigned(String map) {
 		return getMessage("ERROR_NO_BIOMEMAP_ASSIGNMENT",
 				"Errors were found in biomemap {BIOMEMAP}; biomemap was not assigned to any worlds")
-						.replace("{BIOMEMAP}", map);
+				.replace("{BIOMEMAP}", map);
 	}
 
 	public String errorIncompatibleFloor(String map, int floor) {
@@ -217,7 +219,8 @@ public class Messages extends CustomConfigHandler {
 	}
 
 	public String getMessage(String path, String def) {
-		return ChatColor.translateAlternateColorCodes('&', getCustomConfig().getString(path, def));
+		String raw = getRawMessage(path, def);
+		return ChatColor.translateAlternateColorCodes('&', raw);
 	}
 
 }

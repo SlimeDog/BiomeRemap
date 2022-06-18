@@ -26,7 +26,6 @@ import me.ford.biomeremap.populator.MappingPopulator;
 import me.ford.biomeremap.settings.Messages;
 import me.ford.biomeremap.settings.Settings;
 import me.ford.biomeremap.settings.Settings.ReloadIssues;
-// import me.ford.biomeremap.updates.UpdateChecker;
 import me.ford.biomeremap.volotile.APIBiomeManager;
 import me.ford.biomeremap.volotile.BiomeManager;
 
@@ -166,7 +165,6 @@ public class BiomeRemap extends SlimeDogCore {
 				canReadConfig = config.canRead();
 			}
 			if (!existsMessages) {
-				messages.saveDefaultConfig();
 				canReadMessages = msgs.canRead();
 			}
 		}
@@ -183,8 +181,8 @@ public class BiomeRemap extends SlimeDogCore {
 				issues = settings.reload();
 		}
 		if (canReadMessages) {
-			messages.reloadCustomConfig();
-			success = !messages.getCustomConfig().getKeys(true).isEmpty();
+			messages.reloadConfig();
+			success = !messages.isEmpty();
 		}
 		if (success && issues != null && !issues.hasIssues()) {
 			getLogger().info(getMessages().getInfoConfigLoaded());
