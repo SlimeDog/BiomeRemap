@@ -13,9 +13,9 @@ import java.util.logging.Logger;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.World;
 import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 
+import dev.ratas.slimedogcore.impl.SlimeDogCore;
 import me.ford.biomeremap.commands.BiomeRemapCommand;
 import me.ford.biomeremap.hooks.PlaceholderAPIHook;
 import me.ford.biomeremap.mapping.BiomeRemapper;
@@ -29,7 +29,7 @@ import me.ford.biomeremap.updates.UpdateChecker;
 import me.ford.biomeremap.volotile.APIBiomeManager;
 import me.ford.biomeremap.volotile.BiomeManager;
 
-public class BiomeRemap extends JavaPlugin {
+public class BiomeRemap extends SlimeDogCore {
 	private static BiomeRemap staticInstance;
 	private final Logger logger;
 	private Messages messages;
@@ -66,7 +66,7 @@ public class BiomeRemap extends JavaPlugin {
 	}
 
 	@Override
-	public void onEnable() {
+	public void pluginEnabled() {
 		staticInstance = this;
 
 		messages = new Messages(this);
@@ -133,7 +133,7 @@ public class BiomeRemap extends JavaPlugin {
 	}
 
 	@Override
-	public void onDisable() {
+	public void pluginDisabled() {
 		saveDebug();
 	}
 
