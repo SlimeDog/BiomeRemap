@@ -9,10 +9,10 @@ import java.util.regex.Pattern;
 
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import dev.ratas.slimedogcore.api.SlimeDogPlugin;
+import dev.ratas.slimedogcore.api.messaging.recipient.SDCPlayerRecipient;
 import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 import me.ford.biomeremap.largetasks.LargeScanTaskStarter;
 import me.ford.biomeremap.largetasks.LargeTempScanTaskStarter;
@@ -76,7 +76,7 @@ public class ScanSub extends BRSubCommand {
 			return false;
 		}
 		boolean region = regionOrChunk.equalsIgnoreCase("region");
-		boolean ingame = sender instanceof Player;
+		boolean ingame = sender.isPlayer();
 		boolean debug = opts.contains("--debug");
 		boolean temp = opts.contains("--temp");
 		int maxLayer = Integer.MIN_VALUE;
@@ -126,7 +126,7 @@ public class ScanSub extends BRSubCommand {
 			if (args.length > 1) { // either no arguments for current chunk/region or specify chunk/region
 				return false;
 			}
-			Location loc = ((Player) sender).getLocation();
+			Location loc = ((SDCPlayerRecipient) sender).getLocation();
 			world = loc.getWorld();
 			x = loc.getChunk().getX();
 			z = loc.getChunk().getZ();
