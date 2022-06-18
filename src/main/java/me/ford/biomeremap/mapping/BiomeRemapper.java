@@ -12,20 +12,33 @@ import org.bukkit.Chunk;
 import org.bukkit.ChunkSnapshot;
 import org.bukkit.block.Biome;
 
-import me.ford.biomeremap.BiomeRemap;
+import com.google.common.base.Supplier;
+
+import dev.ratas.slimedogcore.api.SlimeDogPlugin;
 import me.ford.biomeremap.commands.sub.BRSubCommand;
 import me.ford.biomeremap.largetasks.LargeAreaMappingTaskStarter;
 import me.ford.biomeremap.largetasks.OnMappingDone;
 import me.ford.biomeremap.mapping.settings.RemapOptions;
+import me.ford.biomeremap.settings.Messages;
+import me.ford.biomeremap.settings.Settings;
 
 public class BiomeRemapper {
 	private static final int BIOME_SIZE = 4;
-	private final BiomeRemap br;
+	private final SlimeDogPlugin br;
+	private final Settings settings;
+	private final Messages messages;
+	private final Supplier<BiomeScanner> scannerGetter;
 	private final Set<OnMappingDone> doneCheckers = new HashSet<>();
+	private final Supplier<TeleportListener> teleportListenerGetter;
 	private long timeLastTick = 0L;
 
-	public BiomeRemapper(BiomeRemap plugin) {
+	public BiomeRemapper(SlimeDogPlugin plugin, Settings settings, Messages messages,
+			Supplier<BiomeScanner> scannerGetter, Supplier<TeleportListener> teleportListenerGetter) {
 		br = plugin;
+		this.settings = settings;
+		this.messages = messages;
+		this.scannerGetter = scannerGetter;
+		this.teleportListenerGetter = teleportListenerGetter;
 	}
 
 	public void addDoneChecker(OnMappingDone checker) {
@@ -37,8 +50,8 @@ public class BiomeRemapper {
 	}
 
 	public void remapArea(RemapOptions options) {
-		new LargeAreaMappingTaskStarter(br, br.getSettings(), br.getMessages(), br.getRemapper(), br.getScanner(),
-				options, options.getEndRunnable());
+		new LargeAreaMappingTaskStarter(br, settings, messages, this, scannerGetter.get(), options,
+				options.getEndRunnable());
 	}
 
 	public long remapChunk(Chunk chunk) {
@@ -50,7 +63,7 @@ public class BiomeRemapper {
 	}
 
 	public long remapChunk(Chunk chunk, boolean debug) {
-		BiomeMap map = br.getSettings().getApplicableBiomeMap(chunk.getWorld().getName());
+		BiomeMap map = settings.getApplicableBiomeMap(chunk.getWorld().getName());
 		return remapChunk(chunk, debug, map);
 	}
 
@@ -61,8 +74,8 @@ public class BiomeRemapper {
 	public long remapChunk(final Chunk chunk, boolean debug, final BiomeMap map, int maxY) {
 		long start = System.currentTimeMillis();
 		if (debug)
-			BiomeRemap
-					.debug("Looking for biomes to remap (SYNC) in chunk:" + chunk.getX() + "," + chunk.getZ() + "...");
+			br.getDebugLogger()
+					.log("Looking for biomes to remap (SYNC) in chunk:" + chunk.getX() + "," + chunk.getZ() + "...");
 		if (map == null)
 			return 0L;
 		final int maxy;
@@ -74,10 +87,10 @@ public class BiomeRemapper {
 			maxy = maxY;
 		}
 		if (debug)
-			BiomeRemap.debug(chunk.getWorld().getName() + "->Mapping " + map.getName());
+			br.getDebugLogger().log(chunk.getWorld().getName() + "->Mapping " + map.getName());
 		List<BiomeChange> toChange = new ArrayList<>();
 		ChunkSnapshot snapshot = chunk.getChunkSnapshot(true, true, false);
-		br.getServer().getScheduler().runTaskAsynchronously(br, () -> {
+		br.getScheduler().runTaskAsync(() -> {
 			for (int x = 0; x < 16; x += BIOME_SIZE) {
 				for (int z = 0; z < 16; z += BIOME_SIZE) {
 					int yStart = Math.max(map.getFloor(), chunk.getWorld().getMinHeight());
@@ -109,9 +122,9 @@ public class BiomeRemapper {
 				}
 			}
 			if (!toChange.isEmpty()) {
-				br.getServer().getScheduler().runTask(br, () -> doMapping(chunk, toChange, debug));
+				br.getScheduler().runTask(() -> doMapping(chunk, toChange, debug));
 			} else {
-				br.getServer().getScheduler().runTask(br, () -> {
+				br.getScheduler().runTask(() -> {
 					long sstart = System.currentTimeMillis();
 					runAfterRemaps(chunk);
 					timeLastTick += (System.currentTimeMillis() - sstart);
@@ -126,7 +139,7 @@ public class BiomeRemapper {
 	private void doMapping(Chunk chunk, List<BiomeChange> toChange, boolean debug) {
 		long start = System.currentTimeMillis();
 		if (debug)
-			BiomeRemap.debug("Remapping biomes");
+			br.getDebugLogger().log("Remapping biomes");
 		Map<BiomePair, Integer> countedChanges = debug ? new HashMap<>() : null;
 		for (BiomeChange change : toChange) {
 			int setX = (chunk.getX() << 4) + change.x;
@@ -146,7 +159,7 @@ public class BiomeRemapper {
 		if (debug) {
 			System.out.println("Counted: " + countedChanges);
 		}
-		br.getTeleportListener().sendUpdatesIfNeeded(chunk);
+		teleportListenerGetter.get().sendUpdatesIfNeeded(chunk);
 		runAfterRemaps(chunk);
 		timeLastTick += (System.currentTimeMillis() - start);
 	}

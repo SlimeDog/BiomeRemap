@@ -82,7 +82,7 @@ public class BiomeRemap extends SlimeDogCore {
 		this.getScheduler().runTaskTimer(() -> saveDebug(), 120 * 20L, 120 * 20L);
 
 		// remapper, scanner
-		remapper = new BiomeRemapper(this);
+		remapper = new BiomeRemapper(this, settings, messages, () -> scanner, () -> teleListener);
 		scanner = new BiomeScanner(this);
 		teleListener = new TeleportListener(this);
 
