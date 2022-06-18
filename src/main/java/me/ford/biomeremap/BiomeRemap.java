@@ -79,7 +79,7 @@ public class BiomeRemap extends SlimeDogCore {
 		}
 
 		// saving debug message periodically
-		this.getServer().getScheduler().runTaskTimer(this, () -> saveDebug(), 120 * 20L, 120 * 20L);
+		this.getScheduler().runTaskTimer(() -> saveDebug(), 120 * 20L, 120 * 20L);
 
 		// remapper, scanner
 		remapper = new BiomeRemapper(this);
@@ -224,7 +224,7 @@ public class BiomeRemap extends SlimeDogCore {
 	public static void debug(String msg) {
 		String debugMsg = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()) + ": " + msg;
 		if (debugIsSaving) {
-			staticInstance.getServer().getScheduler().runTaskLater(staticInstance, () -> debugMessage(debugMsg), 1L);
+			staticInstance.getScheduler().runTaskLater(() -> debugMessage(debugMsg), 1L);
 			return;
 		}
 		debugMessage(debugMsg);
