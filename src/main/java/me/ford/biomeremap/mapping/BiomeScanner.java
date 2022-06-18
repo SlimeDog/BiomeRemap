@@ -5,15 +5,15 @@ import java.util.Map;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 
-import me.ford.biomeremap.BiomeRemap;
+import me.ford.biomeremap.settings.Settings;
 
 public final class BiomeScanner {
 	private static final int BIOME_SIZE = 4;
-	private final BiomeRemap br;
+	private final Settings settings;
 	private PopulatorQueue forPopulator;
 
-	public BiomeScanner(BiomeRemap br) {
-		this.br = br;
+	public BiomeScanner(Settings settings) {
+		this.settings = settings;
 	}
 
 	public boolean addBiomesFor(Map<Biome, Integer> map, World world, int chunkX, int chunkZ) {
@@ -28,7 +28,7 @@ public final class BiomeScanner {
 			if (forPopulator != null)
 				forPopulator.add(chunkX, chunkZ);
 			world.getChunkAt(chunkX, chunkZ);
-			if (br.getSettings().getApplicableBiomeMap(world.getName()) == null) { // world not being remapped
+			if (settings.getApplicableBiomeMap(world.getName()) == null) { // world not being remapped
 				addBiomesForInternal(world, chunkX, chunkZ, startX, startZ, minLayer, maxLayer, map);
 				return true;
 			}
