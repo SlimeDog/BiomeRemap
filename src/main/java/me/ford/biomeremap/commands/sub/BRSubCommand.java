@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 import dev.ratas.slimedogcore.impl.commands.AbstractSubCommand;
 
 public abstract class BRSubCommand extends AbstractSubCommand {
@@ -22,6 +23,11 @@ public abstract class BRSubCommand extends AbstractSubCommand {
             }
         }
         return MAX_Y;
+    }
+
+    @Override
+    public boolean hasPermission(SDCRecipient sender) {
+        return super.hasPermission(sender) || !sender.isPlayer();
     }
 
 }
