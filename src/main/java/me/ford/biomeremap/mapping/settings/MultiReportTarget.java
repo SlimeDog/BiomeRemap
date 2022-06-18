@@ -1,18 +1,18 @@
 package me.ford.biomeremap.mapping.settings;
 
-import org.bukkit.command.CommandSender;
+import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 
 public class MultiReportTarget implements ReportTarget {
-    private final CommandSender[] targets;
+    private final SDCRecipient[] targets;
 
-    public MultiReportTarget(CommandSender... targets) {
+    public MultiReportTarget(SDCRecipient... targets) {
         this.targets = targets;
     }
 
     @Override
     public void sendMessage(String msg) {
-        for (CommandSender target : targets) {
-            target.sendMessage(msg);
+        for (SDCRecipient target : targets) {
+            target.sendRawMessage(msg);
         }
     }
 

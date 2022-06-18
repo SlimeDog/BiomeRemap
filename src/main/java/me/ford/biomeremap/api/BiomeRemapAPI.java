@@ -35,13 +35,16 @@ public class BiomeRemapAPI {
 	public static void remapRegion(World world, int regionX, int regionZ, BiomeMap map) {
 		RegionArea area = new RegionArea(world, regionX, regionZ);
 		RemapOptions options = new RemapOptions.Builder().withArea(area)
-				.withTarget(getPlugin().getServer().getConsoleSender()).withMap(map).build();
-		new LargeAreaMappingTaskStarter(getPlugin(), options, null);
+				.withTarget(getPlugin().getConsoleRecipient()).withMap(map).build();
+		new LargeAreaMappingTaskStarter(getPlugin(), getPlugin().getSettings(), getPlugin().getMessages(),
+				getPlugin().getRemapper(), getPlugin().getScanner(), options, null);
 	}
 
 	public static void scanRegion(World world, int regionX, int regionZ, Consumer<BiomeReport> report) {
-		new LargeScanTaskStarter(getPlugin(), world, new SingleReportTarget(getPlugin().getServer().getConsoleSender()),
-				regionX, world.getMinHeight(), world.getMaxHeight(), regionZ, true, false, null, report);
+		new LargeScanTaskStarter(getPlugin(), getPlugin().getSettings(), getPlugin().getMessages(),
+				getPlugin().getRemapper(), getPlugin().getScanner(), world,
+				new SingleReportTarget(getPlugin().getConsoleRecipient()), regionX, world.getMinHeight(),
+				world.getMaxHeight(), regionZ, true, false, null, report);
 	}
 
 }

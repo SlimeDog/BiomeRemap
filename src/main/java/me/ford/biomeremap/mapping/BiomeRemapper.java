@@ -13,7 +13,7 @@ import org.bukkit.ChunkSnapshot;
 import org.bukkit.block.Biome;
 
 import me.ford.biomeremap.BiomeRemap;
-import me.ford.biomeremap.commands.SubCommand;
+import me.ford.biomeremap.commands.sub.BRSubCommand;
 import me.ford.biomeremap.largetasks.LargeAreaMappingTaskStarter;
 import me.ford.biomeremap.largetasks.OnMappingDone;
 import me.ford.biomeremap.mapping.settings.RemapOptions;
@@ -37,7 +37,8 @@ public class BiomeRemapper {
 	}
 
 	public void remapArea(RemapOptions options) {
-		new LargeAreaMappingTaskStarter(br, options, options.getEndRunnable());
+		new LargeAreaMappingTaskStarter(br, br.getSettings(), br.getMessages(), br.getRemapper(), br.getScanner(),
+				options, options.getEndRunnable());
 	}
 
 	public long remapChunk(Chunk chunk) {
@@ -54,7 +55,7 @@ public class BiomeRemapper {
 	}
 
 	public long remapChunk(final Chunk chunk, boolean debug, final BiomeMap map) {
-		return remapChunk(chunk, debug, map, SubCommand.MAX_Y);
+		return remapChunk(chunk, debug, map, BRSubCommand.MAX_Y);
 	}
 
 	public long remapChunk(final Chunk chunk, boolean debug, final BiomeMap map, int maxY) {
@@ -67,8 +68,8 @@ public class BiomeRemapper {
 		final int maxy;
 		if (maxY > map.getCeiling()) {
 			maxy = map.getCeiling();
-		} else if (maxY > SubCommand.MAX_Y) {
-			maxy = SubCommand.MAX_Y;
+		} else if (maxY > BRSubCommand.MAX_Y) {
+			maxy = BRSubCommand.MAX_Y;
 		} else {
 			maxy = maxY;
 		}

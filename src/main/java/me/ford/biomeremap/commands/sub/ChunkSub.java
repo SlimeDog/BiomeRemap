@@ -5,36 +5,44 @@ import java.util.List;
 
 import org.bukkit.Chunk;
 import org.bukkit.World;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
-import me.ford.biomeremap.BiomeRemap;
-import me.ford.biomeremap.commands.SubCommand;
+import dev.ratas.slimedogcore.api.SlimeDogPlugin;
+import dev.ratas.slimedogcore.api.messaging.recipient.SDCPlayerRecipient;
+import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 import me.ford.biomeremap.mapping.BiomeMap;
+import me.ford.biomeremap.mapping.BiomeRemapper;
 import me.ford.biomeremap.mapping.settings.ChunkArea;
 import me.ford.biomeremap.mapping.settings.MultiReportTarget;
 import me.ford.biomeremap.mapping.settings.RemapOptions;
 import me.ford.biomeremap.mapping.settings.ReportTarget;
 import me.ford.biomeremap.mapping.settings.SingleReportTarget;
+import me.ford.biomeremap.settings.Messages;
+import me.ford.biomeremap.settings.Settings;
 
-public class ChunkSub extends SubCommand {
+public class ChunkSub extends BRSubCommand {
+	private static final String NAME = "chunk";
 	private static final String PERMS = "biomeremap.remap";
 	private static final String USAGE = "/biomeremap chunk [<world> <x> <z>]";
-	private final BiomeRemap br;
+	private final SlimeDogPlugin br;
+	private final Settings settings;
+	private final Messages messages;
+	private final BiomeRemapper remapper;
 	private final List<String> worldNames = new ArrayList<>();
 
-	public ChunkSub(BiomeRemap plugin) {
-		super("chunk");
+	public ChunkSub(SlimeDogPlugin plugin, Settings settings, Messages messages, BiomeRemapper remapper) {
+		super(NAME, PERMS, USAGE);
 		br = plugin;
-		for (World world : br.getServer().getWorlds()) {
+		this.settings = settings;
+		this.messages = messages;
+		this.remapper = remapper;
+		for (World world : br.getWorldProvider().getAllWorlds()) {
 			worldNames.add(world.getName());
 		}
 	}
 
 	@Override
-	public List<String> onTabComplete(CommandSender sender, String[] args, List<String> opts) {
+	public List<String> onTabComplete(SDCRecipient sender, String[] args) {
 		List<String> list = new ArrayList<>();
 		if (args.length == 1) {
 			return StringUtil.copyPartialMatches(args[0], worldNames, list);
@@ -43,11 +51,11 @@ public class ChunkSub extends SubCommand {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, String[] args, List<String> opts) {
+	public boolean onCommand(SDCRecipient sender, String[] args, List<String> opts) {
 		boolean debug = opts.contains("--debug");
 		boolean scanAfter = opts.contains("--scan")
-				&& (sender.hasPermission("biomeremap.scan") || sender instanceof ConsoleCommandSender);
-		boolean ingame = sender instanceof Player;
+				&& (sender.hasPermission("biomeremap.scan") || !sender.isPlayer());
+		boolean ingame = sender.isPlayer();
 		if (!ingame && args.length < 3) {
 			return false;
 		}
@@ -58,13 +66,13 @@ public class ChunkSub extends SubCommand {
 			if (args.length > 0) {// either no arguments for current chunk or specify chunk
 				return false;
 			}
-			chunk = ((Player) sender).getLocation().getChunk();
+			chunk = ((SDCPlayerRecipient) sender).getLocation().getChunk();
 		} else {
 			// check world
 			String worldName = args[0];
-			World world = br.getServer().getWorld(worldName);
+			World world = br.getWorldProvider().getWorldByName(worldName);
 			if (world == null) {
-				sender.sendMessage(br.getMessages().errorWorldNotFound(worldName));
+				sender.sendRawMessage(messages.errorWorldNotFound(worldName));
 				return true;
 			}
 
@@ -73,49 +81,39 @@ public class ChunkSub extends SubCommand {
 			try {
 				x = Integer.parseInt(args[1]);
 			} catch (NumberFormatException e) {
-				sender.sendMessage(br.getMessages().errorNotInteger(args[1]));
+				sender.sendRawMessage(messages.errorNotInteger(args[1]));
 				return true;
 			}
 			int z;
 			try {
 				z = Integer.parseInt(args[2]);
 			} catch (NumberFormatException e) {
-				sender.sendMessage(br.getMessages().errorNotInteger(args[2]));
+				sender.sendRawMessage(messages.errorNotInteger(args[2]));
 				return true;
 			}
 			chunk = world.getChunkAt(x, z);
 		}
-		BiomeMap map = br.getSettings().getApplicableBiomeMap(chunk.getWorld().getName());
+		BiomeMap map = settings.getApplicableBiomeMap(chunk.getWorld().getName());
 		if (map == null) {
-			sender.sendMessage(br.getMessages().getBiomeRemapNoMap(chunk.getWorld().getName()));
+			sender.sendRawMessage(messages.getBiomeRemapNoMap(chunk.getWorld().getName()));
 			return true;
 		}
-		String startMsg = br.getMessages().getChunkRemapStarted(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
+		String startMsg = messages.getChunkRemapStarted(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
 		ReportTarget target;
 		if (!ingame) {
 			target = new SingleReportTarget(sender);
 		} else {
-			target = new MultiReportTarget(sender, br.getServer().getConsoleSender());
+			target = new MultiReportTarget(sender, br.getConsoleRecipient());
 		}
 		target.sendMessage(startMsg);
 		ChunkArea area = new ChunkArea(chunk.getWorld(), chunk.getX(), chunk.getZ());
 		RemapOptions options = new RemapOptions.Builder().isDebug(debug).scanAfter(scanAfter).withArea(area)
 				.withTarget(target).withMap(map).endRunnable(() -> {
-					String completeMsg = br.getMessages().getBiomeRemapComplete();
+					String completeMsg = messages.getBiomeRemapComplete();
 					target.sendMessage(completeMsg);
 				}).maxY(maxY).build();
-		br.getRemapper().remapArea(options);
+		remapper.remapArea(options);
 		return true;
-	}
-
-	@Override
-	public boolean hasPermission(CommandSender sender) {
-		return sender.hasPermission(PERMS) || (sender instanceof ConsoleCommandSender);
-	}
-
-	@Override
-	public String getUsage(CommandSender sender) {
-		return USAGE;
 	}
 
 }

@@ -4,23 +4,28 @@ import java.util.function.Consumer;
 
 import org.bukkit.World;
 
-import me.ford.biomeremap.BiomeRemap;
+import dev.ratas.slimedogcore.api.SlimeDogPlugin;
 import me.ford.biomeremap.mapping.BiomeMap;
+import me.ford.biomeremap.mapping.BiomeRemapper;
 import me.ford.biomeremap.mapping.PopulatorQueue;
+import me.ford.biomeremap.settings.Settings;
 
 public class LargeMappingTask extends LargeTask {
 	private BiomeMap map;
 	private PopulatorQueue queue;
 	private final int maxY;
+	private final BiomeRemapper remapper;
 
-	public LargeMappingTask(BiomeRemap plugin, World world, int minX, int maxX, int minZ, int maxZ, boolean debug,
-			int progressStep, Consumer<String> progress, Consumer<TaskReport> ender, BiomeMap map, int maxY) {
+	public LargeMappingTask(SlimeDogPlugin plugin, Settings settings, BiomeRemapper remapper, World world, int minX,
+			int maxX, int minZ, int maxZ, boolean debug, int progressStep, Consumer<String> progress,
+			Consumer<TaskReport> ender, BiomeMap map, int maxY) {
 		super(plugin, world, minX, maxX, minZ, maxZ, debug, progressStep, progress, ender);
 		this.map = map;
 		if (this.map == null) {
-			this.map = plugin.getSettings().getApplicableBiomeMap(world.getName());
+			this.map = settings.getApplicableBiomeMap(world.getName());
 		}
 		this.maxY = maxY;
+		this.remapper = remapper;
 	}
 
 	public void setPopulatorQueue(PopulatorQueue queue) {
@@ -39,7 +44,7 @@ public class LargeMappingTask extends LargeTask {
 				queue.add(x, z);
 			world.getChunkAt(x, z); // populator takes care
 		} else {
-			getPlugin().getRemapper().remapChunk(world.getChunkAt(x, z), debug, map, this.maxY);
+			remapper.remapChunk(world.getChunkAt(x, z), debug, map, this.maxY);
 		}
 	}
 

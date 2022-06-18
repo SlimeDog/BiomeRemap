@@ -78,9 +78,6 @@ public class BiomeRemap extends SlimeDogCore {
 			new Metrics(this, 5513);
 		}
 
-		// commands
-		getCommand("biomeremap").setExecutor(new BiomeRemapCommand(this));
-
 		// saving debug message periodically
 		this.getServer().getScheduler().runTaskTimer(this, () -> saveDebug(), 120 * 20L, 120 * 20L);
 
@@ -88,6 +85,9 @@ public class BiomeRemap extends SlimeDogCore {
 		remapper = new BiomeRemapper(this);
 		scanner = new BiomeScanner(this);
 		teleListener = new TeleportListener(this);
+
+		// commands
+		getCommand("biomeremap").setExecutor(new BiomeRemapCommand(this, settings, messages, remapper, scanner));
 
 		// NMS biome manager
 		if (!testing) {

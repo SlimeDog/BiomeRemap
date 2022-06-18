@@ -9,49 +9,64 @@ import java.util.stream.Collectors;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 
-import me.ford.biomeremap.BiomeRemap;
+import dev.ratas.slimedogcore.api.SlimeDogPlugin;
 import me.ford.biomeremap.largetasks.LargeScanTask.BiomeReport;
 import me.ford.biomeremap.largetasks.LargeTask.TaskReport;
+import me.ford.biomeremap.mapping.BiomeRemapper;
+import me.ford.biomeremap.mapping.BiomeScanner;
 import me.ford.biomeremap.mapping.settings.ReportTarget;
+import me.ford.biomeremap.settings.Messages;
+import me.ford.biomeremap.settings.Settings;
 
 public class LargeScanTaskStarter extends LargeTaskStarter {
 	private final Runnable runnable;
 	private final Consumer<BiomeReport> mapReturner;
 	private final int minLayer;
 	private final int maxLayer;
+	private final Settings settings;
+	private final Messages messages;
+	private final BiomeRemapper remapper;
+	private final BiomeScanner scanner;
 
-	public LargeScanTaskStarter(BiomeRemap plugin, World world, ReportTarget owner, int x, int minLayer, int maxLayer,
-			int z, boolean region, boolean debug, Runnable runnable) {
-		this(plugin, world, owner, x, minLayer, maxLayer, z, region, debug, runnable, null);
+	public LargeScanTaskStarter(SlimeDogPlugin plugin, Settings settings, Messages messages, BiomeRemapper remapper,
+			BiomeScanner scanner, World world, ReportTarget owner, int x, int minLayer, int maxLayer, int z,
+			boolean region, boolean debug, Runnable runnable) {
+		this(plugin, settings, messages, remapper, scanner, world, owner, x, minLayer, maxLayer, z, region, debug,
+				runnable, null);
 	}
 
-	public LargeScanTaskStarter(BiomeRemap plugin, World world, ReportTarget owner, int x, int minLayer, int maxLayer,
-			int z, boolean region, boolean debug, Runnable runnable, Consumer<BiomeReport> mapReturner) {
+	public LargeScanTaskStarter(SlimeDogPlugin plugin, Settings settings, Messages messages, BiomeRemapper remapper,
+			BiomeScanner scanner, World world, ReportTarget owner, int x, int minLayer, int maxLayer, int z,
+			boolean region, boolean debug, Runnable runnable, Consumer<BiomeReport> mapReturner) {
 		super(plugin, world, owner, x, z, region, debug);
 		this.runnable = runnable;
 		this.mapReturner = mapReturner;
 		this.minLayer = minLayer;
 		this.maxLayer = maxLayer;
+		this.settings = settings;
+		this.messages = messages;
+		this.remapper = remapper;
+		this.scanner = scanner;
 	}
 
 	protected void startTask() {
-		new LargeScanTask(br(), world(), chunkX(), stopX(), chunkZ(), stopZ(), debug(),
-				br().getSettings().getScanProgressStep(), (progress) -> onProgress(owner(), progress),
+		new LargeScanTask(br(), remapper, scanner, world(), chunkX(), stopX(), chunkZ(), stopZ(), debug(),
+				settings.getScanProgressStep(), (progress) -> onProgress(owner(), progress),
 				(task) -> onEnd(owner(), task, debug()),
 				(report) -> showMap(owner(), report, region(), debug(), world().getName(), x(), z()), minLayer,
 				maxLayer);
 	}
 
 	private void onProgress(ReportTarget sender, String progress) {
-		String msg = br().getMessages().getScanProgress(progress);
+		String msg = messages.getScanProgress(progress);
 		sender.sendMessage(msg);
 	}
 
 	private void onEnd(ReportTarget sender, TaskReport report, boolean debug) {
-		String completeMsg = br().getMessages().getScanComplete();
+		String completeMsg = messages.getScanComplete();
 		sender.sendMessage(completeMsg);
 		if (debug)
-			sender.sendMessage(br().getMessages().getBiomeRemapSummary(report.getChunksDone(), report.getCompTime(),
+			sender.sendMessage(messages.getBiomeRemapSummary(report.getChunksDone(), report.getCompTime(),
 					report.getTicksUsed()));
 		if (runnable != null)
 			runnable.run();
@@ -61,9 +76,9 @@ public class LargeScanTaskStarter extends LargeTaskStarter {
 			int x, int z) {
 		String header;
 		if (region) {
-			header = br().getMessages().getScanRegionHeader(worldName, x, z);
+			header = messages.getScanRegionHeader(worldName, x, z);
 		} else {
-			header = br().getMessages().getScanChunkHeader(worldName, x, z);
+			header = messages.getScanChunkHeader(worldName, x, z);
 		}
 		sender.sendMessage(header);
 		Map<Biome, Integer> sortedMap = report.getBiomes().entrySet().stream()
@@ -75,10 +90,10 @@ public class LargeScanTaskStarter extends LargeTaskStarter {
 		}
 		for (Entry<Biome, Integer> entry : sortedMap.entrySet()) {
 			String percentage = String.format("%3.0f%%", 100 * ((double) entry.getValue()) / total);
-			String msg = br().getMessages().getScanListItem(percentage, entry.getKey().name(), entry.getValue());
+			String msg = messages.getScanListItem(percentage, entry.getKey().name(), entry.getValue());
 			sender.sendMessage(msg);
 		}
-		String msg = br().getMessages().getScanListItem("100%", "TOTAL", (int) total);
+		String msg = messages.getScanListItem("100%", "TOTAL", (int) total);
 		sender.sendMessage(msg);
 		if (mapReturner != null)
 			mapReturner.accept(report);

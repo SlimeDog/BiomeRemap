@@ -1,17 +1,17 @@
 package me.ford.biomeremap.mapping.settings;
 
-import org.bukkit.command.CommandSender;
+import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 
 public class SingleReportTarget implements ReportTarget {
-    private final CommandSender target;
+    private final SDCRecipient target;
 
-    public SingleReportTarget(CommandSender target) {
+    public SingleReportTarget(SDCRecipient target) {
         this.target = target;
     }
 
     @Override
     public void sendMessage(String msg) {
-        target.sendMessage(msg);
+        target.sendRawMessage(msg);
     }
 
 }

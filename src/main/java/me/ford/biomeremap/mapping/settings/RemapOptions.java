@@ -1,7 +1,6 @@
 package me.ford.biomeremap.mapping.settings;
 
-import org.bukkit.command.CommandSender;
-
+import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 import me.ford.biomeremap.mapping.BiomeMap;
 
 public class RemapOptions {
@@ -70,12 +69,12 @@ public class RemapOptions {
             return this;
         }
 
-        public Builder withTargets(CommandSender... senders) {
+        public Builder withTargets(SDCRecipient... senders) {
             this.reportTarget = new MultiReportTarget(senders);
             return this;
         }
 
-        public Builder withTarget(CommandSender sender) {
+        public Builder withTarget(SDCRecipient sender) {
             this.reportTarget = new SingleReportTarget(sender);
             return this;
         }

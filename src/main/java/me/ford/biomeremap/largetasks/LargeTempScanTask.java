@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 
 import org.bukkit.World;
 
-import me.ford.biomeremap.BiomeRemap;
+import dev.ratas.slimedogcore.api.SlimeDogPlugin;
 
 /**
  * LargeTempScanTask
@@ -18,7 +18,7 @@ public class LargeTempScanTask extends LargeTask {
     private final int minLayer;
     private final int maxLayer;
 
-    public LargeTempScanTask(BiomeRemap plugin, World world, int minX, int maxX, int minZ, int maxZ, boolean debug,
+    public LargeTempScanTask(SlimeDogPlugin plugin, World world, int minX, int maxX, int minZ, int maxZ, boolean debug,
             int progressStep, Consumer<String> progress, Consumer<TaskReport> ender,
             Consumer<TemperatureReport> tempConsumer, int minLayer, int maxLayer) {
         super(plugin, world, minX, maxX, minZ, maxZ, debug, progressStep, progress, ender);

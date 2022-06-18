@@ -5,37 +5,45 @@ import java.util.List;
 
 import org.bukkit.Chunk;
 import org.bukkit.World;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
-import me.ford.biomeremap.BiomeRemap;
-import me.ford.biomeremap.commands.SubCommand;
+import dev.ratas.slimedogcore.api.SlimeDogPlugin;
+import dev.ratas.slimedogcore.api.messaging.recipient.SDCPlayerRecipient;
+import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 import me.ford.biomeremap.mapping.BiomeMap;
+import me.ford.biomeremap.mapping.BiomeRemapper;
 import me.ford.biomeremap.mapping.settings.MultiReportTarget;
 import me.ford.biomeremap.mapping.settings.RegionArea;
 import me.ford.biomeremap.mapping.settings.RemapOptions;
 import me.ford.biomeremap.mapping.settings.ReportTarget;
 import me.ford.biomeremap.mapping.settings.SingleReportTarget;
+import me.ford.biomeremap.settings.Messages;
+import me.ford.biomeremap.settings.Settings;
 
-public class RegionSub extends SubCommand {
+public class RegionSub extends BRSubCommand {
+	private static final String NAME = "region";
 	private static final String PERMS = "biomeremap.remap";
 	private static final String USAGE = "/biomeremap region [<world> <x> <z>]";
-	private final BiomeRemap br;
+	private final SlimeDogPlugin br;
+	private final Settings settings;
+	private final Messages messages;
+	private final BiomeRemapper remapper;
 	private final List<String> worldNames = new ArrayList<>();
 	private boolean remapping = false;
 
-	public RegionSub(BiomeRemap plugin) {
-		super("region");
+	public RegionSub(SlimeDogPlugin plugin, Settings settings, Messages messages, BiomeRemapper remapper) {
+		super(NAME, PERMS, USAGE);
 		br = plugin;
-		for (World world : br.getServer().getWorlds()) {
+		this.settings = settings;
+		this.messages = messages;
+		this.remapper = remapper;
+		for (World world : br.getWorldProvider().getAllWorlds()) {
 			worldNames.add(world.getName());
 		}
 	}
 
 	@Override
-	public List<String> onTabComplete(CommandSender sender, String[] args, List<String> opts) {
+	public List<String> onTabComplete(SDCRecipient sender, String[] args) {
 		List<String> list = new ArrayList<>();
 		if (args.length == 1) {
 			return StringUtil.copyPartialMatches(args[0], worldNames, list);
@@ -44,15 +52,15 @@ public class RegionSub extends SubCommand {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, String[] args, List<String> opts) {
+	public boolean onCommand(SDCRecipient sender, String[] args, List<String> opts) {
 		if (remapping) {
-			sender.sendMessage(br.getMessages().getBiomeRemapInPrgoress());
+			sender.sendRawMessage(messages.getBiomeRemapInPrgoress());
 			return true;
 		}
 		boolean debug = opts.contains("--debug");
 		boolean scanAfter = opts.contains("--scan")
-				&& (sender.hasPermission("biomeremap.scan") || sender instanceof ConsoleCommandSender);
-		boolean ingame = sender instanceof Player;
+				&& (sender.hasPermission("biomeremap.scan") || !sender.isPlayer());
+		boolean ingame = sender.isPlayer();
 		if (!ingame && args.length < 3) {
 			return false;
 		}
@@ -65,16 +73,16 @@ public class RegionSub extends SubCommand {
 			if (args.length > 0) { // either no arguments for current region or specify region
 				return false;
 			}
-			Chunk chunk = ((Player) sender).getLocation().getChunk();
+			Chunk chunk = ((SDCPlayerRecipient) sender).getLocation().getChunk();
 			regionX = chunk.getX() >> 5;
 			regionZ = chunk.getZ() >> 5;
 			world = chunk.getWorld();
 		} else {
 			// check world
 			String worldName = args[0];
-			world = br.getServer().getWorld(worldName);
+			world = br.getWorldProvider().getWorldByName(worldName);
 			if (world == null) {
-				sender.sendMessage(br.getMessages().errorWorldNotFound(worldName));
+				sender.sendRawMessage(messages.errorWorldNotFound(worldName));
 				return true;
 			}
 
@@ -82,53 +90,43 @@ public class RegionSub extends SubCommand {
 			try {
 				regionX = Integer.parseInt(args[1]);
 			} catch (NumberFormatException e) {
-				sender.sendMessage(br.getMessages().errorNotInteger(args[1]));
+				sender.sendRawMessage(messages.errorNotInteger(args[1]));
 				return true;
 			}
 			try {
 				regionZ = Integer.parseInt(args[2]);
 			} catch (NumberFormatException e) {
-				sender.sendMessage(br.getMessages().errorNotInteger(args[2]));
+				sender.sendRawMessage(messages.errorNotInteger(args[2]));
 				return true;
 			}
 		}
-		BiomeMap map = br.getSettings().getApplicableBiomeMap(world.getName());
+		BiomeMap map = settings.getApplicableBiomeMap(world.getName());
 		if (map == null) {
-			sender.sendMessage(br.getMessages().getBiomeRemapNoMap(world.getName()));
+			sender.sendRawMessage(messages.getBiomeRemapNoMap(world.getName()));
 			return true;
 		}
 		ReportTarget target;
 		if (!ingame) {
 			target = new SingleReportTarget(sender);
 		} else {
-			target = new MultiReportTarget(sender, br.getServer().getConsoleSender());
+			target = new MultiReportTarget(sender, br.getConsoleRecipient());
 		}
-		String startedMsg = br.getMessages().getRegionRemapStarted(world.getName(), regionX, regionZ);
+		String startedMsg = messages.getRegionRemapStarted(world.getName(), regionX, regionZ);
 		target.sendMessage(startedMsg);
 		remapping = true;
 		RegionArea area = new RegionArea(world, regionX, regionZ);
 		RemapOptions options = new RemapOptions.Builder().isDebug(debug).scanAfter(scanAfter).withArea(area)
 				.withTarget(target).withMap(map).endRunnable(() -> {
-					String completeMsg = br.getMessages().getBiomeRemapComplete();
+					String completeMsg = messages.getBiomeRemapComplete();
 					target.sendMessage(completeMsg);
 					remapEnded();
 				}).maxY(maxY).build();
-		br.getRemapper().remapArea(options);
+		remapper.remapArea(options);
 		return true;
 	}
 
 	private void remapEnded() {
 		remapping = false;
-	}
-
-	@Override
-	public boolean hasPermission(CommandSender sender) {
-		return sender.hasPermission(PERMS) || (sender instanceof ConsoleCommandSender);
-	}
-
-	@Override
-	public String getUsage(CommandSender sender) {
-		return USAGE;
 	}
 
 }

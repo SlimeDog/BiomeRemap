@@ -5,10 +5,10 @@ import java.util.logging.Level;
 
 import org.bukkit.World;
 
-import me.ford.biomeremap.BiomeRemap;
+import dev.ratas.slimedogcore.api.SlimeDogPlugin;
 
 public abstract class LargeTask {
-	private final BiomeRemap br;
+	private final SlimeDogPlugin br;
 	private final World world;
 	private final int minX;
 	private final int maxX;
@@ -29,7 +29,7 @@ public abstract class LargeTask {
 	private int nextProgress;
 	// private final boolean[][] checked = new boolean[32][32];
 
-	public LargeTask(BiomeRemap plugin, World world, int minX, int maxX, int minZ, int maxZ, boolean debug,
+	public LargeTask(SlimeDogPlugin plugin, World world, int minX, int maxX, int minZ, int maxZ, boolean debug,
 			int progressStep, Consumer<String> progress, Consumer<TaskReport> ender) {
 		this.br = plugin;
 		this.world = world;
@@ -47,7 +47,7 @@ public abstract class LargeTask {
 			progressStep = 100;
 		this.progressStep = progressStep;
 		nextProgress = this.progressStep;
-		br.getServer().getScheduler().runTask(br, () -> remapChunks());
+		br.getScheduler().runTask(() -> remapChunks());
 	}
 
 	protected void remapChunks() {
@@ -62,7 +62,7 @@ public abstract class LargeTask {
 		time += curTime;
 		ticks++;
 		if (!done) {
-			br.getServer().getScheduler().runTaskLater(br, () -> remapChunks(), curTime > 40 ? 2 : 1);
+			br.getScheduler().runTaskLater(() -> remapChunks(), curTime > 40 ? 2 : 1);
 		} else {
 			ender.accept(new TaskReport(chunks, ticks, time));
 			// DEBUG
@@ -102,7 +102,7 @@ public abstract class LargeTask {
 		chunks++;
 	}
 
-	protected BiomeRemap getPlugin() {
+	protected SlimeDogPlugin getPlugin() {
 		return br;
 	}
 

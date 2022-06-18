@@ -3,49 +3,41 @@ package me.ford.biomeremap.commands.sub;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-
+import dev.ratas.slimedogcore.api.SlimeDogPlugin;
+import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 import me.ford.biomeremap.BiomeRemap;
-import me.ford.biomeremap.commands.SubCommand;
+import me.ford.biomeremap.settings.Messages;
 import me.ford.biomeremap.settings.Settings.ReloadIssues;
 
-public class ReloadSub extends SubCommand {
+public class ReloadSub extends BRSubCommand {
+	private static final String NAME = "reload";
 	private static final String PERMS = "biomeremap.reload";
 	private static final String USAGE = "/biomeremap reload";
-	private final BiomeRemap br;
+	private final SlimeDogPlugin br;
+	private final Messages messages;
 
-	public ReloadSub(BiomeRemap plugin) {
-		super("reload");
+	public ReloadSub(SlimeDogPlugin plugin, Messages messages) {
+		super(NAME, PERMS, USAGE);
 		br = plugin;
+		this.messages = messages;
 	}
 
 	@Override
-	public List<String> onTabComplete(CommandSender sender, String[] args, List<String> opts) {
+	public List<String> onTabComplete(SDCRecipient sender, String[] args) {
 		return new ArrayList<>();
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, String[] args, List<String> opts) {
-		ReloadIssues issues = br.reload();
+	public boolean onCommand(SDCRecipient sender, String[] args, List<String> opts) {
+		ReloadIssues issues = ((BiomeRemap) br).reload();
 		if (issues != null && !issues.hasIssues()) {
-			sender.sendMessage(br.getMessages().getBiomeRemapReload());
+			sender.sendRawMessage(messages.getBiomeRemapReload());
 		} else if (issues != null) {
-			sender.sendMessage(String.join("\n", issues.getIssues()));
+			sender.sendRawMessage(String.join("\n", issues.getIssues()));
 		} else { // issues == null
-			sender.sendMessage(br.getMessages().errorConfigUnreadable());
+			sender.sendRawMessage(messages.errorConfigUnreadable());
 		}
 		return true;
-	}
-
-	@Override
-	public boolean hasPermission(CommandSender sender) {
-		return sender.hasPermission(PERMS) || (sender instanceof ConsoleCommandSender);
-	}
-
-	@Override
-	public String getUsage(CommandSender sender) {
-		return USAGE;
 	}
 
 }

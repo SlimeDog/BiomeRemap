@@ -7,7 +7,9 @@ import java.util.function.Consumer;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 
-import me.ford.biomeremap.BiomeRemap;
+import dev.ratas.slimedogcore.api.SlimeDogPlugin;
+import me.ford.biomeremap.mapping.BiomeRemapper;
+import me.ford.biomeremap.mapping.BiomeScanner;
 import me.ford.biomeremap.mapping.PopulatorQueue;
 
 public class LargeScanTask extends LargeTask {
@@ -18,21 +20,25 @@ public class LargeScanTask extends LargeTask {
 	private final OnMappingDone onMappingDone;
 	private final PopulatorQueue queue;
 	private final boolean[][] checked = new boolean[32][32];
+	private final BiomeRemapper remapper;
+	private final BiomeScanner scanner;
 	// private final boolean[][] doubled = new boolean[32][32];
 	// private final boolean[][] noDice = new boolean[32][32];
 	// private final boolean[][] wasGenerated = new boolean[32][32];
 
-	public LargeScanTask(BiomeRemap plugin, World world, int minX, int maxX, int minZ, int maxZ, boolean debug,
-			int progressStep, Consumer<String> progress, Consumer<TaskReport> ender, Consumer<BiomeReport> biomes,
-			int minLayer, int maxLayer) {
+	public LargeScanTask(SlimeDogPlugin plugin, BiomeRemapper remapper, BiomeScanner scanner, World world, int minX,
+			int maxX, int minZ, int maxZ, boolean debug, int progressStep, Consumer<String> progress,
+			Consumer<TaskReport> ender, Consumer<BiomeReport> biomes, int minLayer, int maxLayer) {
 		super(plugin, world, minX, maxX, minZ, maxZ, debug, progressStep, progress, ender);
 		this.biomes = biomes;
 		this.minLayer = minLayer;
 		this.maxLayer = maxLayer;
 		this.onMappingDone = new OnMappingDone((x, z) -> findBiomes(x, z, debug), world, minX, minZ, maxX, maxZ);
-		getPlugin().getRemapper().addDoneChecker(onMappingDone); // checks the newly generated ones
-		queue = new PopulatorQueue(biomeMap, world, getPlugin().getScanner(), minLayer, maxLayer);
-		getPlugin().getScanner().setPopulatorQueue(queue);
+		this.remapper = remapper;
+		this.scanner = scanner;
+		remapper.addDoneChecker(onMappingDone); // checks the newly generated ones
+		queue = new PopulatorQueue(biomeMap, world, scanner, minLayer, maxLayer);
+		scanner.setPopulatorQueue(queue);
 	}
 
 	@Override
@@ -53,7 +59,7 @@ public class LargeScanTask extends LargeTask {
 		}
 		// wasGenerated[chunkX - getMinX()][chunkZ - getMinZ()] =
 		// getWorld().isChunkGenerated(chunkX, chunkZ);
-		if (getPlugin().getScanner().addBiomesFor(biomeMap, getWorld(), chunkX, chunkZ, minLayer, maxLayer)) {
+		if (scanner.addBiomesFor(biomeMap, getWorld(), chunkX, chunkZ, minLayer, maxLayer)) {
 			checked[chunkX - getMinX()][chunkZ - getMinZ()] = true;
 		} else { // else will be done later, after the remap
 			// noDice[chunkX - getMinX()][chunkZ - getMinZ()] = true;
@@ -62,10 +68,10 @@ public class LargeScanTask extends LargeTask {
 
 	@Override
 	protected void whenDone() {
-		getPlugin().getScanner().finalizePopulatorQueue();
-		getPlugin().getServer().getScheduler().runTaskLater(getPlugin(), () -> {
+		scanner.finalizePopulatorQueue();
+		getPlugin().getScheduler().runTaskLater(() -> {
 			biomes.accept(new BiomeReport(biomeMap));
-			getPlugin().getRemapper().removeDoneCheker(onMappingDone);
+			remapper.removeDoneCheker(onMappingDone);
 			// DEBUG
 			// StringBuilder builder = new StringBuilder();
 			// StringBuilder doubleBuilder = new StringBuilder();

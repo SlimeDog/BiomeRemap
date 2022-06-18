@@ -7,10 +7,12 @@ import java.util.stream.Collectors;
 
 import org.bukkit.World;
 
-import me.ford.biomeremap.BiomeRemap;
+import dev.ratas.slimedogcore.api.SlimeDogPlugin;
 import me.ford.biomeremap.largetasks.LargeTask.TaskReport;
 import me.ford.biomeremap.largetasks.LargeTempScanTask.TemperatureReport;
 import me.ford.biomeremap.mapping.settings.ReportTarget;
+import me.ford.biomeremap.settings.Messages;
+import me.ford.biomeremap.settings.Settings;
 
 /**
  * LargeTempScanTaskStarter
@@ -19,33 +21,38 @@ public class LargeTempScanTaskStarter extends LargeTaskStarter {
 	private final int minLayer;
 	private final int maxLayer;
 	private final Runnable endRunnable;
+	private final Settings settings;
+	private final Messages messages;
 
-	public LargeTempScanTaskStarter(BiomeRemap plugin, World world, ReportTarget owner, int x, int minLayer,
+	public LargeTempScanTaskStarter(SlimeDogPlugin plugin, Settings settings, Messages messages, World world,
+			ReportTarget owner, int x, int minLayer,
 			int maxLayer, int z, boolean region, boolean debug, Runnable endRunnable) {
 		super(plugin, world, owner, x, z, region, debug);
 		this.minLayer = minLayer;
 		this.maxLayer = maxLayer;
 		this.endRunnable = endRunnable;
+		this.settings = settings;
+		this.messages = messages;
 	}
 
 	@Override
 	protected void startTask() {
 		new LargeTempScanTask(br(), world(), chunkX(), stopX(), chunkZ(), stopZ(), debug(),
-				br().getSettings().getScanProgressStep(), (progress) -> onProgress(owner(), progress),
+				settings.getScanProgressStep(), (progress) -> onProgress(owner(), progress),
 				(task) -> onEnd(owner(), task, debug()),
 				(map) -> showMap(owner(), map, region(), debug(), world().getName(), x(), z()), minLayer, maxLayer);
 	}
 
 	private void onProgress(ReportTarget sender, String progress) {
-		String msg = br().getMessages().getScanProgress(progress);
+		String msg = messages.getScanProgress(progress);
 		sender.sendMessage(msg);
 	}
 
 	private void onEnd(ReportTarget sender, TaskReport report, boolean debug) {
-		String completeMsg = br().getMessages().getScanComplete();
+		String completeMsg = messages.getScanComplete();
 		sender.sendMessage(completeMsg);
 		if (debug)
-			sender.sendMessage(br().getMessages().getBiomeRemapSummary(report.getChunksDone(), report.getCompTime(),
+			sender.sendMessage(messages.getBiomeRemapSummary(report.getChunksDone(), report.getCompTime(),
 					report.getTicksUsed()));
 		if (endRunnable != null)
 			endRunnable.run();
@@ -55,9 +62,9 @@ public class LargeTempScanTaskStarter extends LargeTaskStarter {
 			int x, int z) {
 		String header;
 		if (region) {
-			header = br().getMessages().getScanRegionHeader(worldName, x, z);
+			header = messages.getScanRegionHeader(worldName, x, z);
 		} else {
-			header = br().getMessages().getScanChunkHeader(worldName, x, z);
+			header = messages.getScanChunkHeader(worldName, x, z);
 		}
 		sender.sendMessage(header);
 		Map<Double, Integer> sortedMap = report.getTemps().entrySet().stream()
@@ -69,11 +76,11 @@ public class LargeTempScanTaskStarter extends LargeTaskStarter {
 		}
 		for (Entry<Double, Integer> entry : sortedMap.entrySet()) {
 			String percentage = String.format("%3.0f%%", 100 * ((double) entry.getValue()) / total);
-			String msg = br().getMessages().getScanListItem(percentage, String.format("%4.2f", entry.getKey()),
+			String msg = messages.getScanListItem(percentage, String.format("%4.2f", entry.getKey()),
 					entry.getValue());
 			sender.sendMessage(msg);
 		}
-		String msg = br().getMessages().getScanListItem("100%", "TOTAL", (int) total);
+		String msg = messages.getScanListItem("100%", "TOTAL", (int) total);
 		sender.sendMessage(msg);
 	}
 

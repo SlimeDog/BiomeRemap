@@ -2,11 +2,11 @@ package me.ford.biomeremap.largetasks;
 
 import org.bukkit.World;
 
-import me.ford.biomeremap.BiomeRemap;
+import dev.ratas.slimedogcore.api.SlimeDogPlugin;
 import me.ford.biomeremap.mapping.settings.ReportTarget;
 
 public abstract class LargeTaskStarter {
-	private final BiomeRemap br;
+	private final SlimeDogPlugin br;
 	private final World world;
 	private final ReportTarget owner;
 	private final int x, z;
@@ -17,7 +17,7 @@ public abstract class LargeTaskStarter {
 	private final boolean region;
 	private final boolean debug;
 
-	public LargeTaskStarter(BiomeRemap plugin, World world, ReportTarget owner, int x, int z, boolean region,
+	public LargeTaskStarter(SlimeDogPlugin plugin, World world, ReportTarget owner, int x, int z, boolean region,
 			boolean debug) {
 		this.br = plugin;
 		this.world = world;
@@ -40,12 +40,12 @@ public abstract class LargeTaskStarter {
 			stopX = chunkX + 1;
 			stopZ = chunkZ + 1;
 		}
-		br.getServer().getScheduler().runTask(br, () -> startTask());
+		br.getScheduler().runTask(() -> startTask());
 	}
 
 	protected abstract void startTask();
 
-	protected BiomeRemap br() {
+	protected SlimeDogPlugin br() {
 		return br;
 	}
 
