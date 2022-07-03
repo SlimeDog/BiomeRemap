@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 
+import dev.ratas.slimedogcore.api.messaging.factory.SDCSingleContextMessageFactory;
 import dev.ratas.slimedogcore.api.messaging.recipient.SDCPlayerRecipient;
 import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 import me.ford.biomeremap.mapping.BiomeMap;
@@ -40,7 +41,8 @@ public class CBCommand extends BRSubCommand {
         Location loc = ((SDCPlayerRecipient) sender).getLocation();
         BiomeMap map = settings.getApplicableBiomeMap(loc.getWorld().getName());
         if (map == null) {
-            sender.sendRawMessage(messages.getBiomeRemapNoMap(loc.getWorld().getName()));
+            SDCSingleContextMessageFactory<String> msg = messages.getBiomeRemapNoMap();
+            sender.sendMessage(msg.getMessage(msg.getContextFactory().getContext(loc.getWorld().getName())));
             return true;
         }
         Block block = loc.getBlock();

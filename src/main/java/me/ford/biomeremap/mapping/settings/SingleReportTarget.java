@@ -1,5 +1,6 @@
 package me.ford.biomeremap.mapping.settings;
 
+import dev.ratas.slimedogcore.api.messaging.SDCMessage;
 import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 
 public class SingleReportTarget implements ReportTarget {
@@ -10,8 +11,8 @@ public class SingleReportTarget implements ReportTarget {
     }
 
     @Override
-    public void sendMessage(String msg) {
-        target.sendRawMessage(msg);
+    public void sendMessage(SDCMessage<?> msg) {
+        target.sendMessage(msg);
     }
 
 }

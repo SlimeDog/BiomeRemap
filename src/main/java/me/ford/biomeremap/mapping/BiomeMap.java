@@ -8,6 +8,8 @@ import java.util.Map;
 import org.bukkit.block.Biome;
 
 import dev.ratas.slimedogcore.api.config.SDCConfiguration;
+import dev.ratas.slimedogcore.api.messaging.factory.SDCDoubleContextMessageFactory;
+import dev.ratas.slimedogcore.api.messaging.factory.SDCSingleContextMessageFactory;
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.settings.Messages;
 
@@ -38,12 +40,15 @@ public class BiomeMap {
 			try {
 				from = Biome.valueOf(key.toUpperCase());
 			} catch (IllegalArgumentException e) {
-				BiomeRemap.logger().severe(messages.errorBiomeNotFound(key));
+				SDCSingleContextMessageFactory<String> msg = messages.errorBiomeNotFound();
+				BiomeRemap.logger().severe(msg.getMessage(msg.getContextFactory().getContext(key)).getFilled());
 				throw new MappingException();
 			}
 			SDCConfiguration curSection = mapSection.getConfigurationSection(key);
 			if (curSection == null) {
-				BiomeRemap.logger().severe(messages.errorConfigMapincomplete(key, from.name()));
+				SDCDoubleContextMessageFactory<String, String> msg = messages.errorConfigMapincomplete();
+				BiomeRemap.logger()
+						.severe(msg.getMessage(msg.getContextFactory().getContext(key, from.name())).getFilled());
 				throw new MappingException();
 			}
 			String toName = curSection.getString("replacement-biome", "");
@@ -51,7 +56,8 @@ public class BiomeMap {
 			try {
 				to = Biome.valueOf(toName.toUpperCase());
 			} catch (IllegalArgumentException e) {
-				BiomeRemap.logger().severe(messages.errorBiomeNotFound(toName));
+				SDCSingleContextMessageFactory<String> msg = messages.errorBiomeNotFound();
+				BiomeRemap.logger().severe(msg.getMessage(msg.getContextFactory().getContext(toName)).getFilled());
 				throw new MappingException();
 			}
 			biomeMap.put(from, to);

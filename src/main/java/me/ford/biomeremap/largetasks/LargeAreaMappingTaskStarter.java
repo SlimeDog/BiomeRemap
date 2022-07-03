@@ -7,6 +7,10 @@ import java.util.stream.Collectors;
 import org.bukkit.block.Biome;
 
 import dev.ratas.slimedogcore.api.SlimeDogPlugin;
+import dev.ratas.slimedogcore.api.messaging.SDCMessage;
+import dev.ratas.slimedogcore.api.messaging.context.SDCTripleContext;
+import dev.ratas.slimedogcore.api.messaging.factory.SDCSingleContextMessageFactory;
+import dev.ratas.slimedogcore.api.messaging.factory.SDCTripleContextMessageFactory;
 import me.ford.biomeremap.largetasks.LargeScanTask.BiomeReport;
 import me.ford.biomeremap.largetasks.LargeTask.TaskReport;
 import me.ford.biomeremap.mapping.BiomeRemapper;
@@ -53,12 +57,15 @@ public class LargeAreaMappingTaskStarter extends LargeTaskStarter {
     }
 
     private void showMap(BiomeReport report) {
-        String header;
+        SDCMessage<SDCTripleContext<String, Integer, Integer>> header;
         if (area.describesRegion()) {
-            header = messages.getScanRegionHeader(area.getWorld().getName(), area.getAreaX(),
-                    area.getAreaZ());
+            SDCTripleContextMessageFactory<String, Integer, Integer> msg = messages.getScanRegionHeader();
+            header = msg.getMessage(msg.getContextFactory().getContext(area.getWorld().getName(), area.getAreaX(),
+                    area.getAreaZ()));
         } else {
-            header = messages.getScanChunkHeader(area.getWorld().getName(), area.getAreaX(), area.getAreaZ());
+            SDCTripleContextMessageFactory<String, Integer, Integer> msg = messages.getScanChunkHeader();
+            header = msg.getMessage(msg.getContextFactory().getContext(area.getWorld().getName(), area.getAreaX(),
+                    area.getAreaZ()));
         }
         options.getReportTarget().sendMessage(header);
         Map<Biome, Integer> sortedMap = report.getBiomes().entrySet().stream()
@@ -70,22 +77,27 @@ public class LargeAreaMappingTaskStarter extends LargeTaskStarter {
         }
         for (Map.Entry<Biome, Integer> entry : sortedMap.entrySet()) {
             String percentage = String.format("%3.0f%%", 100 * ((double) entry.getValue()) / total);
-            String msg = messages.getScanListItem(percentage, entry.getKey().name(), entry.getValue());
-            options.getReportTarget().sendMessage(msg);
+            SDCTripleContextMessageFactory<String, String, Integer> msg = messages.getScanListItem();
+            options.getReportTarget().sendMessage(msg.getMessage(
+                    msg.getContextFactory().getContext(percentage, entry.getKey().name(), entry.getValue())));
         }
-        String msg = messages.getScanListItem("100%", "TOTAL", (int) total);
-        options.getReportTarget().sendMessage(msg);
+
+        SDCTripleContextMessageFactory<String, String, Integer> msg = messages.getScanListItem();
+        options.getReportTarget().sendMessage(msg.getMessage(
+                msg.getContextFactory().getContext("100%", "TOTAL", (int) total)));
     }
 
     private void reportProgress(String progress) {
-        String msg = messages.getBiomeRemapProgress(progress);
-        options.getReportTarget().sendMessage(msg);
+        SDCSingleContextMessageFactory<String> msg = messages.getBiomeRemapProgress();
+        options.getReportTarget().sendMessage(msg.getMessage(msg.getContextFactory().getContext(progress)));
     }
 
     private void remappingEnded(TaskReport report) {
-        if (options.isDebug())
-            options.getReportTarget().sendMessage(messages.getBiomeRemapSummary(report.getChunksDone(),
-                    report.getCompTime(), report.getTicksUsed()));
+        if (options.isDebug()) {
+            SDCTripleContextMessageFactory<Integer, Long, Integer> msg = messages.getBiomeRemapSummary();
+            options.getReportTarget().sendMessage(msg.getMessage(msg.getContextFactory()
+                    .getContext(report.getChunksDone(), report.getCompTime(), report.getTicksUsed())));
+        }
         if (runnable != null)
             runnable.run();
     }

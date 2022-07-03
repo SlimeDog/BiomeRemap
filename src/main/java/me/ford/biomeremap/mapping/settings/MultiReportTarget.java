@@ -1,5 +1,6 @@
 package me.ford.biomeremap.mapping.settings;
 
+import dev.ratas.slimedogcore.api.messaging.SDCMessage;
 import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 
 public class MultiReportTarget implements ReportTarget {
@@ -10,9 +11,9 @@ public class MultiReportTarget implements ReportTarget {
     }
 
     @Override
-    public void sendMessage(String msg) {
+    public void sendMessage(SDCMessage<?> msg) {
         for (SDCRecipient target : targets) {
-            target.sendRawMessage(msg);
+            target.sendMessage(msg);
         }
     }
 

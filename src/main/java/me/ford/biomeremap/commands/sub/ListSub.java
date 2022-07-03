@@ -7,6 +7,7 @@ import org.bukkit.World;
 import org.bukkit.util.StringUtil;
 
 import dev.ratas.slimedogcore.api.SlimeDogPlugin;
+import dev.ratas.slimedogcore.api.messaging.factory.SDCSingleContextMessageFactory;
 import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 import me.ford.biomeremap.mapping.BiomeMap;
 import me.ford.biomeremap.settings.Messages;
@@ -48,7 +49,8 @@ public class ListSub extends BRSubCommand {
 			for (String name : settings.getBiomeMapNames()) {
 				BiomeMap map = settings.getBiomeMap(name);
 				if (map == null) {
-					plugin.getLogger().warning(messages.errorBiomeMapNotFound(name));
+					SDCSingleContextMessageFactory<String> msg = messages.errorBiomeMapNotFound();
+					plugin.getLogger().warning(msg.getMessage(msg.getContextFactory().getContext(name)).getFilled());
 					continue;
 				}
 				list.add(map);
@@ -56,7 +58,8 @@ public class ListSub extends BRSubCommand {
 		} else {
 			worldName = args[0];
 			if (!worldNames.contains(worldName)) {
-				sender.sendRawMessage(messages.errorWorldNotFound(worldName));
+				SDCSingleContextMessageFactory<String> msg = messages.errorWorldNotFound();
+				sender.sendMessage(msg.getMessage(msg.getContextFactory().getContext(worldName)));
 				return true;
 			}
 			BiomeMap map = settings.getApplicableBiomeMap(worldName);
@@ -64,11 +67,13 @@ public class ListSub extends BRSubCommand {
 				list.add(map);
 		}
 		if (list.isEmpty() && worldName != null) {
-			sender.sendRawMessage(messages.getBiomeRemapNoMap(worldName));
+			SDCSingleContextMessageFactory<String> msg = messages.getBiomeRemapNoMap();
+			sender.sendMessage(msg.getMessage(msg.getContextFactory().getContext(worldName)));
 		} else {
-			sender.sendRawMessage(messages.getBiomeRemapListHeaders());
+			sender.sendMessage(messages.getBiomeRemapListHeaders().getMessage());
+			SDCSingleContextMessageFactory<String> msg = messages.getBiomeRemapListItem();
 			for (BiomeMap map : list) {
-				sender.sendRawMessage(messages.getBiomeRemapListItem(map.getName()));
+				sender.sendMessage(msg.getMessage(msg.getContextFactory().getContext(map.getName())));
 			}
 		}
 		return true;

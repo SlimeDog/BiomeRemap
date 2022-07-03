@@ -7,6 +7,9 @@ import java.util.Set;
 
 import dev.ratas.slimedogcore.api.SlimeDogPlugin;
 import dev.ratas.slimedogcore.api.config.SDCConfiguration;
+import dev.ratas.slimedogcore.api.messaging.factory.SDCDoubleContextMessageFactory;
+import dev.ratas.slimedogcore.api.messaging.factory.SDCSingleContextMessageFactory;
+import dev.ratas.slimedogcore.api.messaging.factory.SDCTripleContextMessageFactory;
 import me.ford.biomeremap.mapping.BiomeMap;
 import me.ford.biomeremap.mapping.BiomeMap.IncompatibleCeilingException;
 import me.ford.biomeremap.mapping.BiomeMap.IncompatibleFloorException;
@@ -33,22 +36,29 @@ public class Settings {
 		for (String key : mapsSection.getKeys(false)) {
 			SDCConfiguration curMapSection = mapsSection.getConfigurationSection(key);
 			if (curMapSection == null) {
-				br.getLogger().severe(messages.errorBiomeMapIncomplete(key));
+				SDCSingleContextMessageFactory<String> msg = messages.errorBiomeMapIncomplete();
+				br.getLogger().severe(msg.getMessage(msg.getContextFactory().getContext(key)).getFilled());
 				continue;
 			}
 			BiomeMap map;
 			try {
 				map = new BiomeMap(messages, curMapSection);
 			} catch (IncompleteBiomeMapException e) {
-				br.getLogger().severe(messages.errorBiomeMapIncomplete(key));
-				issues.addIssue(messages.errorBiomeMapIncomplete(key));
+				SDCSingleContextMessageFactory<String> msg = messages.errorBiomeMapIncomplete();
+				String filled = msg.getMessage(msg.getContextFactory().getContext(key)).getFilled();
+				br.getLogger().severe(filled);
+				issues.addIssue(filled);
 				continue;
 			} catch (MappingException e) {
-				br.getLogger().severe(messages.errorNoBiomeMapAssigned(key));
-				issues.addIssue(messages.errorNoBiomeMapAssigned(key));
+				SDCSingleContextMessageFactory<String> msg = messages.errorNoBiomeMapAssigned();
+				String filled = msg.getMessage(msg.getContextFactory().getContext(key)).getFilled();
+				br.getLogger().severe(filled);
+				issues.addIssue(filled);
 				continue;
 			} catch (IncompatibleFloorException e) {
-				br.getLogger().severe(messages.errorIncompatibleFloor(key, e.floor));
+				SDCDoubleContextMessageFactory<String, Integer> msg = messages.errorIncompatibleFloor();
+				String filled = msg.getMessage(msg.getContextFactory().getContext(key, e.floor)).getFilled();
+				br.getLogger().severe(filled);
 				continue;
 			} catch (IncompatibleCeilingException e) {
 				br.getLogger().severe("Problem with ceiling of biome map (this should not happen!)");
@@ -66,14 +76,18 @@ public class Settings {
 					duplicates.add(worldName);
 					prev.removeWorld(worldName);
 					map.removeWorld(worldName);
-					br.getLogger().severe(messages.errorDuplicateBiomeMapsForWorld(worldName));
-					issues.addIssue(messages.errorDuplicateBiomeMapsForWorld(worldName));
+					SDCSingleContextMessageFactory<String> msg = messages.errorDuplicateBiomeMapsForWorld();
+					String filled = msg.getMessage(msg.getContextFactory().getContext(worldName)).getFilled();
+					br.getLogger().severe(filled);
+					issues.addIssue(filled);
 				} else {
 					if (br.getWorldProvider().getWorldByName(worldName) != null) {
 						successes.add(worldName);
 					} else {
-						br.getLogger().severe(messages.errorWorldNotFound(worldName));
-						issues.addIssue(messages.errorWorldNotFound(worldName));
+						SDCSingleContextMessageFactory<String> msg = messages.errorWorldNotFound();
+						String filled = msg.getMessage(msg.getContextFactory().getContext(worldName)).getFilled();
+						br.getLogger().severe(filled);
+						issues.addIssue(filled);
 						map.removeWorld(worldName);
 					}
 				}
@@ -82,9 +96,13 @@ public class Settings {
 		successes.removeAll(duplicates);
 		for (String worldName : successes) {
 			BiomeMap map = worldMap.get(worldName);
-			br.getLogger().info(messages.getInfoWorldMapped(worldName, map.getName()));
+			SDCDoubleContextMessageFactory<String, String> msg = messages.getInfoWorldMapped();
+			String filled = msg.getMessage(msg.getContextFactory().getContext(worldName, map.getName())).getFilled();
+			br.getLogger().info(filled);
 			if (map.getFloor() != BiomeMap.DEFAULT_FLOOR) {
-				br.getLogger().info(messages.getInfoChunkRemapFloor(map.getFloor(), BiomeMap.DEFAULT_FLOOR, worldName));
+				SDCTripleContextMessageFactory<Integer, Integer, String> m = messages.getInfoChunkRemapFloor();
+				String fill = m.getMessage(m.getContextFactory().getContext( map.getFloor(),BiomeMap.DEFAULT_FLOOR, worldName)).getFilled();
+				br.getLogger().info(fill);
 			}
 		}
 		for (String worldName : duplicates) { // otherwise the third (or 5th, so on) duplicate would stay

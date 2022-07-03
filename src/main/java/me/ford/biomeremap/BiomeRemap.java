@@ -15,6 +15,8 @@ import org.bukkit.World;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPluginLoader;
 
+import dev.ratas.slimedogcore.api.messaging.factory.SDCSingleContextMessageFactory;
+import dev.ratas.slimedogcore.api.messaging.factory.SDCVoidContextMessageFactory;
 import dev.ratas.slimedogcore.impl.SlimeDogCore;
 import dev.ratas.slimedogcore.impl.utils.UpdateChecker;
 import me.ford.biomeremap.commands.BiomeRemapCommand;
@@ -115,7 +117,8 @@ public class BiomeRemap extends SlimeDogCore {
 						logMessage(messages.updateCurrentVersion());
 						break;
 					case FOUND_NEW:
-						logMessage(messages.updateNewVersionAvailable(version));
+						SDCSingleContextMessageFactory<String> msg = messages.updateNewVersionAvailable();
+						logMessage(msg.getMessage(msg.getContextFactory().getContext(version)).getFilled());
 						break;
 					case UNAVAILABLE:
 						logMessage(messages.updateInfoUnavailable());
@@ -153,13 +156,13 @@ public class BiomeRemap extends SlimeDogCore {
 		canReadMessages = msgs.canRead();
 		if ((!canReadDataFolder && existsDataFolder) || (!canReadConfig && existsConfig)
 				|| (!canReadMessages && existsMessages)) {
-			getLogger().severe(getMessages().errorConfigUnreadable());
+			getLogger().severe(getMessages().errorConfigUnreadable().getMessage().getFilled());
 			if (!canReadConfig && !canReadMessages)
 				return;
 		}
 		if (!existsDataFolder || !existsConfig || !existsMessages) {
 			if (!first)
-				getLogger().warning(getMessages().warnConfigRecreated());
+				getLogger().warning(getMessages().warnConfigRecreated().getMessage().getFilled());
 			if (!existsConfig) {
 				saveDefaultConfig();
 				canReadConfig = config.canRead();
@@ -185,7 +188,7 @@ public class BiomeRemap extends SlimeDogCore {
 			success = !messages.isEmpty();
 		}
 		if (success && issues != null && !issues.hasIssues()) {
-			getLogger().info(getMessages().getInfoConfigLoaded());
+			getLogger().info(getMessages().getInfoConfigLoaded().getMessage().getFilled());
 		}
 		return success ? issues : null;
 	}
@@ -212,6 +215,10 @@ public class BiomeRemap extends SlimeDogCore {
 
 	public void logMessage(String msg) {
 		getServer().getConsoleSender().sendMessage(getMessages().getPrefix() + msg);
+	}
+
+	public void logMessage(SDCVoidContextMessageFactory msg) {
+		logMessage(msg.getMessage().getFilled());
 	}
 
 	public static Logger logger() {

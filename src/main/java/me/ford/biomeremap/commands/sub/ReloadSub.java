@@ -31,11 +31,11 @@ public class ReloadSub extends BRSubCommand {
 	public boolean onCommand(SDCRecipient sender, String[] args, List<String> opts) {
 		ReloadIssues issues = ((BiomeRemap) br).reload();
 		if (issues != null && !issues.hasIssues()) {
-			sender.sendRawMessage(messages.getBiomeRemapReload());
+			sender.sendMessage(messages.getBiomeRemapReload().getMessage());
 		} else if (issues != null) {
 			sender.sendRawMessage(String.join("\n", issues.getIssues()));
 		} else { // issues == null
-			sender.sendRawMessage(messages.errorConfigUnreadable());
+			sender.sendMessage(messages.errorConfigUnreadable().getMessage());
 		}
 		return true;
 	}

@@ -12,6 +12,8 @@ import org.bukkit.World;
 import org.bukkit.util.StringUtil;
 
 import dev.ratas.slimedogcore.api.SlimeDogPlugin;
+import dev.ratas.slimedogcore.api.messaging.factory.SDCSingleContextMessageFactory;
+import dev.ratas.slimedogcore.api.messaging.factory.SDCTripleContextMessageFactory;
 import dev.ratas.slimedogcore.api.messaging.recipient.SDCPlayerRecipient;
 import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 import me.ford.biomeremap.largetasks.LargeScanTaskStarter;
@@ -65,7 +67,7 @@ public class ScanSub extends BRSubCommand {
 	@Override
 	public boolean onCommand(SDCRecipient sender, String[] args, List<String> opts) {
 		if (scanning) {
-			sender.sendRawMessage(messages.getScanInProgress());
+			sender.sendMessage(messages.getScanInProgress().getMessage());
 			return true;
 		}
 		if (args.length < 1) {
@@ -139,18 +141,21 @@ public class ScanSub extends BRSubCommand {
 			try {
 				x = Integer.parseInt(args[2]);
 			} catch (NumberFormatException e) {
-				sender.sendRawMessage(messages.errorNotInteger(args[2]));
+				SDCSingleContextMessageFactory<String> msg = messages.errorNotInteger();
+				sender.sendMessage(msg.getMessage(msg.getContextFactory().getContext(args[2])));
 				return true;
 			}
 			try {
 				z = Integer.parseInt(args[3]);
 			} catch (NumberFormatException e) {
-				sender.sendRawMessage(messages.errorNotInteger(args[3]));
+				SDCSingleContextMessageFactory<String> msg = messages.errorNotInteger();
+				sender.sendMessage(msg.getMessage(msg.getContextFactory().getContext(args[3])));
 				return true;
 			}
 		}
 		if (world == null) {
-			sender.sendRawMessage(messages.errorWorldNotFound(args[1]));
+			SDCSingleContextMessageFactory<String> msg = messages.errorWorldNotFound();
+			sender.sendMessage(msg.getMessage(msg.getContextFactory().getContext(args[1])));
 			return true;
 		}
 		if (maxLayer == Integer.MIN_VALUE) {
@@ -161,13 +166,16 @@ public class ScanSub extends BRSubCommand {
 		}
 		int minLayer = world.getMinHeight();
 		if (settings.getApplicableBiomeMap(world.getName()) == null) {
-			sender.sendRawMessage(messages.getBiomeRemapNoMap(world.getName()));
+			SDCSingleContextMessageFactory<String> msg = messages.getBiomeRemapNoMap();
+			sender.sendMessage(msg.getMessage(msg.getContextFactory().getContext(world.getName())));
 			return true;
 		}
 		if (region) {
-			sender.sendRawMessage(messages.getScanRegionStart(world.getName(), x, z));
+			SDCTripleContextMessageFactory<String, Integer, Integer> msg = messages.getScanRegionStart();
+			sender.sendMessage(msg.getMessage(msg.getContextFactory().getContext(world.getName(), x, z)));
 		} else {
-			sender.sendRawMessage(messages.getScanChunkStart(world.getName(), x, z));
+			SDCTripleContextMessageFactory<String, Integer, Integer> msg = messages.getScanChunkStart();
+			sender.sendMessage(msg.getMessage(msg.getContextFactory().getContext(world.getName(), x, z)));
 		}
 		ReportTarget target;
 		if (!ingame) {

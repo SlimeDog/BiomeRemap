@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.bukkit.util.StringUtil;
 
+import dev.ratas.slimedogcore.api.messaging.factory.SDCDoubleContextMessageFactory;
+import dev.ratas.slimedogcore.api.messaging.factory.SDCSingleContextMessageFactory;
+import dev.ratas.slimedogcore.api.messaging.factory.SDCTripleContextMessageFactory;
 import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 import me.ford.biomeremap.mapping.BiomeMap;
 import me.ford.biomeremap.settings.Messages;
@@ -40,15 +43,19 @@ public class InfoSub extends BRSubCommand {
 		}
 		BiomeMap map = settings.getBiomeMap(args[0]);
 		if (map == null) {
-			sender.sendRawMessage(messages.errorBiomeMapNotFound(args[0]));
+			SDCSingleContextMessageFactory<String> msg = messages.errorBiomeMapNotFound();
+			sender.sendMessage(msg.getMessage(msg.getContextFactory().getContext(args[0])));
 			return true;
 		}
-		sender.sendRawMessage(messages.getBiomeRemapInfo(map.getDescription(), map.getApplicableWorldNames()));
+		SDCDoubleContextMessageFactory<String, List<String>> msg = messages.getBiomeRemapInfo();
+		sender.sendMessage(msg
+				.getMessage(msg.getContextFactory().getContext(map.getDescription(), map.getApplicableWorldNames())));
 		int floor = map.getFloor();
 		if (floor != BiomeMap.DEFAULT_FLOOR && !map.getApplicableWorldNames().isEmpty()) {
+			SDCTripleContextMessageFactory<Integer, Integer, String> floorMsg = messages.getInfoFloorWithDefault();
 			for (String world : map.getApplicableWorldNames()) {
-				sender.sendRawMessage(messages.getInfoFloorWithDefault(map.getFloor(), BiomeMap.DEFAULT_FLOOR,
-						world));
+				sender.sendMessage(floorMsg.getMessage(
+						floorMsg.getContextFactory().getContext(map.getFloor(), BiomeMap.DEFAULT_FLOOR, world)));
 			}
 		}
 		return true;

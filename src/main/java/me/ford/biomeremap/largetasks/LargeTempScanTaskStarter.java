@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import org.bukkit.World;
 
 import dev.ratas.slimedogcore.api.SlimeDogPlugin;
+import dev.ratas.slimedogcore.api.messaging.factory.SDCSingleContextMessageFactory;
+import dev.ratas.slimedogcore.api.messaging.factory.SDCTripleContextMessageFactory;
 import me.ford.biomeremap.largetasks.LargeTask.TaskReport;
 import me.ford.biomeremap.largetasks.LargeTempScanTask.TemperatureReport;
 import me.ford.biomeremap.mapping.settings.ReportTarget;
@@ -44,29 +46,30 @@ public class LargeTempScanTaskStarter extends LargeTaskStarter {
 	}
 
 	private void onProgress(ReportTarget sender, String progress) {
-		String msg = messages.getScanProgress(progress);
-		sender.sendMessage(msg);
+		SDCSingleContextMessageFactory<String> msg = messages.getScanProgress();
+		sender.sendMessage(msg.getMessage(msg.getContextFactory().getContext(progress)));
 	}
 
 	private void onEnd(ReportTarget sender, TaskReport report, boolean debug) {
-		String completeMsg = messages.getScanComplete();
-		sender.sendMessage(completeMsg);
-		if (debug)
-			sender.sendMessage(messages.getBiomeRemapSummary(report.getChunksDone(), report.getCompTime(),
-					report.getTicksUsed()));
+		sender.sendMessage(messages.getScanComplete().getMessage());
+		if (debug) {
+			SDCTripleContextMessageFactory<Integer, Long, Integer> msg = messages.getBiomeRemapSummary();
+			sender.sendMessage(msg.getMessage(msg.getContextFactory().getContext(report.getChunksDone(),
+					report.getCompTime(), report.getTicksUsed())));
+		}
 		if (endRunnable != null)
 			endRunnable.run();
 	}
 
 	private void showMap(ReportTarget sender, TemperatureReport report, boolean region, boolean debug, String worldName,
 			int x, int z) {
-		String header;
+		SDCTripleContextMessageFactory<String, Integer, Integer> header;
 		if (region) {
-			header = messages.getScanRegionHeader(worldName, x, z);
+			header = messages.getScanRegionHeader();
 		} else {
-			header = messages.getScanChunkHeader(worldName, x, z);
+			header = messages.getScanChunkHeader();
 		}
-		sender.sendMessage(header);
+		sender.sendMessage(header.getMessage(header.getContextFactory().getContext(worldName, x, z)));
 		Map<Double, Integer> sortedMap = report.getTemps().entrySet().stream()
 				.sorted((e1, e2) -> e1.getKey().compareTo(e2.getKey()))
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
@@ -76,12 +79,13 @@ public class LargeTempScanTaskStarter extends LargeTaskStarter {
 		}
 		for (Entry<Double, Integer> entry : sortedMap.entrySet()) {
 			String percentage = String.format("%3.0f%%", 100 * ((double) entry.getValue()) / total);
-			String msg = messages.getScanListItem(percentage, String.format("%4.2f", entry.getKey()),
-					entry.getValue());
-			sender.sendMessage(msg);
+			SDCTripleContextMessageFactory<String, String, Integer> msg = messages.getScanListItem();
+			sender.sendMessage(msg
+					.getMessage(msg.getContextFactory().getContext(percentage, String.format("%4.2f", entry.getKey()),
+							entry.getValue())));
 		}
-		String msg = messages.getScanListItem("100%", "TOTAL", (int) total);
-		sender.sendMessage(msg);
+		SDCTripleContextMessageFactory<String, String, Integer> msg = messages.getScanListItem();
+		sender.sendMessage(msg.getMessage(msg.getContextFactory().getContext("100%", "TOTAL", (int) total)));
 	}
 
 }

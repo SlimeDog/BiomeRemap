@@ -8,6 +8,11 @@ import org.bukkit.World;
 import org.bukkit.util.StringUtil;
 
 import dev.ratas.slimedogcore.api.SlimeDogPlugin;
+import dev.ratas.slimedogcore.api.messaging.SDCMessage;
+import dev.ratas.slimedogcore.api.messaging.context.SDCTripleContext;
+import dev.ratas.slimedogcore.api.messaging.context.SDCVoidContext;
+import dev.ratas.slimedogcore.api.messaging.factory.SDCSingleContextMessageFactory;
+import dev.ratas.slimedogcore.api.messaging.factory.SDCTripleContextMessageFactory;
 import dev.ratas.slimedogcore.api.messaging.recipient.SDCPlayerRecipient;
 import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 import me.ford.biomeremap.mapping.BiomeMap;
@@ -54,7 +59,7 @@ public class RegionSub extends BRSubCommand {
 	@Override
 	public boolean onCommand(SDCRecipient sender, String[] args, List<String> opts) {
 		if (remapping) {
-			sender.sendRawMessage(messages.getBiomeRemapInPrgoress());
+			sender.sendMessage(messages.getBiomeRemapInPrgoress().getMessage());
 			return true;
 		}
 		boolean debug = opts.contains("--debug");
@@ -82,7 +87,8 @@ public class RegionSub extends BRSubCommand {
 			String worldName = args[0];
 			world = br.getWorldProvider().getWorldByName(worldName);
 			if (world == null) {
-				sender.sendRawMessage(messages.errorWorldNotFound(worldName));
+				SDCSingleContextMessageFactory<String> msg = messages.errorWorldNotFound();
+				sender.sendMessage(msg.getMessage(msg.getContextFactory().getContext(worldName)));
 				return true;
 			}
 
@@ -90,19 +96,22 @@ public class RegionSub extends BRSubCommand {
 			try {
 				regionX = Integer.parseInt(args[1]);
 			} catch (NumberFormatException e) {
-				sender.sendRawMessage(messages.errorNotInteger(args[1]));
+				SDCSingleContextMessageFactory<String> msg = messages.errorNotInteger();
+				sender.sendMessage(msg.getMessage(msg.getContextFactory().getContext(args[1])));
 				return true;
 			}
 			try {
 				regionZ = Integer.parseInt(args[2]);
 			} catch (NumberFormatException e) {
-				sender.sendRawMessage(messages.errorNotInteger(args[2]));
+				SDCSingleContextMessageFactory<String> msg = messages.errorNotInteger();
+				sender.sendMessage(msg.getMessage(msg.getContextFactory().getContext(args[2])));
 				return true;
 			}
 		}
 		BiomeMap map = settings.getApplicableBiomeMap(world.getName());
 		if (map == null) {
-			sender.sendRawMessage(messages.getBiomeRemapNoMap(world.getName()));
+			SDCSingleContextMessageFactory<String> msg = messages.getBiomeRemapNoMap();
+			sender.sendMessage(msg.getMessage(msg.getContextFactory().getContext(world.getName())));
 			return true;
 		}
 		ReportTarget target;
@@ -111,13 +120,17 @@ public class RegionSub extends BRSubCommand {
 		} else {
 			target = new MultiReportTarget(sender, br.getConsoleRecipient());
 		}
-		String startedMsg = messages.getRegionRemapStarted(world.getName(), regionX, regionZ);
+		SDCTripleContextMessageFactory<String, Integer, Integer> msg = messages.getRegionRemapStarted();
+		sender.sendMessage(msg.getMessage(msg.getContextFactory().getContext(world.getName(), regionX, regionZ)));
+		SDCTripleContextMessageFactory<String, Integer, Integer> regionStarted = messages.getRegionRemapStarted();
+		SDCMessage<SDCTripleContext<String, Integer, Integer>> startedMsg = regionStarted
+				.getMessage(regionStarted.getContextFactory().getContext(world.getName(), regionX, regionZ));
 		target.sendMessage(startedMsg);
 		remapping = true;
 		RegionArea area = new RegionArea(world, regionX, regionZ);
 		RemapOptions options = new RemapOptions.Builder().isDebug(debug).scanAfter(scanAfter).withArea(area)
 				.withTarget(target).withMap(map).endRunnable(() -> {
-					String completeMsg = messages.getBiomeRemapComplete();
+					SDCMessage<SDCVoidContext> completeMsg = messages.getBiomeRemapComplete().getMessage();
 					target.sendMessage(completeMsg);
 					remapEnded();
 				}).maxY(maxY).build();

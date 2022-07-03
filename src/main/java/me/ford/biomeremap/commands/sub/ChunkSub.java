@@ -8,6 +8,11 @@ import org.bukkit.World;
 import org.bukkit.util.StringUtil;
 
 import dev.ratas.slimedogcore.api.SlimeDogPlugin;
+import dev.ratas.slimedogcore.api.messaging.SDCMessage;
+import dev.ratas.slimedogcore.api.messaging.context.SDCTripleContext;
+import dev.ratas.slimedogcore.api.messaging.context.SDCVoidContext;
+import dev.ratas.slimedogcore.api.messaging.factory.SDCSingleContextMessageFactory;
+import dev.ratas.slimedogcore.api.messaging.factory.SDCTripleContextMessageFactory;
 import dev.ratas.slimedogcore.api.messaging.recipient.SDCPlayerRecipient;
 import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 import me.ford.biomeremap.mapping.BiomeMap;
@@ -72,7 +77,8 @@ public class ChunkSub extends BRSubCommand {
 			String worldName = args[0];
 			World world = br.getWorldProvider().getWorldByName(worldName);
 			if (world == null) {
-				sender.sendRawMessage(messages.errorWorldNotFound(worldName));
+				SDCSingleContextMessageFactory<String> msg = messages.errorWorldNotFound();
+				sender.sendMessage(msg.getMessage(msg.getContextFactory().getContext(worldName)));
 				return true;
 			}
 
@@ -81,35 +87,41 @@ public class ChunkSub extends BRSubCommand {
 			try {
 				x = Integer.parseInt(args[1]);
 			} catch (NumberFormatException e) {
-				sender.sendRawMessage(messages.errorNotInteger(args[1]));
+				SDCSingleContextMessageFactory<String> msg = messages.errorNotInteger();
+				sender.sendMessage(msg.getMessage(msg.getContextFactory().getContext(args[1])));
 				return true;
 			}
 			int z;
 			try {
 				z = Integer.parseInt(args[2]);
 			} catch (NumberFormatException e) {
-				sender.sendRawMessage(messages.errorNotInteger(args[2]));
+				SDCSingleContextMessageFactory<String> msg = messages.errorNotInteger();
+				sender.sendMessage(msg.getMessage(msg.getContextFactory().getContext(args[2])));
 				return true;
 			}
 			chunk = world.getChunkAt(x, z);
 		}
 		BiomeMap map = settings.getApplicableBiomeMap(chunk.getWorld().getName());
 		if (map == null) {
-			sender.sendRawMessage(messages.getBiomeRemapNoMap(chunk.getWorld().getName()));
+			SDCSingleContextMessageFactory<String> msg = messages.getBiomeRemapNoMap();
+			sender.sendMessage(msg.getMessage(msg.getContextFactory().getContext(chunk.getWorld().getName())));
 			return true;
 		}
-		String startMsg = messages.getChunkRemapStarted(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
+		SDCTripleContextMessageFactory<String, Integer, Integer> startMsg = messages.getChunkRemapStarted();
+		SDCMessage<SDCTripleContext<String, Integer, Integer>> sendMsg = startMsg.getMessage(
+				startMsg.getContextFactory().getContext(chunk.getWorld().getName(), chunk.getX(), chunk.getZ()));
+		sender.sendMessage(sendMsg);
 		ReportTarget target;
 		if (!ingame) {
 			target = new SingleReportTarget(sender);
 		} else {
 			target = new MultiReportTarget(sender, br.getConsoleRecipient());
 		}
-		target.sendMessage(startMsg);
+		target.sendMessage(sendMsg);
 		ChunkArea area = new ChunkArea(chunk.getWorld(), chunk.getX(), chunk.getZ());
 		RemapOptions options = new RemapOptions.Builder().isDebug(debug).scanAfter(scanAfter).withArea(area)
 				.withTarget(target).withMap(map).endRunnable(() -> {
-					String completeMsg = messages.getBiomeRemapComplete();
+					SDCMessage<SDCVoidContext> completeMsg = messages.getBiomeRemapComplete().getMessage();
 					target.sendMessage(completeMsg);
 				}).maxY(maxY).build();
 		remapper.remapArea(options);

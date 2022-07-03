@@ -2,225 +2,315 @@ package me.ford.biomeremap.settings;
 
 import java.util.List;
 
-import org.bukkit.ChatColor;
-
 import dev.ratas.slimedogcore.api.SlimeDogPlugin;
+import dev.ratas.slimedogcore.api.messaging.factory.SDCDoubleContextMessageFactory;
+import dev.ratas.slimedogcore.api.messaging.factory.SDCSingleContextMessageFactory;
+import dev.ratas.slimedogcore.api.messaging.factory.SDCTripleContextMessageFactory;
+import dev.ratas.slimedogcore.api.messaging.factory.SDCVoidContextMessageFactory;
 import dev.ratas.slimedogcore.impl.messaging.MessagesBase;
+import dev.ratas.slimedogcore.impl.messaging.factory.MsgUtil;
 
 public class Messages extends MessagesBase {
 	private static final String FILE_NAME = "messages.yml";
+	private SDCDoubleContextMessageFactory<String, List<String>> biomeRemapInfo;
+	private SDCVoidContextMessageFactory biomeRemapListHeader;
+	private SDCSingleContextMessageFactory<String> biomeRemapNoMap;
+	private SDCSingleContextMessageFactory<String> biomeRemapListItem;
+	private SDCVoidContextMessageFactory reloaded;
+	private SDCTripleContextMessageFactory<String, Integer, Integer> chunkRemapStarted;
+	private SDCVoidContextMessageFactory remapInProgress;
+	private SDCTripleContextMessageFactory<String, Integer, Integer> regionRemapStarted;
+	private SDCVoidContextMessageFactory remapComplete;
+	private SDCSingleContextMessageFactory<String> remapProgress;
+	private SDCTripleContextMessageFactory<Integer, Long, Integer> biomeRemapSummary;
+	private SDCVoidContextMessageFactory infoConfigLoaded;
+	private SDCDoubleContextMessageFactory<String, String> infoWorldMapped;
+	private SDCVoidContextMessageFactory scanInProgress;
+	private SDCTripleContextMessageFactory<Integer, Integer, String> infoChunkRemapFloor;
+	private SDCTripleContextMessageFactory<Integer, Integer, String> infoFloorWithDefault;
+	private SDCTripleContextMessageFactory<String, Integer, Integer> scanChunkStart;
+	private SDCTripleContextMessageFactory<String, Integer, Integer> scanRegionStart;
+	private SDCSingleContextMessageFactory<String> scanProgress;
+	private SDCTripleContextMessageFactory<String, Integer, Integer> scanChunkHeader;
+	private SDCTripleContextMessageFactory<String, Integer, Integer> scanRegionHeader;
+	private SDCTripleContextMessageFactory<String, String, Integer> scanListItem;
+	private SDCVoidContextMessageFactory warnConfigRecreated;
+	private SDCSingleContextMessageFactory<String> errorBiomeMapIncomplete;
+	private SDCSingleContextMessageFactory<String> errorBiomeNotFound;
+	private SDCSingleContextMessageFactory<String> errorBiomeMapNotFound;
+	private SDCVoidContextMessageFactory scanComplete;
+	private SDCVoidContextMessageFactory errorNoPermissions;
+	private SDCSingleContextMessageFactory<String> errorWorldNotFound;
+	private SDCSingleContextMessageFactory<String> errorNotInteger;
+	private SDCSingleContextMessageFactory<String> errorDuplicateBiomeMapsForWorld;
+	private SDCVoidContextMessageFactory errorConfigUnreadable;
+	private SDCDoubleContextMessageFactory<String, String> errorConfigMapIncomplete;
+	private SDCSingleContextMessageFactory<String> errorBiomeMapNotAssigned;
+	private SDCDoubleContextMessageFactory<String, Integer> errorIncompatibleFloor;
+	private SDCSingleContextMessageFactory<String> newVersionAvailable;
+	private SDCVoidContextMessageFactory currentVersion;
+	private SDCVoidContextMessageFactory updateUnavailable;
 
 	public Messages(SlimeDogPlugin plugin) {
 		super(plugin.getCustomConfigManager().getConfig(FILE_NAME));
+		loadMessages();
+	}
+
+	private void loadMessages() {
+		biomeRemapInfo = MsgUtil.doubleContext("{BIOMEREMAP_DESC}", desc -> desc, "{BIOMEREMAP_WORLDS}",
+				worldNames -> worldNames.isEmpty() ? "none" : String.join(", ", worldNames),
+				getRawMessage("BIOMEREMAP_INFO", "Description: {BIOMEREMAP_DESC} \nWorlds: {BIOMEREMAP_WORLDS}"));
+		biomeRemapListHeader = MsgUtil.voidContext(getRawMessage("BIOMEREMAP_LIST_HEADER", "List of biomemaps:"));
+		biomeRemapNoMap = MsgUtil.singleContext("{WORLD_NAME}",
+				world -> world, getRawMessage("BIOMEREMAP_LIST_NO_MAP", "No biomemap found for world {WORLD_NAME}"));
+		biomeRemapListItem = MsgUtil.singleContext("{BIOME_ID}", biome -> biome,
+				getRawMessage("BIOMEREMAP_LIST_ITEM", " - {BIOME_ID}"));
+		reloaded = MsgUtil.voidContext(getRawMessage("BIOMEREMAP_RELOAD", "BiomeRemap was reloaded successfully."));
+		chunkRemapStarted = MsgUtil.tripleContext("{WORLD_NAME}", worldName -> worldName, "{X}", x -> String.valueOf(x),
+				"{Z}", z -> String.valueOf(z),
+				getRawMessage("BIOMEREMAP_REMAP_CHUNK_START", "Remapping chunk world:{WORLD_NAME} x:{X} z:{Z}"));
+		remapInProgress = MsgUtil.voidContext(getRawMessage("BIOMEREMAP_REMAP_IN_PROGRESS",
+				"A biome remap is already in progress; please try again in a few minutes"));
+		regionRemapStarted = MsgUtil.tripleContext("{WORLD_NAME}", worldName -> worldName, "{X}",
+				x -> String.valueOf(x), "{Z}", z -> String.valueOf(z),
+				getRawMessage("BIOMEREMAP_REMAP_REGION_START", "Remapping region world:{WORLD_NAME} x:{X} z:{Z}"));
+		remapComplete = MsgUtil.voidContext(getRawMessage("BIOMEREMAP_REMAP_COMPLETE", "Remap complete."));
+		remapProgress = MsgUtil.singleContext("{PERCENTAGE}", progress -> progress,
+				getRawMessage("BIOMEREMAP_REMAP_PROGRESS", "{PERCENTAGE}"));
+		biomeRemapSummary = MsgUtil.tripleContext("{CHUNKS}", chunks -> String.valueOf(chunks), "{MILLISECONDS}",
+				ms -> String.valueOf(ms), "{TICKS}", ticks -> String.valueOf(ticks),
+				getRawMessage("BIOMEREMAP_REMAP_SUMMARY",
+						"Remapped {CHUNKS} chunks in {MILLISECONDS} ms in a total of {TICKS} ticks"));
+		infoConfigLoaded = MsgUtil.voidContext(
+				getRawMessage("INFO_CONFIG_FILES_LOADED_SUCCESSFULLY", "Configuration files loaded successfully"));
+		infoWorldMapped = MsgUtil.doubleContext("{WORLD_NAME}", world -> world, "{BIOMEMAP}", bm -> bm,
+				getRawMessage("INFO_WORLD_BIOME_MAPPED",
+						"Biomemap {BIOMEMAP} was successfully assigned to world {WORLD_NAME}"));
+		scanInProgress = MsgUtil.voidContext(getRawMessage("BIOMEREMAP_SCAN_IN_PROGRESS",
+				"A biome scan is already in progress; please try again in a few minutes"));
+		infoChunkRemapFloor = MsgUtil.tripleContext("{FLOOR}", floor -> String.valueOf(floor), "{DEFAULT_FLOOR}",
+				defFloor -> String.valueOf(defFloor), "{WORLD_NAME}", wn -> wn, getRawMessage("INFO_CHUNK_REMAP_FLOOR",
+						"The floor is set to {FLOOR} in world {WORLD_NAME} (default {DEFAULT_FLOOR})"));
+		infoFloorWithDefault = MsgUtil.tripleContext("{FLOOR}", floor -> String.valueOf(floor),
+				"{DEFAULT_FLOOR}", defFloor -> String.valueOf(defFloor), "{WORLD_NAME}", wn -> wn,
+				getRawMessage("BIOMEREMAP_INFO_FLOOR",
+						"The floor is set to {FLOOR} in world {WORLD_NAME} (default {DEFAULT_FLOOR})"));
+		scanChunkStart = MsgUtil.tripleContext("{WORLD_NAME}", worldName -> worldName, "{X}", x -> String.valueOf(x),
+				"{Z}", z -> String.valueOf(z),
+				getRawMessage("BIOMEREMAP_SCAN_CHUNK_START", "Scanning chunk world:{WORLD_NAME} x:{X} z:{Z}"));
+		scanRegionStart = MsgUtil.tripleContext("{WORLD_NAME}", worldName -> worldName, "{X}", x -> String.valueOf(x),
+				"{Z}", z -> String.valueOf(z),
+				getRawMessage("BIOMEREMAP_SCAN_REGION_START", "Scanning region world:{WORLD_NAME} x:{X} z:{Z}"));
+		scanProgress = MsgUtil.singleContext("{PERCENTAGE}", progress -> progress,
+				getRawMessage("BIOMEREMAP_SCAN_PROGRESS", "{PERCENTAGE}"));
+		scanChunkHeader = MsgUtil.tripleContext("{WORLD_NAME}", worldName -> worldName, "{X}", x -> String.valueOf(x),
+				"{Z}", z -> String.valueOf(z),
+				getRawMessage("BIOMEREMAP_SCAN_CHUNK_HEADER", "Biomes in chunk world:{WORLD_NAME} x:{X} z:{Z}"));
+		scanRegionHeader = MsgUtil.tripleContext("{WORLD_NAME}", worldName -> worldName, "{X}", x -> String.valueOf(x),
+				"{Z}", z -> String.valueOf(z),
+				getRawMessage("BIOMEREMAP_SCAN_REGION_HEADER", "Biomes in region world:{WORLD_NAME} x:{X} z:{Z}"));
+		scanListItem = MsgUtil.tripleContext("{PERCENTAGE}", percentage -> percentage, "{BIOME_ID}", biome -> biome,
+				"{AMOUNT}", amount -> String.valueOf(amount),
+				getRawMessage("BIOMEREMAP_SCAN_LIST_ITEM", "{PERCENTAGE} ({AMOUNT}) {BIOME_ID}"));
+		warnConfigRecreated = MsgUtil.voidContext(getRawMessage("WARN_CONFIG_FILES_RECREATED",
+				"Configuration files do not exist; default files were created"));
+		errorBiomeMapIncomplete = MsgUtil.singleContext("{BIOMEMAP}", map -> map,
+				getRawMessage("ERROR_BIOMEMAP_INCOMPLETE", "Biomemap {BIOMEMAP} definition is incomplete"));
+		errorBiomeNotFound = MsgUtil.singleContext("{BIOME_ID}", biome -> biome,
+				getRawMessage("ERROR_BIOME_NOT_FOUND", "Biome {BIOME_ID} does not exist"));
+		errorBiomeMapNotFound = MsgUtil.singleContext("{BIOMEMAP}", mapName -> mapName,
+				getRawMessage("ERROR_BIOMEMAP_NOT_FOUND", "Biomemap {BIOMEMAP} does not exist"));
+		scanComplete = MsgUtil.voidContext(getRawMessage("BIOMEREMAP_SCAN_COMPLETE", "Scan complete"));
+		errorNoPermissions = MsgUtil.voidContext(
+				getRawMessage("ERROR_NO_PERMISSION", "You do not have permission to execute that command."));
+		errorWorldNotFound = MsgUtil.singleContext("{WORLD_NAME}", worldName -> worldName,
+				getRawMessage("ERROR_WORLD_NOT_FOUND", "World name {WORLD_NAME} was not found."));
+		errorNotInteger = MsgUtil.singleContext("{VALUE}", value -> value,
+				getRawMessage("ERROR_PARAMETER_INVALID_INTEGER", "{VALUE} is not a value integer"));
+		errorDuplicateBiomeMapsForWorld = MsgUtil.singleContext("{WORLD_NAME}", worldName -> worldName,
+				getRawMessage("ERROR_WORLD_DUPLICATE_ASSIGNMENT",
+						"Multiple biomemaps are assigned to world {WORLD_NAME}; fix configuration and reload"));
+		errorConfigUnreadable = MsgUtil.voidContext(getRawMessage("ERROR_CONFIG_FILE_UNREADABLE",
+				"Cannot read config.yml; no biomemaps were assigned to worlds"));
+		errorConfigMapIncomplete = MsgUtil.doubleContext("{BIOMEMAP}", map -> map, "{BIOME_ID}", biome -> biome,
+				getRawMessage("ERROR_CONFIG_MAP_INCOMPLETE",
+						"Biomemap {BIOMEMAP} has incomplete map for biome {BIOME_ID}; fix configuration and reload"));
+		errorBiomeMapNotAssigned = MsgUtil.singleContext("{BIOMEMAP}", map -> map,
+				getRawMessage("ERROR_NO_BIOMEMAP_ASSIGNMENT",
+						"Errors were found in biomemap {BIOMEMAP}; biomemap was not assigned to any worlds"));
+		errorIncompatibleFloor = MsgUtil.doubleContext("{BIOMEMAP}", map -> map, "{FLOOR}",
+				floor -> String.valueOf(floor),
+				getRawMessage("ERROR_INCOMPATIBLE_FLOOR", "Incompatible floor found for biomemap {BIOMEMAP}: {FLOOR}"));
+		newVersionAvailable = MsgUtil.singleContext("{VERSION}", version -> version,
+				getRawMessage("BIOMEREMAP_UPDATE_NEW_VERSION", "A new version {VERSION} is available for download"));
+		currentVersion = MsgUtil
+				.voidContext(getRawMessage("BIOMEREMAP_UPDATE_CURRENT_VERSION", "You are running the latest version"));
+		updateUnavailable = MsgUtil.voidContext(getRawMessage("+BIOMEREMAP_UPDATE_INFO_UNAVAILABLE",
+				"Version update information is not available at this time"));
+	}
+
+	@Override
+	public void reloadConfig() {
+		super.reloadConfig();
+		loadMessages();
 	}
 
 	public String getPrefix() {
-		return getMessage("BIOMEREMAP_PREFIX", "[BiomeRemap] ");
+		return getRawMessage("BIOMEREMAP_PREFIX", "[BiomeRemap] ");
 	}
 
-	public String getBiomeRemapInfo(String description, List<String> worldNames) {
-		String wn = worldNames.isEmpty() ? "none" : String.join(", ", worldNames);
-		return getMessage("BIOMEREMAP_INFO", "Description: {BIOMEREMAP_DESC} \nWorlds: {BIOMEREMAP_WORLDS}")
-				.replace("{BIOMEREMAP_DESC}", description).replace("{BIOMEREMAP_WORLDS}", wn);
+	public SDCDoubleContextMessageFactory<String, List<String>> getBiomeRemapInfo() {
+		return biomeRemapInfo;
 	}
 
-	public String getBiomeRemapListHeaders() {
-		return getMessage("BIOMEREMAP_LIST_HEADER", "List of biomemaps:");
+	public SDCVoidContextMessageFactory getBiomeRemapListHeaders() {
+		return biomeRemapListHeader;
 	}
 
-	public String getBiomeRemapNoMap(String world) {
-		return getMessage("BIOMEREMAP_LIST_NO_MAP", "No biomemap found for world {WORLD_NAME}").replace("{WORLD_NAME}",
-				world);
+	public SDCSingleContextMessageFactory<String> getBiomeRemapNoMap() {
+		return biomeRemapNoMap;
 	}
 
-	public String getBiomeRemapListItem(String biome) {
-		return getMessage("BIOMEREMAP_LIST_ITEM", " - {BIOME_ID}").replace("{BIOME_ID}", biome);
+	public SDCSingleContextMessageFactory<String> getBiomeRemapListItem() {
+		return biomeRemapListItem;
 	}
 
-	public String getBiomeRemapReload() {
-		return getMessage("BIOMEREMAP_RELOAD", "BiomeRemap was reloaded successfully.");
+	public SDCVoidContextMessageFactory getBiomeRemapReload() {
+		return reloaded;
 	}
 
-	public String getChunkRemapStarted(String worldName, int x, int z) {
-		return getMessage("BIOMEREMAP_REMAP_CHUNK_START", "Remapping chunk world:{WORLD_NAME} x:{X} z:{Z}")
-				.replace("{WORLD_NAME}", worldName).replace("{X}", String.valueOf(x)).replace("{Z}", String.valueOf(z));
+	public SDCTripleContextMessageFactory<String, Integer, Integer> getChunkRemapStarted() {
+		return chunkRemapStarted;
 	}
 
-	public String getBiomeRemapInPrgoress() {
-		return getMessage("BIOMEREMAP_REMAP_IN_PROGRESS",
-				"A biome remap is already in progress; please try again in a few minutes");
+	public SDCVoidContextMessageFactory getBiomeRemapInPrgoress() {
+		return remapInProgress;
 	}
 
-	public String getRegionRemapStarted(String worldName, int x, int z) {
-		return getMessage("BIOMEREMAP_REMAP_REGION_START", "Remapping region world:{WORLD_NAME} x:{X} z:{Z}")
-				.replace("{WORLD_NAME}", worldName).replace("{X}", String.valueOf(x)).replace("{Z}", String.valueOf(z));
+	public SDCTripleContextMessageFactory<String, Integer, Integer> getRegionRemapStarted() {
+		return regionRemapStarted;
 	}
 
-	public String getBiomeRemapComplete() {
-		return getMessage("BIOMEREMAP_REMAP_COMPLETE", "Remap complete.");
+	public SDCVoidContextMessageFactory getBiomeRemapComplete() {
+		return remapComplete;
 	}
 
-	public String getBiomeRemapProgress(String progress) {
-		return getMessage("BIOMEREMAP_REMAP_PROGRESS", "{PERCENTAGE}").replace("{PERCENTAGE}", progress);
+	public SDCSingleContextMessageFactory<String> getBiomeRemapProgress() {
+		return remapProgress;
 	}
 
-	public String getBiomeRemapSummary(int chunks, long ms, int ticks) {
-		return getMessage("BIOMEREMAP_REMAP_SUMMARY",
-				"Remapped {CHUNKS} chunks in {MILLISECONDS} ms in a total of {TICKS} ticks")
-				.replace("{CHUNKS}", String.valueOf(chunks)).replace("{MILLISECONDS}", String.valueOf(ms))
-				.replace("{TICKS}", String.valueOf(ticks));
+	public SDCTripleContextMessageFactory<Integer, Long, Integer> getBiomeRemapSummary() {
+		return biomeRemapSummary;
 	}
 
-	public String getInfoConfigLoaded() {
-		return getMessage("INFO_CONFIG_FILES_LOADED_SUCCESSFULLY", "Configuration files loaded successfully");
+	public SDCVoidContextMessageFactory getInfoConfigLoaded() {
+		return infoConfigLoaded;
 	}
 
-	public String getInfoWorldMapped(String world, String biomemap) {
-		return getMessage("INFO_WORLD_BIOME_MAPPED",
-				"Biomemap {BIOMEMAP} was successfully assigned to world {WORLD_NAME}").replace("{WORLD_NAME}", world)
-				.replace("{BIOMEMAP}", biomemap);
+	public SDCDoubleContextMessageFactory<String, String> getInfoWorldMapped() {
+		return infoWorldMapped;
 	}
 
-	public String getInfoChunkRemapFloor(int floor, int defFloor, String wn) {
-		return getMessage("INFO_CHUNK_REMAP_FLOOR",
-				"The floor is set to {FLOOR} in world {WORLD_NAME} (default {DEFAULT_FLOOR})")
-				.replace("{FLOOR}", String.valueOf(floor)).replace("{WORLD_NAME}", wn)
-				.replace("{DEFAULT_FLOOR}", String.valueOf(defFloor));
+	public SDCTripleContextMessageFactory<Integer, Integer, String> getInfoChunkRemapFloor() {
+		return infoChunkRemapFloor;
 	}
 
-	public String getInfoFloorWithDefault(int floor, int defaultFloor, String wn) {
-		return getMessage("BIOMEREMAP_INFO_FLOOR",
-				"The floor is set to {FLOOR} in world {WORLD_NAME} (default {DEFAULT_FLOOR})")
-				.replace("{FLOOR}", String.valueOf(floor))
-				.replace("{DEFAULT_FLOOR}", String.valueOf(defaultFloor)).replace("{WORLD_NAME}", wn);
+	public SDCTripleContextMessageFactory<Integer, Integer, String> getInfoFloorWithDefault() {
+		return infoFloorWithDefault;
 	}
 
-	public String getScanInProgress() {
-		return getMessage("BIOMEREMAP_SCAN_IN_PROGRESS",
-				"A biome scan is already in progress; please try again in a few minutes");
+	public SDCVoidContextMessageFactory getScanInProgress() {
+		return scanInProgress;
 	}
 
-	public String getScanChunkStart(String worldName, int x, int z) {
-		return getMessage("BIOMEREMAP_SCAN_CHUNK_START", "Scanning chunk world:{WORLD_NAME} x:{X} z:{Z}")
-				.replace("{WORLD_NAME}", worldName).replace("{X}", String.valueOf(x)).replace("{Z}", String.valueOf(z));
+	public SDCTripleContextMessageFactory<String, Integer, Integer> getScanChunkStart() {
+		return scanChunkStart;
 	}
 
-	public String getScanRegionStart(String worldName, int x, int z) {
-		return getMessage("BIOMEREMAP_SCAN_REGION_START", "Scanning region world:{WORLD_NAME} x:{X} z:{Z}")
-				.replace("{WORLD_NAME}", worldName).replace("{X}", String.valueOf(x)).replace("{Z}", String.valueOf(z));
+	public SDCTripleContextMessageFactory<String, Integer, Integer> getScanRegionStart() {
+		return scanRegionStart;
 	}
 
-	public String getScanProgress(String progress) {
-		return getMessage("BIOMEREMAP_SCAN_PROGRESS", "{PERCENTAGE}").replace("{PERCENTAGE}", progress);
+	public SDCSingleContextMessageFactory<String> getScanProgress() {
+		return scanProgress;
 	}
 
-	public String getScanComplete() {
-		return getMessage("BIOMEREMAP_SCAN_COMPLETE", "Scan complete");
+	public SDCVoidContextMessageFactory getScanComplete() {
+		return scanComplete;
 	}
 
-	public String getScanChunkHeader(String worldName, int x, int z) {
-		return getMessage("BIOMEREMAP_SCAN_CHUNK_HEADER", "Biomes in chunk world:{WORLD_NAME} x:{X} z:{Z}")
-				.replace("{WORLD_NAME}", worldName).replace("{X}", String.valueOf(x)).replace("{Z}", String.valueOf(z));
+	public SDCTripleContextMessageFactory<String, Integer, Integer> getScanChunkHeader() {
+		return scanChunkHeader;
 	}
 
-	public String getScanRegionHeader(String worldName, int x, int z) {
-		return getMessage("BIOMEREMAP_SCAN_REGION_HEADER", "Biomes in region world:{WORLD_NAME} x:{X} z:{Z}")
-				.replace("{WORLD_NAME}", worldName).replace("{X}", String.valueOf(x)).replace("{Z}", String.valueOf(z));
+	public SDCTripleContextMessageFactory<String, Integer, Integer> getScanRegionHeader() {
+		return scanRegionHeader;
 	}
 
-	public String getScanListItem(String percentage, String biome, int amount) {// BIOMEREMAP_SCAN_LIST_ITEM:
-																				// "{PERCENTAGE} ({AMOUNT}) {BIOME_ID}"
-		return getMessage("BIOMEREMAP_SCAN_LIST_ITEM", "{PERCENTAGE} ({AMOUNT}) {BIOME_ID}")
-				.replace("{PERCENTAGE}", percentage).replace("{BIOME_ID}", biome)
-				.replace("{AMOUNT}", String.valueOf(amount));
+	public SDCTripleContextMessageFactory<String, String, Integer> getScanListItem() {
+		return scanListItem;
 	}
 
-	public String warnConfigRecreated() {
-		return getMessage("WARN_CONFIG_FILES_RECREATED",
-				"Configuration files do not exist; default files were created");
+	public SDCVoidContextMessageFactory warnConfigRecreated() {
+		return warnConfigRecreated;
 	}
 
-	public String errorBiomeMapIncomplete(String map) {
-		return getMessage("ERROR_BIOMEMAP_INCOMPLETE", "Biomemap {BIOMEMAP} definition is incomplete")
-				.replace("{BIOMEMAP}", map);
+	public SDCSingleContextMessageFactory<String> errorBiomeMapIncomplete() {
+		return errorBiomeMapIncomplete;
 	}
 
-	public String errorBiomeNotFound(String biome) {
-		return getMessage("ERROR_BIOME_NOT_FOUND", "Biome {BIOME_ID} does not exist").replace("{BIOME_ID}", biome);
+	public SDCSingleContextMessageFactory<String> errorBiomeNotFound() {
+		return errorBiomeNotFound;
 	}
 
-	public String errorBiomeMapNotFound(String mapName) {
-		return getMessage("ERROR_BIOMEMAP_NOT_FOUND", "Biomemap {BIOMEMAP} does not exist").replace("{BIOMEMAP}",
-				mapName);
+	public SDCSingleContextMessageFactory<String> errorBiomeMapNotFound() {
+		return errorBiomeMapNotFound;
 	}
 
-	public String errorNoPermissions() {
-		return getMessage("ERROR_NO_PERMISSION", "You do not have permission to execute that command.");
+	public SDCVoidContextMessageFactory errorNoPermissions() {
+		return errorNoPermissions;
 	}
 
-	public String errorWorldNotFound(String worldName) {
-		return getMessage("ERROR_WORLD_NOT_FOUND", "World name {WORLD_NAME} was not found.").replace("{WORLD_NAME}",
-				worldName);
+	public SDCSingleContextMessageFactory<String> errorWorldNotFound() {
+		return errorWorldNotFound;
 	}
 
-	public String errorNotInteger(String value) {
-		return getMessage("ERROR_PARAMETER_INVALID_INTEGER", "{VALUE} is not a value integer").replace("{VALUE}",
-				value);
+	public SDCSingleContextMessageFactory<String> errorNotInteger() {
+		return errorNotInteger;
 	}
 
-	public String errorDuplicateBiomeMapsForWorld(String worldName) {
-		return getMessage("ERROR_WORLD_DUPLICATE_ASSIGNMENT",
-				"Multiple biomemaps are assigned to world {WORLD_NAME}; fix configuration and reload")
-				.replace("{WORLD_NAME}", worldName);
+	public SDCSingleContextMessageFactory<String> errorDuplicateBiomeMapsForWorld() {
+		return errorDuplicateBiomeMapsForWorld;
 	}
 
-	public String errorConfigUnreadable() {
-		return getMessage("ERROR_CONFIG_FILE_UNREADABLE",
-				"Cannot read config.yml; no biomemaps were assigned to worlds");
+	public SDCVoidContextMessageFactory errorConfigUnreadable() {
+		return errorConfigUnreadable;
 	}
 
-	public String errorConfigMapincomplete(String map, String biome) {
-		return getMessage("ERROR_CONFIG_MAP_INCOMPLETE",
-				"Biomemap {BIOMEMAP} has incomplete map for biome {BIOME_ID}; fix configuration and reload")
-				.replace("{BIOMEMAP}", map).replace("{BIOME_ID}", biome);
+	public SDCDoubleContextMessageFactory<String, String> errorConfigMapincomplete() {
+		return errorConfigMapIncomplete;
 	}
 
-	public String errorNoBiomeMapAssigned(String map) {
-		return getMessage("ERROR_NO_BIOMEMAP_ASSIGNMENT",
-				"Errors were found in biomemap {BIOMEMAP}; biomemap was not assigned to any worlds")
-				.replace("{BIOMEMAP}", map);
+	public SDCSingleContextMessageFactory<String> errorNoBiomeMapAssigned() {
+		return errorBiomeMapNotAssigned;
 	}
 
-	public String errorIncompatibleFloor(String map, int floor) {
-		return getMessage("ERROR_INCOMPATIBLE_FLOOR", "Incompatible floor found for biomemap {BIOMEMAP}: {FLOOR}")
-				.replace("{BIOMEMAP}", map).replace("{FLOOR}", String.valueOf(floor));
+	public SDCDoubleContextMessageFactory<String, Integer> errorIncompatibleFloor() {
+		return errorIncompatibleFloor;
 	}
-
-	// public String errorIncompatibleCeiling(String map, int ceiling) {
-	// return getMessage("ERROR_INCOMPATIBLE_CEILING", "Incompatible ceiling found
-	// for biomemap {BIOMEMAP}: {CEILING}")
-	// .replace("{BIOMEMAP}", map).replace("{CEILING}", String.valueOf(ceiling));
-	// }
 
 	// Update messages
 
-	public String updateNewVersionAvailable(String version) {
-		return getMessage("BIOMEREMAP_UPDATE_NEW_VERSION", "A new version {VERSION} is available for download")
-				.replace("{VERSION}", version);
+	public SDCSingleContextMessageFactory<String> updateNewVersionAvailable() {
+		return newVersionAvailable;
 	}
 
-	public String updateCurrentVersion() {
-		return getMessage("BIOMEREMAP_UPDATE_CURRENT_VERSION", "You are running the latest version");
+	public SDCVoidContextMessageFactory updateCurrentVersion() {
+		return currentVersion;
 	}
 
-	public String updateInfoUnavailable() {
-		return getMessage("+BIOMEREMAP_UPDATE_INFO_UNAVAILABLE",
-				"Version update information is not available at this time");
-	}
-
-	public String getMessage(String path, String def) {
-		String raw = getRawMessage(path, def);
-		return ChatColor.translateAlternateColorCodes('&', raw);
+	public SDCVoidContextMessageFactory updateInfoUnavailable() {
+		return updateUnavailable;
 	}
 
 }
