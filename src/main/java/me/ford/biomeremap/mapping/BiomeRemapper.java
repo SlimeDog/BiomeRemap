@@ -81,8 +81,8 @@ public class BiomeRemapper {
 		final int maxy;
 		if (maxY > map.getCeiling()) {
 			maxy = map.getCeiling();
-		} else if (maxY > BRSubCommand.MAX_Y) {
-			maxy = BRSubCommand.MAX_Y;
+		} else if (maxY >= BRSubCommand.MAX_Y) {
+			maxy = BRSubCommand.MAX_Y - 1;
 		} else {
 			maxy = maxY;
 		}
