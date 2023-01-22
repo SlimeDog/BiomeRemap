@@ -45,7 +45,7 @@
 		<dependency>
 			<groupId>com.github.SlimeDog</groupId>
 			<artifactId>SlimeDogCore</artifactId>
-			<version>0.1.7-SNAPSHOT</version>
+			<version>1.0.0</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
