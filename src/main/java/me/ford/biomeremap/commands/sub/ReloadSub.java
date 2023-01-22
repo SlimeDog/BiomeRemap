@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dev.ratas.slimedogcore.api.SlimeDogPlugin;
+import dev.ratas.slimedogcore.api.commands.SDCCommandOptionSet;
 import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 import me.ford.biomeremap.BiomeRemap;
 import me.ford.biomeremap.settings.Messages;
@@ -28,7 +29,7 @@ public class ReloadSub extends BRSubCommand {
 	}
 
 	@Override
-	public boolean onCommand(SDCRecipient sender, String[] args, List<String> opts) {
+    public boolean onOptionedCommand(SDCRecipient sender, String[] args, SDCCommandOptionSet opts) {
 		ReloadIssues issues = ((BiomeRemap) br).reload();
 		if (issues != null && !issues.hasIssues()) {
 			sender.sendMessage(messages.getBiomeRemapReload().getMessage());

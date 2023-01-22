@@ -7,6 +7,7 @@ import org.bukkit.World;
 import org.bukkit.util.StringUtil;
 
 import dev.ratas.slimedogcore.api.SlimeDogPlugin;
+import dev.ratas.slimedogcore.api.commands.SDCCommandOptionSet;
 import dev.ratas.slimedogcore.api.messaging.factory.SDCSingleContextMessageFactory;
 import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 import me.ford.biomeremap.mapping.BiomeMap;
@@ -42,7 +43,7 @@ public class ListSub extends BRSubCommand {
 	}
 
 	@Override
-	public boolean onCommand(SDCRecipient sender, String[] args, List<String> opts) {
+    public boolean onOptionedCommand(SDCRecipient sender, String[] args, SDCCommandOptionSet opts) {
 		List<BiomeMap> list = new ArrayList<>();
 		String worldName = null;
 		if (args.length == 0) {

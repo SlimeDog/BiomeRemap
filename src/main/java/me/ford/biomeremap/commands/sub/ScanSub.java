@@ -12,10 +12,13 @@ import org.bukkit.World;
 import org.bukkit.util.StringUtil;
 
 import dev.ratas.slimedogcore.api.SlimeDogPlugin;
+import dev.ratas.slimedogcore.api.commands.SDCCommandOption;
+import dev.ratas.slimedogcore.api.commands.SDCCommandOptionSet;
 import dev.ratas.slimedogcore.api.messaging.factory.SDCSingleContextMessageFactory;
 import dev.ratas.slimedogcore.api.messaging.factory.SDCTripleContextMessageFactory;
 import dev.ratas.slimedogcore.api.messaging.recipient.SDCPlayerRecipient;
 import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
+import dev.ratas.slimedogcore.impl.commands.CommandOptionSet;
 import me.ford.biomeremap.largetasks.LargeScanTaskStarter;
 import me.ford.biomeremap.largetasks.LargeTempScanTaskStarter;
 import me.ford.biomeremap.mapping.BiomeRemapper;
@@ -65,7 +68,7 @@ public class ScanSub extends BRSubCommand {
 	}
 
 	@Override
-	public boolean onCommand(SDCRecipient sender, String[] args, List<String> opts) {
+	public boolean onOptionedCommand(SDCRecipient sender, String[] args, SDCCommandOptionSet opts) {
 		if (scanning) {
 			sender.sendMessage(messages.getScanInProgress().getMessage());
 			return true;
@@ -79,10 +82,11 @@ public class ScanSub extends BRSubCommand {
 		}
 		boolean region = regionOrChunk.equalsIgnoreCase("region");
 		boolean ingame = sender.isPlayer();
-		boolean debug = opts.contains("--debug");
-		boolean temp = opts.contains("--temp");
+		boolean debug = opts.hasRawOption("--debug");
+		boolean temp = opts.hasRawOption("--temp");
 		int maxLayer = Integer.MIN_VALUE;
-		for (String opt : opts) {
+		for (SDCCommandOption cmdOpt : opts.getOptions()) {
+			String opt = cmdOpt.getValue();
 			Matcher matcher = layerPattern.matcher(opt);
 			if (matcher.matches()) {
 				try {
@@ -114,7 +118,7 @@ public class ScanSub extends BRSubCommand {
 					return true;
 				}
 				sender.sendRawMessage("Running for multiple layers"); // TODO - message?
-				runLayers(sender, args, opts, opt, start, stop);
+				runLayers(sender, args, opts, cmdOpt, start, stop);
 				return true;
 			}
 		}
@@ -194,15 +198,25 @@ public class ScanSub extends BRSubCommand {
 		return true;
 	}
 
-	private void runLayers(SDCRecipient sender, String[] args, List<String> opts, String curOpt, int start, int stop) {
-		List<String> newOpts = new ArrayList<>(opts);
-		newOpts.remove(curOpt);
+	private static SDCCommandOptionSet getCopyWithout(SDCCommandOptionSet opts, SDCCommandOption curOpt) {
+		SDCCommandOptionSet newOpts = new CommandOptionSet();
+		for (SDCCommandOption opt : opts.getOptions()) {
+			if (curOpt != opt) {
+				newOpts.addOption(curOpt.getRaw(), curOpt.getValue());
+			}
+		}
+		return newOpts;
+	}
+
+	private void runLayers(SDCRecipient sender, String[] args, SDCCommandOptionSet opts, SDCCommandOption curOpt,
+			int start, int stop) {
 		final AtomicInteger nr = new AtomicInteger(start);
 		br.getScheduler().runTaskTimer((t) -> {
 			if (!scanning) {
-				newOpts.add(String.format("--layer=%d", nr));
-				onCommand(sender, args, newOpts);
-				newOpts.remove(newOpts.size() - 1);
+				SDCCommandOptionSet newOpts = getCopyWithout(opts, curOpt);
+				String opt = String.format("--layer=%d", nr);
+				newOpts.addOption(opt, opt);
+				onOptionedCommand(sender, args, newOpts);
 				nr.incrementAndGet();
 				if (nr.get() > stop) {
 					t.cancel();

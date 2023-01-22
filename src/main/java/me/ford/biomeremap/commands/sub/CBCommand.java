@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 
+import dev.ratas.slimedogcore.api.commands.SDCCommandOptionSet;
 import dev.ratas.slimedogcore.api.messaging.factory.SDCSingleContextMessageFactory;
 import dev.ratas.slimedogcore.api.messaging.recipient.SDCPlayerRecipient;
 import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
@@ -33,7 +34,7 @@ public class CBCommand extends BRSubCommand {
     }
 
     @Override
-    public boolean onCommand(SDCRecipient sender, String[] args, List<String> opts) {
+    public boolean onOptionedCommand(SDCRecipient sender, String[] args, SDCCommandOptionSet opts) {
         if (!sender.isPlayer()) {
             sender.sendRawMessage("Need a palyer");
             return true;

@@ -3,6 +3,7 @@ package me.ford.biomeremap.commands.sub;
 import java.util.ArrayList;
 import java.util.List;
 
+import dev.ratas.slimedogcore.api.commands.SDCCommandOptionSet;
 import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
 import dev.ratas.slimedogcore.impl.commands.AbstractSubCommand;
 import me.ford.biomeremap.commands.BiomeRemapCommand;
@@ -24,7 +25,7 @@ public class HelpSub extends AbstractSubCommand {
 	}
 
 	@Override
-	public boolean onCommand(SDCRecipient sender, String[] args, List<String> opts) {
+    public boolean onOptionedCommand(SDCRecipient sender, String[] args, SDCCommandOptionSet opts) {
 		base.getUsage(sender);
 		return true;
 	}

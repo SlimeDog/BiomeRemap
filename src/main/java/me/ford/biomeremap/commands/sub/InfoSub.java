@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.util.StringUtil;
 
+import dev.ratas.slimedogcore.api.commands.SDCCommandOptionSet;
 import dev.ratas.slimedogcore.api.messaging.factory.SDCDoubleContextMessageFactory;
 import dev.ratas.slimedogcore.api.messaging.factory.SDCSingleContextMessageFactory;
 import dev.ratas.slimedogcore.api.messaging.factory.SDCTripleContextMessageFactory;
@@ -37,7 +38,7 @@ public class InfoSub extends BRSubCommand {
 	}
 
 	@Override
-	public boolean onCommand(SDCRecipient sender, String[] args, List<String> opts) {
+    public boolean onOptionedCommand(SDCRecipient sender, String[] args, SDCCommandOptionSet opts) {
 		if (args.length < 1) {
 			return false;
 		}

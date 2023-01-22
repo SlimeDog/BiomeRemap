@@ -8,6 +8,7 @@ import org.bukkit.World;
 import org.bukkit.util.StringUtil;
 
 import dev.ratas.slimedogcore.api.SlimeDogPlugin;
+import dev.ratas.slimedogcore.api.commands.SDCCommandOptionSet;
 import dev.ratas.slimedogcore.api.messaging.SDCMessage;
 import dev.ratas.slimedogcore.api.messaging.context.SDCTripleContext;
 import dev.ratas.slimedogcore.api.messaging.context.SDCVoidContext;
@@ -57,13 +58,13 @@ public class RegionSub extends BRSubCommand {
 	}
 
 	@Override
-	public boolean onCommand(SDCRecipient sender, String[] args, List<String> opts) {
+    public boolean onOptionedCommand(SDCRecipient sender, String[] args, SDCCommandOptionSet opts) {
 		if (remapping) {
 			sender.sendMessage(messages.getBiomeRemapInPrgoress().getMessage());
 			return true;
 		}
-		boolean debug = opts.contains("--debug");
-		boolean scanAfter = opts.contains("--scan")
+		boolean debug = opts.hasRawOption("--debug");
+		boolean scanAfter = opts.hasRawOption("--scan")
 				&& (sender.hasPermission("biomeremap.scan") || !sender.isPlayer());
 		boolean ingame = sender.isPlayer();
 		if (!ingame && args.length < 3) {
