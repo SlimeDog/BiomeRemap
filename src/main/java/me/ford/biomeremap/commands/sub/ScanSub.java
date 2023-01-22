@@ -211,12 +211,13 @@ public class ScanSub extends BRSubCommand {
 	private void runLayers(SDCRecipient sender, String[] args, SDCCommandOptionSet opts, SDCCommandOption curOpt,
 			int start, int stop) {
 		final AtomicInteger nr = new AtomicInteger(start);
+		SDCCommandOptionSet newOpts = getCopyWithout(opts, curOpt);
 		br.getScheduler().runTaskTimer((t) -> {
 			if (!scanning) {
-				SDCCommandOptionSet newOpts = getCopyWithout(opts, curOpt);
 				String opt = String.format("--layer=%d", nr);
 				newOpts.addOption(opt, opt);
 				onOptionedCommand(sender, args, newOpts);
+				newOpts.removeOptionWithName(opt);
 				nr.incrementAndGet();
 				if (nr.get() > stop) {
 					t.cancel();
