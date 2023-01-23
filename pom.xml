@@ -29,6 +29,10 @@
 		  <id>jitpack.io</id> <!-- For automated building of SlimeDogCore-->
 		  <url>https://jitpack.io</url>
 		</repository>
+		<repository> <!-- For paper stuff needed for MockBukkit -->
+			<id>papermc</id>
+			<url>https://repo.papermc.io/repository/maven-public/</url>
+		</repository>
 	</repositories>
 
 	<pluginRepositories>
