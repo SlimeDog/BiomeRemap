@@ -7,16 +7,14 @@
 # Implementation: drives_a_ford
 # Testing: SlimeDog
 #
-# Minecraft version support:
-#   BiomeRemap 1.0.1    Spigot 1.14.4     
-#   BiomeRemap 2.0.3    Spigot 1.15.2     
-#   BiomeRemap 2.2.1    Spigot and Paper 1.16.5     
-#   BiomeRemap 2.3.2    Spigot and Paper 1.17.1
-#   BiomeRemap 3.0.0    Spigot and Paper 1.18.2
-#   BiomeRemap 3.1.0    Spigot and Paper 1.19
+# Supported MC version:
+# https://github.com/SlimeDog/BiomeRemap/wiki/
+# Default configuration:
+# https://github.com/SlimeDog/BiomeRemap/wiki/Configuration
 #
-# This configuration file is compatible with Minecraft 1.19 only. Versions for previous Minecraft
-# versions may be found at https://github.com/SlimeDog/BiomeRemap/wiki/Configuration.
+# This configuration file is compatible with Minecraft 1.19.4 only.
+# Configurations for previous Minecraft versions
+# https://github.com/SlimeDog/BiomeRemap/wiki/Configuration.
 #
 # ========== CAVEATS AND WARNINGS ==================================================================
 # BiomeRemap is provided for your enjoyment and entertainment. We cannot guarantee that the results
