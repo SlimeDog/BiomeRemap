@@ -1,7 +1,7 @@
 # BiomeRemap
-# This file must contain valid YAML code. A YAML checker may be found at http://www.yamllint.com
-#
 # Remap biomes to create strange new worlds.
+#
+# This file must contain valid YAML code. A YAML checker may be found at http://www.yamllint.com
 #
 # Design: SlimeDog
 # Implementation: drives_a_ford
