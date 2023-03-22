@@ -1,22 +1,20 @@
 # BiomeRemap
-# This file must contain valid YAML code. A YAML checker may be found at http://www.yamllint.com
-#
 # Remap biomes to create strange new worlds.
+#
+# This file must contain valid YAML code. A YAML checker may be found at http://www.yamllint.com
 #
 # Design: SlimeDog
 # Implementation: drives_a_ford
 # Testing: SlimeDog
 #
-# Minecraft version support:
-#   BiomeRemap 1.0.1    Spigot 1.14.4     
-#   BiomeRemap 2.0.3    Spigot 1.15.2     
-#   BiomeRemap 2.2.1    Spigot and Paper 1.16.5     
-#   BiomeRemap 2.3.2    Spigot and Paper 1.17.1
-#   BiomeRemap 3.0.0    Spigot and Paper 1.18.2
-#   BiomeRemap 3.1.0    Spigot and Paper 1.19
+# Supported MC version:
+# https://github.com/SlimeDog/BiomeRemap/wiki/
+# Default configuration:
+# https://github.com/SlimeDog/BiomeRemap/wiki/Configuration
 #
-# This configuration file is compatible with Minecraft 1.19 only. Versions for previous Minecraft
-# versions may be found at https://github.com/SlimeDog/BiomeRemap/wiki/Configuration.
+# This configuration file is  compatible with Minecraft 1.19.4 only.
+# Configurations for previous Minecraft versions
+# https://github.com/SlimeDog/BiomeRemap/wiki/Configuration.
 #
 # ========== CAVEATS AND WARNINGS ==================================================================
 # BiomeRemap is provided for your enjoyment and entertainment. We cannot guarantee that the results
@@ -41,18 +39,15 @@
 # before installing and using any new plugin.
 
 # ========== CONFIGURATION FILE VERSION ============================================================
-# This configuration file is compatible with Minecraft 1.18 only. Versions for previous Minecraft
+# This configuration file is compatible with Minecraft 1.19.4 only. Versions for previous Minecraft
 # versions may be found at https://github.com/SlimeDog/BiomeRemap/wiki/Configuration.
 #
-# In Minecraft 1.18, 13 biomes were renamed, 25 biomes were deleted, and six new biomes were
-# introduced. See https://github.com/SlimeDog/BiomeRemap/wiki/ for details.
+# In Minecraft 1.19.4, one new biome was introduced.
+# See https://github.com/SlimeDog/BiomeRemap/wiki/ for details.
 #
 # Biomes that do not exist in your Minecraft version will generate errors in the console/log,
 # and BiomeRemap will fail to enable.
 #
-# Do not edit the version string unless you know what you are dolng.
-file: config.yml
-version: 1.18
 
 # ========== CHECK FOR UPDATES =====================================================================
 # If you do not want notification of available updates in the console log, you may disable it here.
@@ -133,6 +128,8 @@ biomemaps:
       beach:
         replacement-biome: snowy_beach
       birch_forest:
+        replacement-biome: snowy_plains
+      cherry_grove:
         replacement-biome: snowy_plains
       cold_ocean:
         replacement-biome: frozen_ocean
@@ -250,6 +247,8 @@ biomemaps:
         replacement-biome: desert
       birch_forest:
         replacement-biome: birch_forest
+      cherry_grove:
+        replacement-biome: cherry_grove
       cold_ocean:
         replacement-biome: warm_ocean
       dark_forest:
