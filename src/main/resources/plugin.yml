@@ -3,7 +3,7 @@ version: ${project.version}
 api-version: 1.18
 main: ${project.groupId}.${project.artifactId}.${project.name}
 description: ${project.description}
-authors: [drives_a_ford, SlimeDog]
+authors: [mart-r, SlimeDog]
 load: POSTWORLD
 softdepend: [Multiverse-Core, MultiWorld, PlaceholderAPI]
 
