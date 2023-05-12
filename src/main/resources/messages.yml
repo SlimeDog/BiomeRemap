@@ -1,11 +1,9 @@
-# messages.yml
+# Message text may be localized to suit.
+# Both legacy and MiniMessage format codes are supported.
+# See https://github.com/SlimeDog/SlimeDogCore/wiki/Formatting-Codes.
+# Undefined messages default to internal values (ie., US English).
 #
-# All messages produced by BiomeRemap may be localized here.
-# This file must contain valid YAML code.
-# A YAML checker may be found at http://www.yamllint.com
-#
-# Message may contain color codes and other format codes. Both & and § are recognized.
-# A list of valid formatting codes may be found at https://minecraft.fandom.com/wiki/Formatting_codes
+# This file must contain valid YAML code. A YAML checker may be found at http://www.yamllint.com
 #
 # Message placeholders are indicated by {PLACEHOLDER}.
 # PlaceholderAPI variables are not supported.
