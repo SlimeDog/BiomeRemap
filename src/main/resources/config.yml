@@ -58,6 +58,8 @@ check-for-updates: true
 # Data collection may be disabled here, or generally in the bStats/config.yml.
 #
 enable-metrics: true
+# Update source may be either Hangar (default) or SpigotMC.
+update-source: Hangar
 
 # ========== BIOMEMAP CONFIGURATION ================================================================
 # The main configuration is a list of biomemaps, enabled in specific world(s).
