@@ -12,7 +12,7 @@
 # Default configuration:
 # https://github.com/SlimeDog/BiomeRemap/wiki/Configuration
 #
-# This configuration file is  compatible with Minecraft 1.19.4 only.
+# This configuration file is  compatible with Minecraft 1.19.4 and 1.20 only.
 # Configurations for previous Minecraft versions
 # https://github.com/SlimeDog/BiomeRemap/wiki/Configuration.
 #
@@ -52,6 +52,8 @@
 # ========== CHECK FOR UPDATES =====================================================================
 # If you do not want notification of available updates in the console log, you may disable it here.
 check-for-updates: true
+# Update source may be either Hangar (default) or SpigotMC.
+update-source: Hangar
 
 # ========== BSTATS METRICS ========================================================================
 # By default, the plugin collects and transmits anonymous statistics to bstats.org.

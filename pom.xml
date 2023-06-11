@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>me.ford</groupId>
 	<artifactId>biomeremap</artifactId>
-	<version>3.2.0</version>
+	<version>3.2.2</version>
 	<name>BiomeRemap</name>
 	<description>Remap biomes to create strange new worlds.</description>
 	<properties>
@@ -47,13 +47,13 @@
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
-			<version>1.19.4-R0.1-SNAPSHOT</version>
+			<version>1.20-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.github.SlimeDog</groupId>
 			<artifactId>SlimeDogCore</artifactId>
-			<version>1.0.7</version>
+			<version>1.0.9</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>

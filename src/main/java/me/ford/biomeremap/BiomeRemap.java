@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.logging.Logger;
 
 import org.bstats.bukkit.Metrics;
@@ -15,7 +16,6 @@ import org.bukkit.World;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPluginLoader;
 
-import dev.ratas.slimedogcore.api.messaging.factory.SDCSingleContextMessageFactory;
 import dev.ratas.slimedogcore.api.messaging.factory.SDCVoidContextMessageFactory;
 import dev.ratas.slimedogcore.impl.SlimeDogCore;
 import dev.ratas.slimedogcore.impl.utils.UpdateChecker;
@@ -33,6 +33,8 @@ import me.ford.biomeremap.volotile.BiomeManager;
 
 public class BiomeRemap extends SlimeDogCore {
 	private static final int SPIGOT_RESOURCE_ID = 70973;
+	private static final String HANGAR_AUTHOR = "SlimeDog";
+	private static final String HANGAR_SLUG = "BiomeRemap";
 	private static BiomeRemap staticInstance;
 	private final Logger logger;
 	private Messages messages;
@@ -111,20 +113,28 @@ public class BiomeRemap extends SlimeDogCore {
 
 		// update
 		if (settings.checkForUpdates()) {
-			new UpdateChecker(this, (response, version) -> {
+
+			String source = getDefaultConfig().getConfig().getString("update-source", "Hangar");
+			BiConsumer<UpdateChecker.VersionResponse, String> consumer = (response, version) -> {
 				switch (response) {
 					case LATEST:
-						logMessage(messages.updateCurrentVersion());
+						getLogger().info(messages.updateCurrentVersion().getMessage().getFilled());
 						break;
 					case FOUND_NEW:
-						SDCSingleContextMessageFactory<String> msg = messages.updateNewVersionAvailable();
-						logMessage(msg.getMessage(msg.getContextFactory().getContext(version)).getFilled());
+						getLogger().info(messages.updateNewVersionAvailable().createWith(version).getFilled());
 						break;
 					case UNAVAILABLE:
-						logMessage(messages.updateInfoUnavailable());
+						getLogger().info("Version information not available");
 						break;
 				}
-			}, SPIGOT_RESOURCE_ID).check();
+			};
+			UpdateChecker checker;
+			if (source.equalsIgnoreCase("Hangar")) {
+				checker = UpdateChecker.forHangar(this, consumer, HANGAR_AUTHOR, HANGAR_SLUG);
+			} else {
+				checker = UpdateChecker.forSpigot(this, consumer, SPIGOT_RESOURCE_ID);
+			}
+			checker.check();
 		}
 	}
 
