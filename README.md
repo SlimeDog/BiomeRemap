@@ -8,7 +8,7 @@ Completed tasks:
 - Posted update to SpigotMC
 - Updated `Version Support` page of SlimeDog/BiomeRemap wiki on Github
 - Posted end-of-life notices
-  - `Overview` and `Documentation` pages of SlimeDog/BiomeRemap on SpigotMC
+  - `Overview` page of SlimeDog/BiomeRemap on SpigotMC
   - `README` for SlimeDog/BiomeRemap repository on Github
   - `Home` page of SlimeDog/BiomeRemap wiki on Github
 - Archived SlimeDog/BiomeRemap Github repository
