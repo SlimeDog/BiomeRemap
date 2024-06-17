@@ -12,7 +12,6 @@ Completed tasks:
   - `README` for SlimeDog/BiomeRemap repository on Github
   - `Home` page of SlimeDog/BiomeRemap wiki on Github
 - Archived SlimeDog/BiomeRemap Github repository
-- Removed SlimeDog/BiomeRemap from bStats
 - Removed SlimeDog/BiomeRemap from Hangar
 
 Support for future Minecraft versions:
