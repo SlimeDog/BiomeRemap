@@ -57,6 +57,22 @@ public class BiomeRemap extends SlimeDogCore {
 	public BiomeRemap() {
 		super();
 		this.logger = null;
+		try {
+			Class.forName("be.seeseemelk.mockbukkit.MockBukkit");
+			testing = true;
+		} catch (ClassNotFoundException e) {
+			testing = false;
+		}
+	}
+
+	public BiomeRemap(Logger logger) {
+		this.logger = logger;
+		try {
+			Class.forName("be.seeseemelk.mockbukkit.MockBukkit");
+			testing = true;
+		} catch (ClassNotFoundException e) {
+			testing = false;
+		}
 	}
 
 	protected BiomeRemap(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
